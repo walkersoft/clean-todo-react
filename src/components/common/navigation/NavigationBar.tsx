@@ -1,18 +1,11 @@
 import {
   AppBar,
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
   Toolbar,
-  Typography,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import AdbIcon from "@mui/icons-material/Adb";
 import { useState, MouseEvent } from "react";
-import Button from "@mui/material/Button";
 import { Container } from "@mui/system";
 import { DesktopNavigation } from "./DesktopNavigation";
+import { MobileNavigation } from "./MobileNavigation";
 
 export function NavigationBar() {
   const title = "CLEAN TODO";
@@ -34,52 +27,13 @@ export function NavigationBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ ml: 2 }}>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-controls="app-menu"
-              aria-haspopup="true"
-              onClick={handleOpenNav}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="app-menu"
-              keepMounted
-              open={navAnchorElement != null}
-              onClose={handleCloseNav}
-              anchorEl={navAnchorElement}
-              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-              transformOrigin={{ vertical: "top", horizontal: "left" }}
-              sx={{ display: { sx: "block", md: "none" } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={() => {}}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ mr: 1, display: { xs: "flex", md: "none" } }} />
-          <Typography
-            variant="h5"
-            noWrap
-            sx={{
-              mr: 2,
-              display: {
-                xs: "flex",
-                md: "none",
-              },
-              flexGrow: 1,
-              color: "inherit",
-              textDecoration: "none",
-              fontFamily: "monospace",
-              letterSpacing: ".2rem",
-            }}
-          >
-            CLEAN TODO
-          </Typography>
+          <MobileNavigation
+            title={title}
+            pages={pages}
+            navAnchorElement={navAnchorElement}
+            handleOpenNav={handleOpenNav}
+            handleCloseNav={handleCloseNav}
+          />
           <DesktopNavigation
             title={title}
             pages={pages}
