@@ -1,13 +1,15 @@
-import './App.css';
-import { Container } from '@mui/system';
-import { NavigationBar } from './components/common/NavigationBar';
+import "./App.css";
+import { NavigationBar } from "./components/common/navigation/NavigationBar";
+import React from "react";
+import CssBaseline from "@mui/material/CssBaseline";
 
 function App() {
   return (
     <div className="App">
-      <Container maxWidth="xl">
+      <React.Fragment>
+        <CssBaseline />
         <NavigationBar />
-      </Container>
+      </React.Fragment>
     </div>
   );
 }
