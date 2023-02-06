@@ -6,7 +6,7 @@ import { MobileNavigation } from "./MobileNavigation";
 
 export function NavigationBar() {
   const title = "CLEAN TODO";
-  const pages = ["Home", "Create New List", "Manage Lists"];
+  const pages = ["Home", "Create New List"];
 
   const [navAnchorElement, setNavAnchorElement] = useState<HTMLElement | null>(
     null
