@@ -2,9 +2,9 @@ import "./App.css";
 import { NavigationBar } from "./components/common/navigation/NavigationBar";
 import React, { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import TodoTagEditor from "./components/common/todo-tag/TodoTagEditor";
-import { TodoTagView } from "./components/common/todo-tag/TodoTagView";
-import { TodoItemEditor } from "./components/common/todo-item/TodoItemEditor";
+import TodoTagEditor from "./components/todo-tag/TodoTagEditor";
+import { TodoTagView } from "./components/todo-tag/TodoTagView";
+import { TodoItemEditor } from "./components/todo-item/TodoItemEditor";
 
 function App() {
   const [tags, setTags] = useState<string[]>([]);
