@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import TodoTagEditor from "./components/common/todo-tag/TodoTagEditor";
 import { TodoTagView } from "./components/common/todo-tag/TodoTagView";
+import { TodoItemEditor } from "./components/common/todo-item/TodoItemEditor";
 
 function App() {
   const [tags, setTags] = useState<string[]>([]);
@@ -18,6 +19,7 @@ function App() {
         <NavigationBar />
         <TodoTagEditor addTag={addTag} />
         <TodoTagView tags={tags}/>
+        <TodoItemEditor />
       </React.Fragment>
     </div>
   );
