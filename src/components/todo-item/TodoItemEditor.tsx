@@ -22,7 +22,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
 
-export function TodoItemEditor() {
+interface TodoItemEditorProps {
+  tags: string[];
+}
+
+export function TodoItemEditor({ tags }: TodoItemEditorProps) {
   const [dueDate, setDueDate] = useState<moment.Moment | null>(moment());
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   
@@ -36,8 +40,6 @@ export function TodoItemEditor() {
       typeof value === "string" ? value.split(',') : value,
     )
   }
-
-  const testTags = ["Foo", "Bar", "Baz"];
   
   return (
     <>
@@ -78,7 +80,7 @@ export function TodoItemEditor() {
                 </Box>
               )}
             >
-              {testTags.map((tag) => (
+              {tags.map((tag) => (
                 <MenuItem
                   key={tag}
                   value={tag}

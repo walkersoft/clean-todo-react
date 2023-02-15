@@ -19,7 +19,7 @@ function App() {
         <NavigationBar />
         <TodoTagEditor addTag={addTag} />
         <TodoTagView tags={tags}/>
-        <TodoItemEditor />
+        <TodoItemEditor tags={tags} />
       </React.Fragment>
     </div>
   );
