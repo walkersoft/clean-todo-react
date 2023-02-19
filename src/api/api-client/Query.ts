@@ -7,51 +7,76 @@
 /* tslint:disable */
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
-import * as Types from '../api-client';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import type { UseQueryResult, QueryFunctionContext, UseQueryOptions, QueryClient, QueryKey, MutationKey, UseMutationOptions, UseMutationResult, QueryMeta, MutationMeta } from '@tanstack/react-query';
-import { trimArrayEnd, isParameterObject, getBaseUrl, addMetaToOptions  } from './helpers';
-import type { QueryMetaContextValue } from 'react-query-swagger';
-import { QueryMetaContext } from 'react-query-swagger';
-import { useContext } from 'react';
+import type {
+  MutationKey,
+  QueryClient,
+  QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
+import { QueryMetaContext } from "react-query-swagger";
+import * as Types from "../api-client";
+import { addMetaToOptions, getBaseUrl, trimArrayEnd } from "./helpers";
 export const Client = Types.Client;
 
-    
 export function todoItemsAllUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoItems";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-let todoItemsAllDefaultOptions: UseQueryOptions<Types.TodoItemResponse[], unknown, Types.TodoItemResponse[]> = {
+let todoItemsAllDefaultOptions: UseQueryOptions<
+  Types.TodoItemResponse[],
+  unknown,
+  Types.TodoItemResponse[]
+> = {
   queryFn: __todoItemsAll,
 };
-export function getTodoItemsAllDefaultOptions(): UseQueryOptions<Types.TodoItemResponse[], unknown, Types.TodoItemResponse[]> {
+export function getTodoItemsAllDefaultOptions(): UseQueryOptions<
+  Types.TodoItemResponse[],
+  unknown,
+  Types.TodoItemResponse[]
+> {
   return todoItemsAllDefaultOptions;
-};
-export function setTodoItemsAllDefaultOptions(options: UseQueryOptions<Types.TodoItemResponse[], unknown, Types.TodoItemResponse[]>) {
+}
+export function setTodoItemsAllDefaultOptions(
+  options: UseQueryOptions<
+    Types.TodoItemResponse[],
+    unknown,
+    Types.TodoItemResponse[]
+  >
+) {
   todoItemsAllDefaultOptions = options;
 }
 
 export function todoItemsAllQueryKey(): QueryKey;
 export function todoItemsAllQueryKey(...params: any[]): QueryKey {
-  return trimArrayEnd([
-      'Client',
-      'todoItemsAll',
-    ]);
+  return trimArrayEnd(["Client", "todoItemsAll"]);
 }
 function __todoItemsAll() {
-  return Types.Client.todoItemsAll(
-    );
+  return Types.Client.todoItemsAll();
 }
 
 /**
  * @return Success
  */
-export function useTodoItemsAllQuery<TSelectData = Types.TodoItemResponse[], TError = unknown>(options?: UseQueryOptions<Types.TodoItemResponse[], TError, TSelectData>): UseQueryResult<TSelectData, TError>;
-export function useTodoItemsAllQuery<TSelectData = Types.TodoItemResponse[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
-  let options: UseQueryOptions<Types.TodoItemResponse[], TError, TSelectData> | undefined = undefined;
-  
+export function useTodoItemsAllQuery<
+  TSelectData = Types.TodoItemResponse[],
+  TError = unknown
+>(
+  options?: UseQueryOptions<Types.TodoItemResponse[], TError, TSelectData>
+): UseQueryResult<TSelectData, TError>;
+export function useTodoItemsAllQuery<
+  TSelectData = Types.TodoItemResponse[],
+  TError = unknown
+>(...params: any[]): UseQueryResult<TSelectData, TError> {
+  let options:
+    | UseQueryOptions<Types.TodoItemResponse[], TError, TSelectData>
+    | undefined = undefined;
 
   options = params[0] as any;
 
@@ -61,27 +86,39 @@ export function useTodoItemsAllQuery<TSelectData = Types.TodoItemResponse[], TEr
   return useQuery<Types.TodoItemResponse[], TError, TSelectData>({
     queryFn: __todoItemsAll,
     queryKey: todoItemsAllQueryKey(),
-    ...todoItemsAllDefaultOptions as unknown as UseQueryOptions<Types.TodoItemResponse[], TError, TSelectData>,
+    ...(todoItemsAllDefaultOptions as unknown as UseQueryOptions<
+      Types.TodoItemResponse[],
+      TError,
+      TSelectData
+    >),
     ...options,
   });
 }
 /**
  * @return Success
  */
-export function setTodoItemsAllData(queryClient: QueryClient, updater: (data: Types.TodoItemResponse[] | undefined) => Types.TodoItemResponse[], ) {
-  queryClient.setQueryData(todoItemsAllQueryKey(),
-    updater
-  );
+export function setTodoItemsAllData(
+  queryClient: QueryClient,
+  updater: (
+    data: Types.TodoItemResponse[] | undefined
+  ) => Types.TodoItemResponse[]
+) {
+  queryClient.setQueryData(todoItemsAllQueryKey(), updater);
 }
 
 /**
  * @return Success
  */
-export function setTodoItemsAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.TodoItemResponse[] | undefined) => Types.TodoItemResponse[]) {
+export function setTodoItemsAllDataByQueryId(
+  queryClient: QueryClient,
+  queryKey: QueryKey,
+  updater: (
+    data: Types.TodoItemResponse[] | undefined
+  ) => Types.TodoItemResponse[]
+) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
-    
+
 export function todoItemsUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoItems";
   url_ = url_.replace(/[?&]$/, "");
@@ -89,61 +126,94 @@ export function todoItemsUrl(): string {
 }
 
 export function todoItemsMutationKey(): MutationKey {
-  return trimArrayEnd([
-      'Client',
-      'todoItems',
-    ]);
+  return trimArrayEnd(["Client", "todoItems"]);
 }
 
 /**
- * @param body (optional) 
+ * @param body (optional)
  * @return Success
  */
-export function useTodoItemsMutation<TContext>(options?: Omit<UseMutationOptions<Types.TodoItemResponse, unknown, Types.CreateTodoItemRequest, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.TodoItemResponse, unknown, Types.CreateTodoItemRequest, TContext> {
+export function useTodoItemsMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<
+      Types.TodoItemResponse,
+      unknown,
+      Types.CreateTodoItemRequest,
+      TContext
+    >,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<
+  Types.TodoItemResponse,
+  unknown,
+  Types.CreateTodoItemRequest,
+  TContext
+> {
   const key = todoItemsMutationKey();
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
-      return useMutation((body: Types.CreateTodoItemRequest) => Types.Client.todoItems(body), {...options, mutationKey: key});
+
+  return useMutation(
+    (body: Types.CreateTodoItemRequest) => Types.Client.todoItems(body),
+    { ...options, mutationKey: key }
+  );
 }
-  
-    
+
 export function todoTagsAllUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoTags";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-let todoTagsAllDefaultOptions: UseQueryOptions<Types.TodoTagResponse[], unknown, Types.TodoTagResponse[]> = {
+let todoTagsAllDefaultOptions: UseQueryOptions<
+  Types.TodoTagResponse[],
+  unknown,
+  Types.TodoTagResponse[]
+> = {
   queryFn: __todoTagsAll,
 };
-export function getTodoTagsAllDefaultOptions(): UseQueryOptions<Types.TodoTagResponse[], unknown, Types.TodoTagResponse[]> {
+export function getTodoTagsAllDefaultOptions(): UseQueryOptions<
+  Types.TodoTagResponse[],
+  unknown,
+  Types.TodoTagResponse[]
+> {
   return todoTagsAllDefaultOptions;
-};
-export function setTodoTagsAllDefaultOptions(options: UseQueryOptions<Types.TodoTagResponse[], unknown, Types.TodoTagResponse[]>) {
+}
+export function setTodoTagsAllDefaultOptions(
+  options: UseQueryOptions<
+    Types.TodoTagResponse[],
+    unknown,
+    Types.TodoTagResponse[]
+  >
+) {
   todoTagsAllDefaultOptions = options;
 }
 
 export function todoTagsAllQueryKey(): QueryKey;
 export function todoTagsAllQueryKey(...params: any[]): QueryKey {
-  return trimArrayEnd([
-      'Client',
-      'todoTagsAll',
-    ]);
+  return trimArrayEnd(["Client", "todoTagsAll"]);
 }
 function __todoTagsAll() {
-  return Types.Client.todoTagsAll(
-    );
+  return Types.Client.todoTagsAll();
 }
 
 /**
  * @return Success
  */
-export function useTodoTagsAllQuery<TSelectData = Types.TodoTagResponse[], TError = unknown>(options?: UseQueryOptions<Types.TodoTagResponse[], TError, TSelectData>): UseQueryResult<TSelectData, TError>;
-export function useTodoTagsAllQuery<TSelectData = Types.TodoTagResponse[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
-  let options: UseQueryOptions<Types.TodoTagResponse[], TError, TSelectData> | undefined = undefined;
-  
+export function useTodoTagsAllQuery<
+  TSelectData = Types.TodoTagResponse[],
+  TError = unknown
+>(
+  options?: UseQueryOptions<Types.TodoTagResponse[], TError, TSelectData>
+): UseQueryResult<TSelectData, TError>;
+export function useTodoTagsAllQuery<
+  TSelectData = Types.TodoTagResponse[],
+  TError = unknown
+>(...params: any[]): UseQueryResult<TSelectData, TError> {
+  let options:
+    | UseQueryOptions<Types.TodoTagResponse[], TError, TSelectData>
+    | undefined = undefined;
 
   options = params[0] as any;
 
@@ -153,27 +223,39 @@ export function useTodoTagsAllQuery<TSelectData = Types.TodoTagResponse[], TErro
   return useQuery<Types.TodoTagResponse[], TError, TSelectData>({
     queryFn: __todoTagsAll,
     queryKey: todoTagsAllQueryKey(),
-    ...todoTagsAllDefaultOptions as unknown as UseQueryOptions<Types.TodoTagResponse[], TError, TSelectData>,
+    ...(todoTagsAllDefaultOptions as unknown as UseQueryOptions<
+      Types.TodoTagResponse[],
+      TError,
+      TSelectData
+    >),
     ...options,
   });
 }
 /**
  * @return Success
  */
-export function setTodoTagsAllData(queryClient: QueryClient, updater: (data: Types.TodoTagResponse[] | undefined) => Types.TodoTagResponse[], ) {
-  queryClient.setQueryData(todoTagsAllQueryKey(),
-    updater
-  );
+export function setTodoTagsAllData(
+  queryClient: QueryClient,
+  updater: (
+    data: Types.TodoTagResponse[] | undefined
+  ) => Types.TodoTagResponse[]
+) {
+  queryClient.setQueryData(todoTagsAllQueryKey(), updater);
 }
 
 /**
  * @return Success
  */
-export function setTodoTagsAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.TodoTagResponse[] | undefined) => Types.TodoTagResponse[]) {
+export function setTodoTagsAllDataByQueryId(
+  queryClient: QueryClient,
+  queryKey: QueryKey,
+  updater: (
+    data: Types.TodoTagResponse[] | undefined
+  ) => Types.TodoTagResponse[]
+) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
-    
+
 export function todoTagsUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoTags";
   url_ = url_.replace(/[?&]$/, "");
@@ -181,61 +263,94 @@ export function todoTagsUrl(): string {
 }
 
 export function todoTagsMutationKey(): MutationKey {
-  return trimArrayEnd([
-      'Client',
-      'todoTags',
-    ]);
+  return trimArrayEnd(["Client", "todoTags"]);
 }
 
 /**
- * @param body (optional) 
+ * @param body (optional)
  * @return Success
  */
-export function useTodoTagsMutation<TContext>(options?: Omit<UseMutationOptions<Types.TodoItemResponse, unknown, Types.CreateTodoTagRequest, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.TodoItemResponse, unknown, Types.CreateTodoTagRequest, TContext> {
+export function useTodoTagsMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<
+      Types.TodoItemResponse,
+      unknown,
+      Types.CreateTodoTagRequest,
+      TContext
+    >,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<
+  Types.TodoItemResponse,
+  unknown,
+  Types.CreateTodoTagRequest,
+  TContext
+> {
   const key = todoTagsMutationKey();
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
-      return useMutation((body: Types.CreateTodoTagRequest) => Types.Client.todoTags(body), {...options, mutationKey: key});
+
+  return useMutation(
+    (body: Types.CreateTodoTagRequest) => Types.Client.todoTags(body),
+    { ...options, mutationKey: key }
+  );
 }
-  
-    
+
 export function getWeatherForecastUrl(): string {
   let url_ = getBaseUrl() + "/WeatherForecast";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-let getWeatherForecastDefaultOptions: UseQueryOptions<Types.WeatherForecast[], unknown, Types.WeatherForecast[]> = {
+let getWeatherForecastDefaultOptions: UseQueryOptions<
+  Types.WeatherForecast[],
+  unknown,
+  Types.WeatherForecast[]
+> = {
   queryFn: __getWeatherForecast,
 };
-export function getGetWeatherForecastDefaultOptions(): UseQueryOptions<Types.WeatherForecast[], unknown, Types.WeatherForecast[]> {
+export function getGetWeatherForecastDefaultOptions(): UseQueryOptions<
+  Types.WeatherForecast[],
+  unknown,
+  Types.WeatherForecast[]
+> {
   return getWeatherForecastDefaultOptions;
-};
-export function setGetWeatherForecastDefaultOptions(options: UseQueryOptions<Types.WeatherForecast[], unknown, Types.WeatherForecast[]>) {
+}
+export function setGetWeatherForecastDefaultOptions(
+  options: UseQueryOptions<
+    Types.WeatherForecast[],
+    unknown,
+    Types.WeatherForecast[]
+  >
+) {
   getWeatherForecastDefaultOptions = options;
 }
 
 export function getWeatherForecastQueryKey(): QueryKey;
 export function getWeatherForecastQueryKey(...params: any[]): QueryKey {
-  return trimArrayEnd([
-      'Client',
-      'getWeatherForecast',
-    ]);
+  return trimArrayEnd(["Client", "getWeatherForecast"]);
 }
 function __getWeatherForecast() {
-  return Types.Client.getWeatherForecast(
-    );
+  return Types.Client.getWeatherForecast();
 }
 
 /**
  * @return Success
  */
-export function useGetWeatherForecastQuery<TSelectData = Types.WeatherForecast[], TError = unknown>(options?: UseQueryOptions<Types.WeatherForecast[], TError, TSelectData>): UseQueryResult<TSelectData, TError>;
-export function useGetWeatherForecastQuery<TSelectData = Types.WeatherForecast[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
-  let options: UseQueryOptions<Types.WeatherForecast[], TError, TSelectData> | undefined = undefined;
-  
+export function useGetWeatherForecastQuery<
+  TSelectData = Types.WeatherForecast[],
+  TError = unknown
+>(
+  options?: UseQueryOptions<Types.WeatherForecast[], TError, TSelectData>
+): UseQueryResult<TSelectData, TError>;
+export function useGetWeatherForecastQuery<
+  TSelectData = Types.WeatherForecast[],
+  TError = unknown
+>(...params: any[]): UseQueryResult<TSelectData, TError> {
+  let options:
+    | UseQueryOptions<Types.WeatherForecast[], TError, TSelectData>
+    | undefined = undefined;
 
   options = params[0] as any;
 
@@ -245,22 +360,35 @@ export function useGetWeatherForecastQuery<TSelectData = Types.WeatherForecast[]
   return useQuery<Types.WeatherForecast[], TError, TSelectData>({
     queryFn: __getWeatherForecast,
     queryKey: getWeatherForecastQueryKey(),
-    ...getWeatherForecastDefaultOptions as unknown as UseQueryOptions<Types.WeatherForecast[], TError, TSelectData>,
+    ...(getWeatherForecastDefaultOptions as unknown as UseQueryOptions<
+      Types.WeatherForecast[],
+      TError,
+      TSelectData
+    >),
     ...options,
   });
 }
 /**
  * @return Success
  */
-export function setGetWeatherForecastData(queryClient: QueryClient, updater: (data: Types.WeatherForecast[] | undefined) => Types.WeatherForecast[], ) {
-  queryClient.setQueryData(getWeatherForecastQueryKey(),
-    updater
-  );
+export function setGetWeatherForecastData(
+  queryClient: QueryClient,
+  updater: (
+    data: Types.WeatherForecast[] | undefined
+  ) => Types.WeatherForecast[]
+) {
+  queryClient.setQueryData(getWeatherForecastQueryKey(), updater);
 }
 
 /**
  * @return Success
  */
-export function setGetWeatherForecastDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.WeatherForecast[] | undefined) => Types.WeatherForecast[]) {
+export function setGetWeatherForecastDataByQueryId(
+  queryClient: QueryClient,
+  queryKey: QueryKey,
+  updater: (
+    data: Types.WeatherForecast[] | undefined
+  ) => Types.WeatherForecast[]
+) {
   queryClient.setQueryData(queryKey, updater);
 }
