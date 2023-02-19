@@ -1,12 +1,13 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
 
-type Guid = string;
+export type Guid = string;
 
-interface TodoItem {
+export interface TodoItem {
   description: string;
+  isActive: boolean;
   isComplete: boolean;
   rollsOver: boolean;
-  dueDate: Date;
+  dueDate: moment.Moment;
   tagIds: Guid[];
 }
 
