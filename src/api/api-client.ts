@@ -8,6 +8,8 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
+import * as moment from 'moment';
+
 export * as Client from './api-client/Client';
 
 export * as Query from './api-client/Query';
@@ -18,7 +20,7 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
     description?: string | null;
     isActive?: boolean;
     rollsOver?: boolean;
-    dateDate?: Date;
+    dateDate?: moment.Moment;
     tagIds?: string[] | null;
 
     constructor(data?: ICreateTodoItemRequest) {
@@ -35,7 +37,7 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
             this.description = _data["description"];
             this.isActive = _data["isActive"];
             this.rollsOver = _data["rollsOver"];
-            this.dateDate = _data["dateDate"] ? new Date(_data["dateDate"].toString()) : <any>null;
+            this.dateDate = _data["dateDate"] ? moment(_data["dateDate"].toString()) : <any>null;
             if (Array.isArray(_data["tagIds"])) {
                 this.tagIds = [] as any;
                 for (let item of _data["tagIds"])
@@ -70,7 +72,7 @@ export interface ICreateTodoItemRequest {
     description?: string | null;
     isActive?: boolean;
     rollsOver?: boolean;
-    dateDate?: Date;
+    dateDate?: moment.Moment;
     tagIds?: string[] | null;
 }
 
@@ -117,8 +119,8 @@ export class TodoItemResponse implements ITodoItemResponse {
     isComplete?: boolean;
     rollsOver?: boolean;
     rollOverCount?: number;
-    dueDate?: Date;
-    completionDate?: Date | null;
+    dueDate?: moment.Moment;
+    completionDate?: moment.Moment | null;
     tags?: string[] | null;
 
     constructor(data?: ITodoItemResponse) {
@@ -138,8 +140,8 @@ export class TodoItemResponse implements ITodoItemResponse {
             this.isComplete = _data["isComplete"];
             this.rollsOver = _data["rollsOver"];
             this.rollOverCount = _data["rollOverCount"];
-            this.dueDate = _data["dueDate"] ? new Date(_data["dueDate"].toString()) : <any>null;
-            this.completionDate = _data["completionDate"] ? new Date(_data["completionDate"].toString()) : <any>null;
+            this.dueDate = _data["dueDate"] ? moment(_data["dueDate"].toString()) : <any>null;
+            this.completionDate = _data["completionDate"] ? moment(_data["completionDate"].toString()) : <any>null;
             if (Array.isArray(_data["tags"])) {
                 this.tags = [] as any;
                 for (let item of _data["tags"])
@@ -181,8 +183,8 @@ export interface ITodoItemResponse {
     isComplete?: boolean;
     rollsOver?: boolean;
     rollOverCount?: number;
-    dueDate?: Date;
-    completionDate?: Date | null;
+    dueDate?: moment.Moment;
+    completionDate?: moment.Moment | null;
     tags?: string[] | null;
 }
 
@@ -227,7 +229,7 @@ export interface ITodoTagResponse {
 }
 
 export class WeatherForecast implements IWeatherForecast {
-    date?: Date;
+    date?: moment.Moment;
     temperatureC?: number;
     readonly temperatureF?: number;
     summary?: string | null;
@@ -243,7 +245,7 @@ export class WeatherForecast implements IWeatherForecast {
 
     init(_data?: any) {
         if (_data) {
-            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>null;
+            this.date = _data["date"] ? moment(_data["date"].toString()) : <any>null;
             this.temperatureC = _data["temperatureC"];
             (<any>this).temperatureF = _data["temperatureF"];
             this.summary = _data["summary"];
@@ -268,7 +270,7 @@ export class WeatherForecast implements IWeatherForecast {
 }
 
 export interface IWeatherForecast {
-    date?: Date;
+    date?: moment.Moment;
     temperatureC?: number;
     temperatureF?: number;
     summary?: string | null;
