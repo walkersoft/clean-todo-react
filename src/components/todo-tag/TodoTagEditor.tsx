@@ -1,18 +1,18 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { TodoTag } from "./TodoTagView";
+import { ITodoTagResponse } from "../../api/api-client";
 
 interface TodoTagEditorProps {
-  addTag: (tag: TodoTag) => void;
+  addTag: (tag: ITodoTagResponse) => void;
 }
 
-const initialItem: TodoTag = {
+const initialItem: ITodoTagResponse = {
   id: "",
-  name: "",
+  name: ""
 };
 
 export default function TodoTagEditor({ addTag }: TodoTagEditorProps) {
-  const [tag, setTag] = useState<TodoTag>(initialItem);
+  const [tag, setTag] = useState<ITodoTagResponse>(initialItem);
 
   return (
     <Stack direction="row">

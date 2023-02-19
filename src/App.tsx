@@ -3,15 +3,16 @@ import { NavigationBar } from "./components/common/navigation/NavigationBar";
 import React, { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import TodoTagEditor from "./components/todo-tag/TodoTagEditor";
-import { TodoTag, TodoTagView } from "./components/todo-tag/TodoTagView";
+import { TodoTagView } from "./components/todo-tag/TodoTagView";
 import { TodoItemEditor } from "./components/todo-item/TodoItemEditor";
 import { TodoItem, TodoItemView } from "./components/todo-item/TodoItemView";
+import { ITodoTagResponse } from "./api/api-client";
 
 function App() {
-  const [tags, setTags] = useState<TodoTag[]>([]);
+  const [tags, setTags] = useState<ITodoTagResponse[]>([]);
   const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
   
-  const addTag = (tag: TodoTag) => {
+  const addTag = (tag: ITodoTagResponse) => {
     setTags([tag, ...tags]);
   }
 

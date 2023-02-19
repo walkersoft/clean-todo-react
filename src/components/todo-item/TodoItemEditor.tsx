@@ -21,11 +21,11 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import { TodoTag } from "../todo-tag/TodoTagView";
-import { Guid, TodoItem } from "./TodoItemView";
+import { ITodoTagResponse } from "../../api/api-client";
+import { TodoItem } from "./TodoItemView";
 
 interface TodoItemEditorProps {
-  tags: TodoTag[];
+  tags: ITodoTagResponse[];
   addTodoItem: (item: TodoItem) => void;
 }
 
@@ -56,7 +56,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
     setTodoItem({ ...todoItem, tagIds: getSelectedTagIds() });
   };
 
-  const getSelectedTagIds = (): Guid[] => {
+  const getSelectedTagIds = (): string[] | undefined => {
     return tags
       .filter((t) => selectedTags.includes(t.name) !== undefined)
       .map((x) => x.id);
