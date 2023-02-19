@@ -4,8 +4,12 @@ import {
   ITodoTagResponse,
   ITodoItemResponse,
   CreateTodoTagRequest,
+  CreateTodoItemRequest,
+  ICreateTodoItemRequest,
 } from "../api/api-client";
 import {
+  useTodoItemsAllQuery,
+  useTodoItemsMutation,
   useTodoTagsAllQuery,
   useTodoTagsMutation,
 } from "../api/api-client/Query";
@@ -21,7 +25,9 @@ interface LandingPageProps {
 export function LandingPage({ apiClient }: LandingPageProps) {
   const tagsQuery = useTodoTagsAllQuery();
   const tagsPost = useTodoTagsMutation();
-  
+  const itemsQuery = useTodoItemsAllQuery();
+  const itemsPost = useTodoItemsMutation();
+
   const [tags, setTags] = useState<ITodoTagResponse[]>([]);
   const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
 
@@ -31,13 +37,16 @@ export function LandingPage({ apiClient }: LandingPageProps) {
     });
   };
 
-  const addTodoItem = (item: ITodoItemResponse) => {
-    setTodoItems([...todoItems, item]);
+  const addTodoItem = (item: ICreateTodoItemRequest) => {
+    itemsPost.mutate(new CreateTodoItemRequest({ ...item }), {
+      onSuccess: () => itemsQuery.refetch(),
+    });
   };
 
   useEffect(() => {
     setTags(!!tagsQuery.data ? tagsQuery.data : []);
-  }, [tagsQuery.data]);
+    setTodoItems(!!itemsQuery.data ? itemsQuery.data : []);
+  }, [tagsQuery.data, itemsQuery.data]);
 
   return (
     <>
