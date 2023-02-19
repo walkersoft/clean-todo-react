@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "api": "npx react-query-swagger /tanstack /input:https://localhost:7144/swagger/v1/swagger.json /output:src/api/api-client.ts /template:fetch /use-recommended-configuration /DateTimeType:MomentJS"
   },
   "eslintConfig": {
     "extends": [
