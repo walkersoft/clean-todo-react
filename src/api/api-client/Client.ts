@@ -1,3 +1,6 @@
+/* tslint:disable */
+/* eslint-disable */
+
 import * as Types from '../api-client';
 import { throwException } from '../api-client';
 import { getFetch, getBaseUrl, getJsonParseReviver } from './helpers';
@@ -34,7 +37,7 @@ function processTodoItemsAll(response: Response): Promise<Types.TodoItemResponse
                 result200!.push(Types.TodoItemResponse.fromJS(item));
         }
         else {
-            result200 = null as any;
+            result200 = <any>null;
         }
         return result200;
         });
@@ -120,7 +123,7 @@ function processTodoTagsAll(response: Response): Promise<Types.TodoTagResponse[]
                 result200!.push(Types.TodoTagResponse.fromJS(item));
         }
         else {
-            result200 = null as any;
+            result200 = <any>null;
         }
         return result200;
         });
@@ -206,7 +209,7 @@ function processGetWeatherForecast(response: Response): Promise<Types.WeatherFor
                 result200!.push(Types.WeatherForecast.fromJS(item));
         }
         else {
-            result200 = null as any;
+            result200 = <any>null;
         }
         return result200;
         });
