@@ -34,7 +34,7 @@ function processTodoItemsAll(response: Response): Promise<Types.TodoItemResponse
                 result200!.push(Types.TodoItemResponse.fromJS(item));
         }
         else {
-            result200 = <any>null;
+            result200 = null as any;
         }
         return result200;
         });
@@ -120,7 +120,7 @@ function processTodoTagsAll(response: Response): Promise<Types.TodoTagResponse[]
                 result200!.push(Types.TodoTagResponse.fromJS(item));
         }
         else {
-            result200 = <any>null;
+            result200 = null as any;
         }
         return result200;
         });
@@ -206,7 +206,7 @@ function processGetWeatherForecast(response: Response): Promise<Types.WeatherFor
                 result200!.push(Types.WeatherForecast.fromJS(item));
         }
         else {
-            result200 = <any>null;
+            result200 = null as any;
         }
         return result200;
         });

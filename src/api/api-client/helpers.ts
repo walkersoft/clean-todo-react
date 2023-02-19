@@ -1,9 +1,6 @@
 //-----ReactQueryFile-----
-import { useQuery, useMutation } from '@tanstack/react-query';
-import type { UseQueryResult, QueryFunctionContext, UseQueryOptions, QueryClient, QueryKey, MutationKey, UseMutationOptions, UseMutationResult, QueryMeta, MutationMeta } from '@tanstack/react-query';
+import type { QueryMeta, MutationMeta } from '@tanstack/react-query';
 import type { QueryMetaContextValue } from 'react-query-swagger';
-import { QueryMetaContext } from 'react-query-swagger';
-import { useContext } from 'react';
 
 let _jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 export function getJsonParseReviver() {
@@ -71,7 +68,7 @@ export function setBaseUrl(baseUrl: string) {
   _baseUrl = baseUrl;
 }
 
-let _fetchFactory = () => <any>window;
+let _fetchFactory = () => window as any;
 /*
   Returns an instance of fetch either created by a configured factory or a default one
 */
