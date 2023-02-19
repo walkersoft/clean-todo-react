@@ -21,25 +21,23 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import { ITodoTagResponse } from "../../api/api-client";
-import { TodoItem } from "./TodoItemView";
+import { ITodoItemResponse, ITodoTagResponse } from "../../api/api-client";
 
 interface TodoItemEditorProps {
   tags: ITodoTagResponse[];
-  addTodoItem: (item: TodoItem) => void;
+  addTodoItem: (item: ITodoItemResponse) => void;
 }
 
-const initialItem: TodoItem = {
+const initialItem: ITodoItemResponse = {
   description: "",
   isActive: true,
-  isComplete: false,
   rollsOver: false,
   dueDate: moment(),
-  tagIds: [],
+  tags: []
 };
 
 export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
-  const [todoItem, setTodoItem] = useState<TodoItem>(initialItem);
+  const [todoItem, setTodoItem] = useState<ITodoItemResponse>(initialItem);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
@@ -53,7 +51,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
       target: { value },
     } = event;
     setSelectedTags(typeof value === "string" ? value.split(",") : value);
-    setTodoItem({ ...todoItem, tagIds: getSelectedTagIds() });
+    setTodoItem({ ...todoItem, tags: getSelectedTagIds() });
   };
 
   const getSelectedTagIds = (): string[] | undefined => {

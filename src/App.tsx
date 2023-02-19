@@ -5,18 +5,18 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TodoTagEditor from "./components/todo-tag/TodoTagEditor";
 import { TodoTagView } from "./components/todo-tag/TodoTagView";
 import { TodoItemEditor } from "./components/todo-item/TodoItemEditor";
-import { TodoItem, TodoItemView } from "./components/todo-item/TodoItemView";
-import { ITodoTagResponse } from "./api/api-client";
+import { TodoItemView } from "./components/todo-item/TodoItemView";
+import { ITodoItemResponse, ITodoTagResponse } from "./api/api-client";
 
 function App() {
   const [tags, setTags] = useState<ITodoTagResponse[]>([]);
-  const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
+  const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
   
   const addTag = (tag: ITodoTagResponse) => {
     setTags([tag, ...tags]);
   }
 
-  const addTodoItem = (item: TodoItem) => {
+  const addTodoItem = (item: ITodoItemResponse) => {
     setTodoItems([...todoItems, item]);
   }
 
