@@ -21,28 +21,28 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import { ITodoItemResponse, ITodoTagResponse } from "../../api/api-client";
+import { ICreateTodoItemRequest, ITodoTagResponse } from "../../api/api-client";
 
 interface TodoItemEditorProps {
   tags: ITodoTagResponse[];
-  addTodoItem: (item: ITodoItemResponse) => void;
+  addTodoItem: (item: ICreateTodoItemRequest) => void;
 }
 
-const initialItem: ITodoItemResponse = {
+const initialItem: ICreateTodoItemRequest = {
   description: "",
   isActive: true,
   rollsOver: false,
-  dueDate: moment(),
-  tags: [],
+  dateDate: moment(),
+  tagIds: [],
 };
 
 export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
-  const [todoItem, setTodoItem] = useState<ITodoItemResponse>(initialItem);
+  const [todoItem, setTodoItem] = useState<ICreateTodoItemRequest>(initialItem);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
     if (newDate !== null) {
-      setTodoItem({ ...todoItem, dueDate: newDate });
+      setTodoItem({ ...todoItem, dateDate: newDate });
     }
   };
 
@@ -53,7 +53,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
     setSelectedTags((_) => {
       const newlySelected =
         typeof value === "string" ? value.split(",") : value;
-      setTodoItem({ ...todoItem, tags: getSelectedTagIds(newlySelected) });
+      setTodoItem({ ...todoItem, tagIds: getSelectedTagIds(newlySelected) });
       return newlySelected;
     });
   };
@@ -106,7 +106,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
               label="Due Date"
-              value={todoItem.dueDate}
+              value={todoItem.dateDate}
               onChange={handleDueDateChange}
               minDate={moment()}
               renderInput={(params) => <TextField {...params} />}

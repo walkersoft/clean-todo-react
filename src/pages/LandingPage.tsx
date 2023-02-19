@@ -1,34 +1,53 @@
 import { QueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
-import { ITodoTagResponse, ITodoItemResponse } from "../api/api-client";
-import { useTodoTagsAllQuery } from "../api/api-client/Query";
+import {
+  ITodoTagResponse,
+  ITodoItemResponse,
+  CreateTodoTagRequest,
+  CreateTodoItemRequest,
+  ICreateTodoItemRequest,
+} from "../api/api-client";
+import {
+  useTodoItemsAllQuery,
+  useTodoItemsMutation,
+  useTodoTagsAllQuery,
+  useTodoTagsMutation,
+} from "../api/api-client/Query";
 import { TodoItemEditor } from "../components/todo-item/TodoItemEditor";
 import { TodoItemView } from "../components/todo-item/TodoItemView";
 import TodoTagEditor from "../components/todo-tag/TodoTagEditor";
 import { TodoTagView } from "../components/todo-tag/TodoTagView";
 
 interface LandingPageProps {
-  apiClient: QueryClient
+  apiClient: QueryClient;
 }
 
 export function LandingPage({ apiClient }: LandingPageProps) {
   const tagsQuery = useTodoTagsAllQuery();
+  const tagsPost = useTodoTagsMutation();
+  const itemsQuery = useTodoItemsAllQuery();
+  const itemsPost = useTodoItemsMutation();
+
   const [tags, setTags] = useState<ITodoTagResponse[]>([]);
   const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
 
   const addTag = (tag: ITodoTagResponse) => {
-    setTags([tag, ...tags]);
+    tagsPost.mutate(new CreateTodoTagRequest({ ...tag }), {
+      onSuccess: () => tagsQuery.refetch(),
+    });
   };
 
-  const addTodoItem = (item: ITodoItemResponse) => {
-    setTodoItems([...todoItems, item]);
+  const addTodoItem = (item: ICreateTodoItemRequest) => {
+    itemsPost.mutate(new CreateTodoItemRequest({ ...item }), {
+      onSuccess: () => itemsQuery.refetch(),
+    });
   };
 
   useEffect(() => {
-    if (!!tagsQuery.data && tagsQuery.data?.length > 0) {
-      setTags(tagsQuery.data);
-    }
-  }, [tagsQuery.data, setTags]);
+    setTags(!!tagsQuery.data ? tagsQuery.data : []);
+    setTodoItems(!!itemsQuery.data ? itemsQuery.data : []);
+  }, [tagsQuery.data, itemsQuery.data]);
+
   return (
     <>
       <TodoTagEditor addTag={addTag} />
