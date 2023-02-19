@@ -18,7 +18,7 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
   description?: string | undefined;
   isActive?: boolean;
   rollsOver?: boolean;
-  dateDate?: moment.Moment;
+  dueDate?: moment.Moment;
   tagIds?: string[] | undefined;
 
   constructor(data?: ICreateTodoItemRequest) {
@@ -35,8 +35,8 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
       this.description = _data["description"];
       this.isActive = _data["isActive"];
       this.rollsOver = _data["rollsOver"];
-      this.dateDate = _data["dateDate"]
-        ? moment(_data["dateDate"].toString())
+      this.dueDate = _data["dueDate"]
+        ? moment(_data["dueDate"].toString())
         : <any>undefined;
       if (Array.isArray(_data["tagIds"])) {
         this.tagIds = [] as any;
@@ -57,8 +57,8 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
     data["description"] = this.description;
     data["isActive"] = this.isActive;
     data["rollsOver"] = this.rollsOver;
-    data["dateDate"] = this.dateDate
-      ? this.dateDate.toISOString()
+    data["dueDate"] = this.dueDate
+      ? this.dueDate.toISOString()
       : <any>undefined;
     if (Array.isArray(this.tagIds)) {
       data["tagIds"] = [];
@@ -72,7 +72,7 @@ export interface ICreateTodoItemRequest {
   description?: string | undefined;
   isActive?: boolean;
   rollsOver?: boolean;
-  dateDate?: moment.Moment;
+  dueDate?: moment.Moment;
   tagIds?: string[] | undefined;
 }
 
