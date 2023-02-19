@@ -1,13 +1,8 @@
 import { Typography } from "@mui/material";
-import { Guid } from "../todo-item/TodoItemView"
-
-export interface TodoTag {
-  id: Guid;
-  name: string;
-}
+import { ITodoTagResponse } from "../../api/api-client";
 
 interface TodoTagViewProps {
-  tags: TodoTag[]
+  tags: ITodoTagResponse[]
 }
 
 export function TodoTagView({ tags }: TodoTagViewProps) {

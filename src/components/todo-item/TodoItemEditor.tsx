@@ -21,25 +21,23 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import { TodoTag } from "../todo-tag/TodoTagView";
-import { Guid, TodoItem } from "./TodoItemView";
+import { ITodoItemResponse, ITodoTagResponse } from "../../api/api-client";
 
 interface TodoItemEditorProps {
-  tags: TodoTag[];
-  addTodoItem: (item: TodoItem) => void;
+  tags: ITodoTagResponse[];
+  addTodoItem: (item: ITodoItemResponse) => void;
 }
 
-const initialItem: TodoItem = {
+const initialItem: ITodoItemResponse = {
   description: "",
   isActive: true,
-  isComplete: false,
   rollsOver: false,
   dueDate: moment(),
-  tagIds: [],
+  tags: [],
 };
 
 export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
-  const [todoItem, setTodoItem] = useState<TodoItem>(initialItem);
+  const [todoItem, setTodoItem] = useState<ITodoItemResponse>(initialItem);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
@@ -52,14 +50,21 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
     const {
       target: { value },
     } = event;
-    setSelectedTags(typeof value === "string" ? value.split(",") : value);
-    setTodoItem({ ...todoItem, tagIds: getSelectedTagIds() });
+    setSelectedTags((_) => {
+      const newlySelected =
+        typeof value === "string" ? value.split(",") : value;
+      setTodoItem({ ...todoItem, tags: getSelectedTagIds(newlySelected) });
+      return newlySelected;
+    });
   };
 
-  const getSelectedTagIds = (): Guid[] => {
-    return tags
-      .filter((t) => selectedTags.includes(t.name) !== undefined)
-      .map((x) => x.id);
+  const getSelectedTagIds = (selected: string[]): string[] | undefined => {
+    const ids: string[] = [];
+    tags
+      .filter((t) => !!t.name && selected.includes(t.name) !== undefined)
+      .forEach((t) => !!t.id && ids.push(t.id));
+
+    return ids;
   };
 
   return (

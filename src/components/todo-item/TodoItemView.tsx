@@ -1,18 +1,8 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
-
-export type Guid = string;
-
-export interface TodoItem {
-  description: string;
-  isActive: boolean;
-  isComplete: boolean;
-  rollsOver: boolean;
-  dueDate: moment.Moment;
-  tagIds: Guid[];
-}
+import { ITodoItemResponse } from "../../api/api-client";
 
 interface TodoItemViewProps {
-  todoItems: TodoItem[];
+  todoItems: ITodoItemResponse[];
 }
 
 export function TodoItemView({ todoItems }: TodoItemViewProps) {
