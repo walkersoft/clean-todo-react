@@ -1,3 +1,5 @@
+/* tslint:disable */
+/* eslint-disable */
 import * as Types from "../api-client";
 import { throwException } from "../api-client";
 import { getBaseUrl, getFetch, getJsonParseReviver } from "./helpers";

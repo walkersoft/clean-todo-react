@@ -8,7 +8,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import * as moment from "moment";
+import moment from "moment";
 
 export * as Client from "./api-client/Client";
 export { getFetch, setBaseUrl, setFetchFactory } from "./api-client/helpers";
