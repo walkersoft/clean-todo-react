@@ -33,7 +33,7 @@ const initialItem: ITodoItemResponse = {
   isActive: true,
   rollsOver: false,
   dueDate: moment(),
-  tags: []
+  tags: [],
 };
 
 export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
@@ -50,14 +50,21 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
     const {
       target: { value },
     } = event;
-    setSelectedTags(typeof value === "string" ? value.split(",") : value);
-    setTodoItem({ ...todoItem, tags: getSelectedTagIds() });
+    setSelectedTags((_) => {
+      const newlySelected =
+        typeof value === "string" ? value.split(",") : value;
+      setTodoItem({ ...todoItem, tags: getSelectedTagIds(newlySelected) });
+      return newlySelected;
+    });
   };
 
-  const getSelectedTagIds = (): string[] | undefined => {
-    return tags
-      .filter((t) => selectedTags.includes(t.name) !== undefined)
-      .map((x) => x.id);
+  const getSelectedTagIds = (selected: string[]): string[] | undefined => {
+    const ids: string[] = [];
+    tags
+      .filter((t) => !!t.name && selected.includes(t.name) !== undefined)
+      .forEach((t) => !!t.id && ids.push(t.id));
+
+    return ids;
   };
 
   return (
