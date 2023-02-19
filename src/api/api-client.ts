@@ -8,7 +8,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 export * as Client from './api-client/Client';
 
@@ -17,11 +17,11 @@ export * as Query from './api-client/Query';
 
 
 export class CreateTodoItemRequest implements ICreateTodoItemRequest {
-    description?: string | null;
+    description?: string | undefined;
     isActive?: boolean;
     rollsOver?: boolean;
     dateDate?: moment.Moment;
-    tagIds?: string[] | null;
+    tagIds?: string[] | undefined;
 
     constructor(data?: ICreateTodoItemRequest) {
         if (data) {
@@ -37,7 +37,7 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
             this.description = _data["description"];
             this.isActive = _data["isActive"];
             this.rollsOver = _data["rollsOver"];
-            this.dateDate = _data["dateDate"] ? moment(_data["dateDate"].toString()) : <any>null;
+            this.dateDate = _data["dateDate"] ? moment(_data["dateDate"].toString()) : <any>undefined;
             if (Array.isArray(_data["tagIds"])) {
                 this.tagIds = [] as any;
                 for (let item of _data["tagIds"])
@@ -58,7 +58,7 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
         data["description"] = this.description;
         data["isActive"] = this.isActive;
         data["rollsOver"] = this.rollsOver;
-        data["dateDate"] = this.dateDate && this.dateDate.toISOString();
+        data["dateDate"] = this.dateDate ? this.dateDate.toISOString() : <any>undefined;
         if (Array.isArray(this.tagIds)) {
             data["tagIds"] = [];
             for (let item of this.tagIds)
@@ -69,15 +69,15 @@ export class CreateTodoItemRequest implements ICreateTodoItemRequest {
 }
 
 export interface ICreateTodoItemRequest {
-    description?: string | null;
+    description?: string | undefined;
     isActive?: boolean;
     rollsOver?: boolean;
     dateDate?: moment.Moment;
-    tagIds?: string[] | null;
+    tagIds?: string[] | undefined;
 }
 
 export class CreateTodoTagRequest implements ICreateTodoTagRequest {
-    name?: string | null;
+    name?: string | undefined;
 
     constructor(data?: ICreateTodoTagRequest) {
         if (data) {
@@ -109,19 +109,19 @@ export class CreateTodoTagRequest implements ICreateTodoTagRequest {
 }
 
 export interface ICreateTodoTagRequest {
-    name?: string | null;
+    name?: string | undefined;
 }
 
 export class TodoItemResponse implements ITodoItemResponse {
     id?: string;
-    description?: string | null;
+    description?: string | undefined;
     isActive?: boolean;
     isComplete?: boolean;
     rollsOver?: boolean;
     rollOverCount?: number;
     dueDate?: moment.Moment;
-    completionDate?: moment.Moment | null;
-    tags?: string[] | null;
+    completionDate?: moment.Moment | undefined;
+    tags?: string[] | undefined;
 
     constructor(data?: ITodoItemResponse) {
         if (data) {
@@ -140,8 +140,8 @@ export class TodoItemResponse implements ITodoItemResponse {
             this.isComplete = _data["isComplete"];
             this.rollsOver = _data["rollsOver"];
             this.rollOverCount = _data["rollOverCount"];
-            this.dueDate = _data["dueDate"] ? moment(_data["dueDate"].toString()) : <any>null;
-            this.completionDate = _data["completionDate"] ? moment(_data["completionDate"].toString()) : <any>null;
+            this.dueDate = _data["dueDate"] ? moment(_data["dueDate"].toString()) : <any>undefined;
+            this.completionDate = _data["completionDate"] ? moment(_data["completionDate"].toString()) : <any>undefined;
             if (Array.isArray(_data["tags"])) {
                 this.tags = [] as any;
                 for (let item of _data["tags"])
@@ -165,8 +165,8 @@ export class TodoItemResponse implements ITodoItemResponse {
         data["isComplete"] = this.isComplete;
         data["rollsOver"] = this.rollsOver;
         data["rollOverCount"] = this.rollOverCount;
-        data["dueDate"] = this.dueDate && this.dueDate.toISOString();
-        data["completionDate"] = this.completionDate && this.completionDate.toISOString();
+        data["dueDate"] = this.dueDate ? this.dueDate.toISOString() : <any>undefined;
+        data["completionDate"] = this.completionDate ? this.completionDate.toISOString() : <any>undefined;
         if (Array.isArray(this.tags)) {
             data["tags"] = [];
             for (let item of this.tags)
@@ -178,19 +178,19 @@ export class TodoItemResponse implements ITodoItemResponse {
 
 export interface ITodoItemResponse {
     id?: string;
-    description?: string | null;
+    description?: string | undefined;
     isActive?: boolean;
     isComplete?: boolean;
     rollsOver?: boolean;
     rollOverCount?: number;
     dueDate?: moment.Moment;
-    completionDate?: moment.Moment | null;
-    tags?: string[] | null;
+    completionDate?: moment.Moment | undefined;
+    tags?: string[] | undefined;
 }
 
 export class TodoTagResponse implements ITodoTagResponse {
     id?: string;
-    name?: string | null;
+    name?: string | undefined;
 
     constructor(data?: ITodoTagResponse) {
         if (data) {
@@ -225,14 +225,14 @@ export class TodoTagResponse implements ITodoTagResponse {
 
 export interface ITodoTagResponse {
     id?: string;
-    name?: string | null;
+    name?: string | undefined;
 }
 
 export class WeatherForecast implements IWeatherForecast {
     date?: moment.Moment;
     temperatureC?: number;
     readonly temperatureF?: number;
-    summary?: string | null;
+    summary?: string | undefined;
 
     constructor(data?: IWeatherForecast) {
         if (data) {
@@ -245,7 +245,7 @@ export class WeatherForecast implements IWeatherForecast {
 
     init(_data?: any) {
         if (_data) {
-            this.date = _data["date"] ? moment(_data["date"].toString()) : <any>null;
+            this.date = _data["date"] ? moment(_data["date"].toString()) : <any>undefined;
             this.temperatureC = _data["temperatureC"];
             (<any>this).temperatureF = _data["temperatureF"];
             this.summary = _data["summary"];
@@ -261,7 +261,7 @@ export class WeatherForecast implements IWeatherForecast {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["date"] = this.date && this.date.toISOString();
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["temperatureC"] = this.temperatureC;
         data["temperatureF"] = this.temperatureF;
         data["summary"] = this.summary;
@@ -273,7 +273,7 @@ export interface IWeatherForecast {
     date?: moment.Moment;
     temperatureC?: number;
     temperatureF?: number;
-    summary?: string | null;
+    summary?: string | undefined;
 }
 
 export class ApiException extends Error {
