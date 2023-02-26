@@ -256,26 +256,26 @@ export function setTodoTagsAllDataByQueryId(
   queryClient.setQueryData(queryKey, updater);
 }
 
-export function todoTagsUrl(): string {
+export function todoTagsPOSTUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoTags";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-export function todoTagsMutationKey(): MutationKey {
-  return trimArrayEnd(["Client", "todoTags"]);
+export function todoTagsPOSTMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "todoTagsPOST"]);
 }
 
 /**
  * @param body (optional)
  * @return Success
  */
-export function useTodoTagsMutation<TContext>(
+export function useTodoTagsPOSTMutation<TContext>(
   options?: Omit<
     UseMutationOptions<
       Types.TodoItemResponse,
       unknown,
-      Types.CreateTodoTagRequest,
+      Types.TodoTagRequest,
       TContext
     >,
     "mutationKey" | "mutationFn"
@@ -283,18 +283,95 @@ export function useTodoTagsMutation<TContext>(
 ): UseMutationResult<
   Types.TodoItemResponse,
   unknown,
-  Types.CreateTodoTagRequest,
+  Types.TodoTagRequest,
   TContext
 > {
-  const key = todoTagsMutationKey();
+  const key = todoTagsPOSTMutationKey();
 
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
 
   return useMutation(
-    (body: Types.CreateTodoTagRequest) => Types.Client.todoTags(body),
+    (body: Types.TodoTagRequest) => Types.Client.todoTagsPOST(body),
     { ...options, mutationKey: key }
   );
+}
+
+export function todoTagsPUTUrl(): string {
+  let url_ = getBaseUrl() + "/api/TodoTags";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function todoTagsPUTMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "todoTagsPUT"]);
+}
+
+/**
+ * @param body (optional)
+ * @return Success
+ */
+export function useTodoTagsPUTMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<
+      Types.TodoItemResponse,
+      unknown,
+      Types.TodoTagRequest,
+      TContext
+    >,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<
+  Types.TodoItemResponse,
+  unknown,
+  Types.TodoTagRequest,
+  TContext
+> {
+  const key = todoTagsPUTMutationKey();
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(
+    (body: Types.TodoTagRequest) => Types.Client.todoTagsPUT(body),
+    { ...options, mutationKey: key }
+  );
+}
+
+export function todoTagsDELETEUrl(id?: string | undefined): string {
+  let url_ = getBaseUrl() + "/api/TodoTags?";
+  if (id === null) throw new Error("The parameter 'id' cannot be null.");
+  else if (id !== undefined) url_ += "id=" + encodeURIComponent("" + id) + "&";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function todoTagsDELETEMutationKey(
+  id?: string | undefined
+): MutationKey {
+  return trimArrayEnd(["Client", "todoTagsDELETE", id as any]);
+}
+
+/**
+ * @param id (optional)
+ * @return Success
+ */
+export function useTodoTagsDELETEMutation<TContext>(
+  id?: string | undefined,
+  options?: Omit<
+    UseMutationOptions<void, unknown, void, TContext>,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<void, unknown, void, TContext> {
+  const key = todoTagsDELETEMutationKey(id);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(() => Types.Client.todoTagsDELETE(id), {
+    ...options,
+    mutationKey: key,
+  });
 }
 
 export function getWeatherForecastUrl(): string {
@@ -303,26 +380,18 @@ export function getWeatherForecastUrl(): string {
   return url_;
 }
 
-let getWeatherForecastDefaultOptions: UseQueryOptions<
-  Types.WeatherForecast[],
-  unknown,
-  Types.WeatherForecast[]
-> = {
+let getWeatherForecastDefaultOptions: UseQueryOptions<void, unknown, void> = {
   queryFn: __getWeatherForecast,
 };
 export function getGetWeatherForecastDefaultOptions(): UseQueryOptions<
-  Types.WeatherForecast[],
+  void,
   unknown,
-  Types.WeatherForecast[]
+  void
 > {
   return getWeatherForecastDefaultOptions;
 }
 export function setGetWeatherForecastDefaultOptions(
-  options: UseQueryOptions<
-    Types.WeatherForecast[],
-    unknown,
-    Types.WeatherForecast[]
-  >
+  options: UseQueryOptions<void, unknown, void>
 ) {
   getWeatherForecastDefaultOptions = options;
 }
@@ -335,60 +404,47 @@ function __getWeatherForecast() {
   return Types.Client.getWeatherForecast();
 }
 
-/**
- * @return Success
- */
 export function useGetWeatherForecastQuery<
-  TSelectData = Types.WeatherForecast[],
+  TSelectData = void,
   TError = unknown
 >(
-  options?: UseQueryOptions<Types.WeatherForecast[], TError, TSelectData>
+  options?: UseQueryOptions<void, TError, TSelectData>
 ): UseQueryResult<TSelectData, TError>;
 export function useGetWeatherForecastQuery<
-  TSelectData = Types.WeatherForecast[],
+  TSelectData = void,
   TError = unknown
 >(...params: any[]): UseQueryResult<TSelectData, TError> {
-  let options:
-    | UseQueryOptions<Types.WeatherForecast[], TError, TSelectData>
-    | undefined = undefined;
+  let options: UseQueryOptions<void, TError, TSelectData> | undefined =
+    undefined;
 
   options = params[0] as any;
 
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
 
-  return useQuery<Types.WeatherForecast[], TError, TSelectData>({
+  return useQuery<void, TError, TSelectData>({
     queryFn: __getWeatherForecast,
     queryKey: getWeatherForecastQueryKey(),
     ...(getWeatherForecastDefaultOptions as unknown as UseQueryOptions<
-      Types.WeatherForecast[],
+      void,
       TError,
       TSelectData
     >),
     ...options,
   });
 }
-/**
- * @return Success
- */
+
 export function setGetWeatherForecastData(
   queryClient: QueryClient,
-  updater: (
-    data: Types.WeatherForecast[] | undefined
-  ) => Types.WeatherForecast[]
+  updater: (data: void | undefined) => void
 ) {
   queryClient.setQueryData(getWeatherForecastQueryKey(), updater);
 }
 
-/**
- * @return Success
- */
 export function setGetWeatherForecastDataByQueryId(
   queryClient: QueryClient,
   queryKey: QueryKey,
-  updater: (
-    data: Types.WeatherForecast[] | undefined
-  ) => Types.WeatherForecast[]
+  updater: (data: void | undefined) => void
 ) {
   queryClient.setQueryData(queryKey, updater);
 }
