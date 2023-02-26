@@ -21,7 +21,6 @@ export default function TodoTagEditor({ addTag }: TodoTagEditorProps) {
         variant="standard"
         onChange={(e) => {
           setTag({
-            id: e.target.value + "-" + Math.random(),
             name: e.target.value,
           });
         }}
