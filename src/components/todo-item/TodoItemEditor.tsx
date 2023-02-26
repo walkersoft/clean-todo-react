@@ -61,7 +61,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
   const getSelectedTagIds = (selected: string[]): string[] | undefined => {
     const ids: string[] = [];
     tags
-      .filter((t) => !!t.name && selected.includes(t.name) !== undefined)
+      .filter((t) => !!t.name && selected.includes(t.name))
       .forEach((t) => !!t.id && ids.push(t.id));
 
     return ids;
