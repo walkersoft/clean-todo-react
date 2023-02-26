@@ -1,16 +1,17 @@
 import { Typography } from "@mui/material";
 import { ITodoTagResponse } from "../../api/api-client";
+import { TodoTagListItem } from "./TodoTagListItem";
 
-interface TodoTagViewProps {
+interface TodoTagListViewProps {
   tags: ITodoTagResponse[]
 }
 
-export function TodoTagView({ tags }: TodoTagViewProps) {
+export function TodoTagListView({ tags }: TodoTagListViewProps) {
   return (
     <>
       <Typography variant="h6">Existing Tags</Typography>
       {tags.map((value, index) => {
-        return <Typography key={index} variant="body1">{value.name}</Typography>
+        return <TodoTagListItem key={index} tag={value} />
       })}
     </>
   );

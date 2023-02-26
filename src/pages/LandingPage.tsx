@@ -16,7 +16,7 @@ import {
 import { TodoItemEditor } from "../components/todo-item/TodoItemEditor";
 import { TodoItemListView } from "../components/todo-item/TodoItemListView";
 import TodoTagEditor from "../components/todo-tag/TodoTagEditor";
-import { TodoTagView } from "../components/todo-tag/TodoTagView";
+import { TodoTagListView } from "../components/todo-tag/TodoTagListView";
 
 interface LandingPageProps {
   apiClient: QueryClient;
@@ -51,7 +51,7 @@ export function LandingPage({ apiClient }: LandingPageProps) {
   return (
     <>
       <TodoTagEditor addTag={addTag} />
-      <TodoTagView tags={tags} />
+      <TodoTagListView tags={tags} />
       <TodoItemEditor tags={tags} addTodoItem={addTodoItem} />
       <TodoItemListView todoItems={todoItems} />
     </>
