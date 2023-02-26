@@ -14,7 +14,7 @@ import {
   useTodoTagsMutation,
 } from "../api/api-client/Query";
 import { TodoItemEditor } from "../components/todo-item/TodoItemEditor";
-import { TodoItemView } from "../components/todo-item/TodoItemView";
+import { TodoItemListView } from "../components/todo-item/TodoItemListView";
 import TodoTagEditor from "../components/todo-tag/TodoTagEditor";
 import { TodoTagView } from "../components/todo-tag/TodoTagView";
 
@@ -53,7 +53,7 @@ export function LandingPage({ apiClient }: LandingPageProps) {
       <TodoTagEditor addTag={addTag} />
       <TodoTagView tags={tags} />
       <TodoItemEditor tags={tags} addTodoItem={addTodoItem} />
-      <TodoItemView todoItems={todoItems} />
+      <TodoItemListView todoItems={todoItems} />
     </>
   );
 }
