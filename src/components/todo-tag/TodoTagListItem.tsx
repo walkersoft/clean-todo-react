@@ -1,4 +1,5 @@
-import { Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton, ListItem, ListItemText } from "@mui/material";
 import { ITodoTagResponse } from "../../api/api-client";
 
 interface TodoTagListItemProps {
@@ -7,5 +8,15 @@ interface TodoTagListItemProps {
 
 export function TodoTagListItem({ tag }: TodoTagListItemProps) {
   const { name } = tag;
-  return <Typography variant="body1">{name}</Typography>;
+  return (
+    <ListItem
+      secondaryAction={
+        <IconButton edge="end" color="error">
+          <DeleteIcon />
+        </IconButton>
+      }
+    >
+      <ListItemText primary={name} />
+    </ListItem>
+  );
 }
