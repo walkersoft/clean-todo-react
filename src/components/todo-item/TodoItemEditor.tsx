@@ -32,7 +32,7 @@ const initialItem: ICreateTodoItemRequest = {
   description: "",
   isActive: true,
   rollsOver: false,
-  dateDate: moment(),
+  dueDate: moment(),
   tagIds: [],
 };
 
@@ -42,7 +42,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
     if (newDate !== null) {
-      setTodoItem({ ...todoItem, dateDate: newDate });
+      setTodoItem({ ...todoItem, dueDate: newDate });
     }
   };
 
@@ -106,7 +106,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
           <LocalizationProvider dateAdapter={AdapterMoment}>
             <DatePicker
               label="Due Date"
-              value={todoItem.dateDate}
+              value={todoItem.dueDate}
               onChange={handleDueDateChange}
               minDate={moment()}
               renderInput={(params) => <TextField {...params} />}

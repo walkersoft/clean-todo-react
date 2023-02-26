@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import {
   ITodoTagResponse,
   ITodoItemResponse,
-  CreateTodoTagRequest,
+  TodoTagRequest,
   CreateTodoItemRequest,
   ICreateTodoItemRequest,
 } from "../api/api-client";
@@ -11,7 +11,7 @@ import {
   useTodoItemsAllQuery,
   useTodoItemsMutation,
   useTodoTagsAllQuery,
-  useTodoTagsMutation,
+  useTodoTagsPOSTMutation,
 } from "../api/api-client/Query";
 import { TodoItemEditor } from "../components/todo-item/TodoItemEditor";
 import { TodoItemListView } from "../components/todo-item/TodoItemListView";
@@ -24,7 +24,7 @@ interface LandingPageProps {
 
 export function LandingPage({ apiClient }: LandingPageProps) {
   const tagsQuery = useTodoTagsAllQuery();
-  const tagsPost = useTodoTagsMutation();
+  const tagsPost = useTodoTagsPOSTMutation();
   const itemsQuery = useTodoItemsAllQuery();
   const itemsPost = useTodoItemsMutation();
 
@@ -32,7 +32,7 @@ export function LandingPage({ apiClient }: LandingPageProps) {
   const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
 
   const addTag = (tag: ITodoTagResponse) => {
-    tagsPost.mutate(new CreateTodoTagRequest({ ...tag }), {
+    tagsPost.mutate(new TodoTagRequest({ ...tag }), {
       onSuccess: () => tagsQuery.refetch(),
     });
   };
