@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  ITodoItemResponse,
-} from "../api/api-client";
+import { ITodoItemResponse } from "../api/api-client";
 import {
   useTodoItemsAllQuery,
   useTodoTagsAllQuery,

@@ -8,15 +8,13 @@ interface TodoTagListItemProps {
   tag: ITodoTagResponse;
 }
 
-export function TodoTagListItem({
-  tag
-}: TodoTagListItemProps) {
+export function TodoTagListItem({ tag }: TodoTagListItemProps) {
   const { name, isAssigned } = tag;
 
   const dispatch = useTagsDispatch();
 
   const deleteTag = useTodoTagsDELETEMutation(tag.id, {
-    onSuccess: () => dispatch({type: "require-refetch"}),
+    onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
   const handleDelete = () => {

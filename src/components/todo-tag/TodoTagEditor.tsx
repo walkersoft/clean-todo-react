@@ -4,7 +4,6 @@ import { ITodoTagResponse, TodoTagRequest } from "../../api/api-client";
 import { useTodoTagsPOSTMutation } from "../../api/api-client/Query";
 import { useTagsDispatch } from "../../contexts/TagsContext";
 
-
 const initialItem: ITodoTagResponse = {
   id: "",
   name: "",
@@ -16,11 +15,11 @@ export default function TodoTagEditor() {
   const dispatch = useTagsDispatch();
 
   const saveTag = useTodoTagsPOSTMutation({
-    onSuccess: () => dispatch({type: "require-refetch"})
+    onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
   const handleClick = () => {
-    saveTag.mutate(new TodoTagRequest({ ...tag }))
+    saveTag.mutate(new TodoTagRequest({ ...tag }));
   };
 
   return (

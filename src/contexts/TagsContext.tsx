@@ -1,4 +1,9 @@
-import { createContext, PropsWithChildren, useContext, useReducer } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useReducer,
+} from "react";
 import { ITodoTagResponse } from "../api/api-client";
 
 const TagsContext = createContext({} as TagsState);
@@ -11,8 +16,8 @@ interface TagsState {
 
 const initialState: TagsState = {
   fetchRequired: false,
-  tags: []
-}
+  tags: [],
+};
 
 export function TagsStateProvider({ children }: PropsWithChildren) {
   const [state, dispatch] = useReducer(tagsReducer, initialState);
@@ -23,7 +28,7 @@ export function TagsStateProvider({ children }: PropsWithChildren) {
         {children}
       </TagsDispatchContext.Provider>
     </TagsContext.Provider>
-  )
+  );
 }
 
 export function useTags() {
@@ -35,8 +40,8 @@ export function useTagsDispatch() {
 }
 
 type TagActions =
-  | { type: "tags-fetched", tags: ITodoTagResponse[] }
-  | { type: "require-refetch"};
+  | { type: "tags-fetched"; tags: ITodoTagResponse[] }
+  | { type: "require-refetch" };
 
 function tagsReducer(state: TagsState, action: TagActions): TagsState {
   switch (action.type) {
@@ -44,7 +49,7 @@ function tagsReducer(state: TagsState, action: TagActions): TagsState {
       return {
         ...state,
         fetchRequired: false,
-        tags: action.tags
+        tags: action.tags,
       };
     }
 
@@ -52,7 +57,7 @@ function tagsReducer(state: TagsState, action: TagActions): TagsState {
       return {
         ...state,
         fetchRequired: true,
-      }
+      };
     }
   }
 }

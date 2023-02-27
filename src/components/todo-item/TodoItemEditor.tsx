@@ -24,7 +24,6 @@ import { useState } from "react";
 import { ICreateTodoItemRequest } from "../../api/api-client";
 import { useTags } from "../../contexts/TagsContext";
 
-
 const initialItem: ICreateTodoItemRequest = {
   description: "",
   isActive: true,
