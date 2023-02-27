@@ -25,7 +25,6 @@ export function LandingPage() {
 
   const [tags, setTags] = useState<ITodoTagResponse[]>([]);
   const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
-  const [notifyOfTagDeleted, setNotifyOfTagDeleted] = useState<boolean>(false);
 
   const addTag = (tag: ITodoTagResponse) => {
     tagsPost.mutate(new TodoTagRequest({ ...tag }), {
@@ -42,19 +41,12 @@ export function LandingPage() {
   useEffect(() => {
     setTags(!!tagsQuery.data ? tagsQuery.data : []);
     setTodoItems(!!itemsQuery.data ? itemsQuery.data : []);
-    if (notifyOfTagDeleted) {
-      tagsQuery.refetch();
-      setNotifyOfTagDeleted((notified) => !notified);
-    }
-  }, [tagsQuery, tagsQuery.data, itemsQuery.data, notifyOfTagDeleted]);
+  }, [tagsQuery, tagsQuery.data, itemsQuery.data]);
 
   return (
     <>
       <TodoTagEditor addTag={addTag} />
-      <TodoTagListView
-        tags={tags}
-        onNotifyOfTagDeleted={() => setNotifyOfTagDeleted(true)}
-      />
+      <TodoTagListView />
       <TodoItemEditor tags={tags} addTodoItem={addTodoItem} />
       <TodoItemListView todoItems={todoItems} />
     </>

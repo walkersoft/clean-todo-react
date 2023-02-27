@@ -1,14 +1,24 @@
 import { createContext, PropsWithChildren, useContext, useReducer } from "react";
 import { ITodoTagResponse } from "../api/api-client";
 
-const TagsContext = createContext({});
-const TagsDispatchContext = createContext({});
+const TagsContext = createContext({} as TagsState);
+const TagsDispatchContext = createContext({} as React.Dispatch<TagActions>);
+
+interface TagsState {
+  fetchRequired: boolean;
+  tags: ITodoTagResponse[];
+}
+
+const initialState: TagsState = {
+  fetchRequired: false,
+  tags: []
+}
 
 export function TagsStateProvider({ children }: PropsWithChildren) {
-  const [tags, dispatch] = useReducer(tagsReducer, []);
+  const [state, dispatch] = useReducer(tagsReducer, initialState);
 
   return (
-    <TagsContext.Provider value={tags}>
+    <TagsContext.Provider value={state}>
       <TagsDispatchContext.Provider value={dispatch}>
         {children}
       </TagsDispatchContext.Provider>
@@ -25,12 +35,24 @@ export function useTagsDispatch() {
 }
 
 type TagActions =
-  | { type: "tags-fetched", tags: ITodoTagResponse[] };
+  | { type: "tags-fetched", tags: ITodoTagResponse[] }
+  | { type: "tag-deleted"};
 
-function tagsReducer(state: ITodoTagResponse[], action: TagActions): ITodoTagResponse[] {
+function tagsReducer(state: TagsState, action: TagActions): TagsState {
   switch (action.type) {
     case "tags-fetched": {
-      return action.tags;
+      return {
+        ...state,
+        fetchRequired: false,
+        tags: action.tags
+      };
+    }
+
+    case "tag-deleted": {
+      return {
+        ...state,
+        fetchRequired: true,
+      }
     }
   }
 }

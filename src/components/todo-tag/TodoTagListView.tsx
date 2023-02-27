@@ -1,16 +1,28 @@
 import { List, Typography } from "@mui/material";
-import { ITodoTagResponse } from "../../api/api-client";
+import { useEffect } from "react";
+import { useTodoTagsAllQuery } from "../../api/api-client/Query";
+import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
 import { TodoTagListItem } from "./TodoTagListItem";
 
-interface TodoTagListViewProps {
-  tags: ITodoTagResponse[];
-  onNotifyOfTagDeleted: () => void;
-}
 
-export function TodoTagListView({
-  tags,
-  onNotifyOfTagDeleted,
-}: TodoTagListViewProps) {
+export function TodoTagListView() {
+  const { tags, fetchRequired } = useTags();
+  
+  const dispatch = useTagsDispatch();
+  
+  const tagsQuery = useTodoTagsAllQuery({ 
+    onSuccess: (tags) => dispatch({
+      type: "tags-fetched",
+      tags: tags
+    })
+  });
+
+  useEffect(() => {
+    if (fetchRequired) {
+      tagsQuery.refetch();
+    }
+  }, [fetchRequired, tagsQuery])
+
   return (
     <>
       <Typography variant="h6">Existing Tags</Typography>
@@ -20,7 +32,6 @@ export function TodoTagListView({
             <TodoTagListItem
               key={index}
               tag={value}
-              onNotifyTagDeleted={onNotifyOfTagDeleted}
             />
           );
         })}
