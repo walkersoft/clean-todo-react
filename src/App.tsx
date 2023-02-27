@@ -14,7 +14,7 @@ function App() {
       <CssBaseline />
       <NavigationBar />
       <QueryClientProvider client={queryClient}>
-        <LandingPage apiClient={queryClient} />
+        <LandingPage />
       </QueryClientProvider>
     </div>
   );

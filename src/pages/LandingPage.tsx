@@ -18,11 +18,7 @@ import { TodoItemListView } from "../components/todo-item/TodoItemListView";
 import TodoTagEditor from "../components/todo-tag/TodoTagEditor";
 import { TodoTagListView } from "../components/todo-tag/TodoTagListView";
 
-interface LandingPageProps {
-  apiClient: QueryClient;
-}
-
-export function LandingPage({ apiClient }: LandingPageProps) {
+export function LandingPage() {
   const tagsQuery = useTodoTagsAllQuery();
   const tagsPost = useTodoTagsPOSTMutation();
   const itemsQuery = useTodoItemsAllQuery();
