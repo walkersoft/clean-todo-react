@@ -4,6 +4,7 @@ import { setBaseUrl } from "./api/api-client";
 import "./App.css";
 import { NavigationBar } from "./components/common/navigation/NavigationBar";
 import { TagsStateProvider } from "./contexts/TagsContext";
+import { TodoItemsStateProvider } from "./contexts/TodoItemsContext";
 import { LandingPage } from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
@@ -15,9 +16,11 @@ function App() {
       <CssBaseline />
       <NavigationBar />
       <QueryClientProvider client={queryClient}>
-        <TagsStateProvider>
-          <LandingPage />
-        </TagsStateProvider>
+        <TodoItemsStateProvider>
+          <TagsStateProvider>
+            <LandingPage />
+          </TagsStateProvider>
+        </TodoItemsStateProvider>
       </QueryClientProvider>
     </div>
   );

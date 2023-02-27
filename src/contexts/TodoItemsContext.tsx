@@ -1,8 +1,15 @@
-import { createContext, PropsWithChildren, useReducer } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useReducer,
+} from "react";
 import { ITodoItemResponse } from "../api/api-client";
 
 const TodoItemsContext = createContext({} as TodoItemsState);
-const TodoItemsDispatchContext = createContext({} as React.Dispatch<TodoItemActions>);
+const TodoItemsDispatchContext = createContext(
+  {} as React.Dispatch<TodoItemActions>
+);
 
 interface TodoItemsState {
   fetchRequired: boolean;
@@ -23,7 +30,15 @@ export function TodoItemsStateProvider({ children }: PropsWithChildren) {
         {children}
       </TodoItemsDispatchContext.Provider>
     </TodoItemsContext.Provider>
-  )
+  );
+}
+
+export function useTodoItems() {
+  return useContext(TodoItemsContext);
+}
+
+export function useTodoItemsDispatch() {
+  return useContext(TodoItemsDispatchContext);
 }
 
 type TodoItemActions =
