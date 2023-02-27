@@ -23,7 +23,6 @@ export function LandingPage() {
   const itemsQuery = useTodoItemsAllQuery();
   const itemsPost = useTodoItemsMutation();
 
-  const [tags, setTags] = useState<ITodoTagResponse[]>([]);
   const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
 
   const addTag = (tag: ITodoTagResponse) => {
@@ -39,7 +38,6 @@ export function LandingPage() {
   };
 
   useEffect(() => {
-    setTags(!!tagsQuery.data ? tagsQuery.data : []);
     setTodoItems(!!itemsQuery.data ? itemsQuery.data : []);
   }, [tagsQuery, tagsQuery.data, itemsQuery.data]);
 
@@ -47,7 +45,7 @@ export function LandingPage() {
     <>
       <TodoTagEditor addTag={addTag} />
       <TodoTagListView />
-      <TodoItemEditor tags={tags} addTodoItem={addTodoItem} />
+      <TodoItemEditor />
       <TodoItemListView todoItems={todoItems} />
     </>
   );
