@@ -1,6 +1,6 @@
 import { AppBar, Toolbar } from "@mui/material";
-import { useState, MouseEvent } from "react";
 import { Container } from "@mui/system";
+import { MouseEvent, useState } from "react";
 import { DesktopNavigation } from "./DesktopNavigation";
 import { MobileNavigation } from "./MobileNavigation";
 

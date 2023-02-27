@@ -1,11 +1,11 @@
-import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 
 interface MobileNavigationProps {
   title: string;
   pages: string[];
-  navAnchorElement: HTMLElement | null,
+  navAnchorElement: HTMLElement | null;
   handleOpenNav: (event: React.MouseEvent<HTMLElement>) => void;
   handleCloseNav: (event: React.MouseEvent<HTMLElement>) => void;
 }
@@ -65,7 +65,6 @@ export function MobileNavigation({
       >
         {title}
       </Typography>
-      
     </>
   );
 }

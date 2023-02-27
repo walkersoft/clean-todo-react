@@ -1,8 +1,8 @@
-import { Box, Button, Typography } from "@mui/material";
 import AdbIcon from "@mui/icons-material/Adb";
+import { Box, Button, Typography } from "@mui/material";
 
 interface DesktopNavigationProps {
-  title: string,
+  title: string;
   pages: string[];
   handleCloseNav: (event: React.MouseEvent<HTMLElement>) => void;
 }

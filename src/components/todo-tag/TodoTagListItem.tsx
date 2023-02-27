@@ -5,13 +5,16 @@ import { useTodoTagsDELETEMutation } from "../../api/api-client/Query";
 
 interface TodoTagListItemProps {
   tag: ITodoTagResponse;
-  onNotifyTagDeleted: () => void
+  onNotifyTagDeleted: () => void;
 }
 
-export function TodoTagListItem({ tag, onNotifyTagDeleted }: TodoTagListItemProps) {
+export function TodoTagListItem({
+  tag,
+  onNotifyTagDeleted,
+}: TodoTagListItemProps) {
   const { name, isAssigned } = tag;
   const tagDelete = useTodoTagsDELETEMutation(tag.id, {
-    onSuccess: () => onNotifyTagDeleted()
+    onSuccess: () => onNotifyTagDeleted(),
   });
 
   const handleDelete = () => {

@@ -8,7 +8,7 @@ interface TodoTagEditorProps {
 
 const initialItem: ITodoTagResponse = {
   id: "",
-  name: ""
+  name: "",
 };
 
 export default function TodoTagEditor({ addTag }: TodoTagEditorProps) {
