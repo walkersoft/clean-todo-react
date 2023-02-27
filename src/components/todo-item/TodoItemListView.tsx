@@ -1,11 +1,11 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
 import { ITodoItemResponse } from "../../api/api-client";
 
-interface TodoItemViewProps {
+interface TodoItemListViewProps {
   todoItems: ITodoItemResponse[];
 }
 
-export function TodoItemView({ todoItems }: TodoItemViewProps) {
+export function TodoItemListView({ todoItems }: TodoItemListViewProps) {
   return (
     <>
       <Typography variant="h5">Todo Items</Typography>

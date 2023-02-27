@@ -1,38 +1,34 @@
-import { QueryClient } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
-  ITodoTagResponse,
-  ITodoItemResponse,
-  CreateTodoTagRequest,
   CreateTodoItemRequest,
   ICreateTodoItemRequest,
+  ITodoItemResponse,
+  ITodoTagResponse,
+  TodoTagRequest,
 } from "../api/api-client";
 import {
   useTodoItemsAllQuery,
   useTodoItemsMutation,
   useTodoTagsAllQuery,
-  useTodoTagsMutation,
+  useTodoTagsPOSTMutation,
 } from "../api/api-client/Query";
 import { TodoItemEditor } from "../components/todo-item/TodoItemEditor";
-import { TodoItemView } from "../components/todo-item/TodoItemView";
+import { TodoItemListView } from "../components/todo-item/TodoItemListView";
 import TodoTagEditor from "../components/todo-tag/TodoTagEditor";
-import { TodoTagView } from "../components/todo-tag/TodoTagView";
+import { TodoTagListView } from "../components/todo-tag/TodoTagListView";
 
-interface LandingPageProps {
-  apiClient: QueryClient;
-}
-
-export function LandingPage({ apiClient }: LandingPageProps) {
+export function LandingPage() {
   const tagsQuery = useTodoTagsAllQuery();
-  const tagsPost = useTodoTagsMutation();
+  const tagsPost = useTodoTagsPOSTMutation();
   const itemsQuery = useTodoItemsAllQuery();
   const itemsPost = useTodoItemsMutation();
 
   const [tags, setTags] = useState<ITodoTagResponse[]>([]);
   const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
+  const [notifyOfTagDeleted, setNotifyOfTagDeleted] = useState<boolean>(false);
 
   const addTag = (tag: ITodoTagResponse) => {
-    tagsPost.mutate(new CreateTodoTagRequest({ ...tag }), {
+    tagsPost.mutate(new TodoTagRequest({ ...tag }), {
       onSuccess: () => tagsQuery.refetch(),
     });
   };
@@ -46,14 +42,21 @@ export function LandingPage({ apiClient }: LandingPageProps) {
   useEffect(() => {
     setTags(!!tagsQuery.data ? tagsQuery.data : []);
     setTodoItems(!!itemsQuery.data ? itemsQuery.data : []);
-  }, [tagsQuery.data, itemsQuery.data]);
+    if (notifyOfTagDeleted) {
+      tagsQuery.refetch();
+      setNotifyOfTagDeleted((notified) => !notified);
+    }
+  }, [tagsQuery, tagsQuery.data, itemsQuery.data, notifyOfTagDeleted]);
 
   return (
     <>
       <TodoTagEditor addTag={addTag} />
-      <TodoTagView tags={tags} />
+      <TodoTagListView
+        tags={tags}
+        onNotifyOfTagDeleted={() => setNotifyOfTagDeleted(true)}
+      />
       <TodoItemEditor tags={tags} addTodoItem={addTodoItem} />
-      <TodoItemView todoItems={todoItems} />
+      <TodoItemListView todoItems={todoItems} />
     </>
   );
 }

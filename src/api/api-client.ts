@@ -76,10 +76,11 @@ export interface ICreateTodoItemRequest {
   tagIds?: string[] | undefined;
 }
 
-export class CreateTodoTagRequest implements ICreateTodoTagRequest {
-  name?: string | undefined;
+export class ExceptionResponse implements IExceptionResponse {
+  statusCode?: number;
+  message?: string | undefined;
 
-  constructor(data?: ICreateTodoTagRequest) {
+  constructor(data?: IExceptionResponse) {
     if (data) {
       for (var property in data) {
         if (data.hasOwnProperty(property))
@@ -90,26 +91,29 @@ export class CreateTodoTagRequest implements ICreateTodoTagRequest {
 
   init(_data?: any) {
     if (_data) {
-      this.name = _data["name"];
+      this.statusCode = _data["statusCode"];
+      this.message = _data["message"];
     }
   }
 
-  static fromJS(data: any): CreateTodoTagRequest {
+  static fromJS(data: any): ExceptionResponse {
     data = typeof data === "object" ? data : {};
-    let result = new CreateTodoTagRequest();
+    let result = new ExceptionResponse();
     result.init(data);
     return result;
   }
 
   toJSON(data?: any) {
     data = typeof data === "object" ? data : {};
-    data["name"] = this.name;
+    data["statusCode"] = this.statusCode;
+    data["message"] = this.message;
     return data;
   }
 }
 
-export interface ICreateTodoTagRequest {
-  name?: string | undefined;
+export interface IExceptionResponse {
+  statusCode?: number;
+  message?: string | undefined;
 }
 
 export class TodoItemResponse implements ITodoItemResponse {
@@ -194,11 +198,11 @@ export interface ITodoItemResponse {
   tags?: string[] | undefined;
 }
 
-export class TodoTagResponse implements ITodoTagResponse {
+export class TodoTagRequest implements ITodoTagRequest {
   id?: string;
   name?: string | undefined;
 
-  constructor(data?: ITodoTagResponse) {
+  constructor(data?: ITodoTagRequest) {
     if (data) {
       for (var property in data) {
         if (data.hasOwnProperty(property))
@@ -214,9 +218,9 @@ export class TodoTagResponse implements ITodoTagResponse {
     }
   }
 
-  static fromJS(data: any): TodoTagResponse {
+  static fromJS(data: any): TodoTagRequest {
     data = typeof data === "object" ? data : {};
-    let result = new TodoTagResponse();
+    let result = new TodoTagRequest();
     result.init(data);
     return result;
   }
@@ -229,18 +233,17 @@ export class TodoTagResponse implements ITodoTagResponse {
   }
 }
 
-export interface ITodoTagResponse {
+export interface ITodoTagRequest {
   id?: string;
   name?: string | undefined;
 }
 
-export class WeatherForecast implements IWeatherForecast {
-  date?: moment.Moment;
-  temperatureC?: number;
-  readonly temperatureF?: number;
-  summary?: string | undefined;
+export class TodoTagResponse implements ITodoTagResponse {
+  id?: string;
+  name?: string | undefined;
+  isAssigned?: boolean;
 
-  constructor(data?: IWeatherForecast) {
+  constructor(data?: ITodoTagResponse) {
     if (data) {
       for (var property in data) {
         if (data.hasOwnProperty(property))
@@ -251,37 +254,32 @@ export class WeatherForecast implements IWeatherForecast {
 
   init(_data?: any) {
     if (_data) {
-      this.date = _data["date"]
-        ? moment(_data["date"].toString())
-        : <any>undefined;
-      this.temperatureC = _data["temperatureC"];
-      (<any>this).temperatureF = _data["temperatureF"];
-      this.summary = _data["summary"];
+      this.id = _data["id"];
+      this.name = _data["name"];
+      this.isAssigned = _data["isAssigned"];
     }
   }
 
-  static fromJS(data: any): WeatherForecast {
+  static fromJS(data: any): TodoTagResponse {
     data = typeof data === "object" ? data : {};
-    let result = new WeatherForecast();
+    let result = new TodoTagResponse();
     result.init(data);
     return result;
   }
 
   toJSON(data?: any) {
     data = typeof data === "object" ? data : {};
-    data["date"] = this.date ? this.date.toISOString() : <any>undefined;
-    data["temperatureC"] = this.temperatureC;
-    data["temperatureF"] = this.temperatureF;
-    data["summary"] = this.summary;
+    data["id"] = this.id;
+    data["name"] = this.name;
+    data["isAssigned"] = this.isAssigned;
     return data;
   }
 }
 
-export interface IWeatherForecast {
-  date?: moment.Moment;
-  temperatureC?: number;
-  temperatureF?: number;
-  summary?: string | undefined;
+export interface ITodoTagResponse {
+  id?: string;
+  name?: string | undefined;
+  isAssigned?: boolean;
 }
 
 export class ApiException extends Error {
@@ -426,9 +424,5 @@ export function getResultTypeClassKey(queryKey: QueryKey): string {
 export function initPersister() {
   addResultTypeFactory("Client___todoItemsAll", () => new TodoItemResponse());
   addResultTypeFactory("Client___todoTagsAll", () => new TodoTagResponse());
-  addResultTypeFactory(
-    "Client___getWeatherForecast",
-    () => new WeatherForecast()
-  );
 }
 //-----/PersistorHydrator.File----
