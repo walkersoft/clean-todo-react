@@ -40,7 +40,7 @@ export function useTagsDispatch() {
 }
 
 type TagActions =
-  | { type: "tags-fetched"; tags: ITodoTagResponse[] }
+  | { type: "tags-fetched", tags: ITodoTagResponse[] }
   | { type: "require-refetch" };
 
 function tagsReducer(state: TagsState, action: TagActions): TagsState {
