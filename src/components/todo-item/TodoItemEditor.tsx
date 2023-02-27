@@ -21,7 +21,10 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import { CreateTodoItemRequest, ICreateTodoItemRequest } from "../../api/api-client";
+import {
+  CreateTodoItemRequest,
+  ICreateTodoItemRequest,
+} from "../../api/api-client";
 import { useTodoItemsMutation } from "../../api/api-client/Query";
 import { useTags } from "../../contexts/TagsContext";
 import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
@@ -39,17 +42,16 @@ export function TodoItemEditor() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const { tags } = useTags();
-  
+
   const dispatch = useTodoItemsDispatch();
 
   const saveTodoItem = useTodoItemsMutation({
-    onSuccess: () => dispatch({type: "require-refetch"}),
+    onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
   const handleClick = () => {
     saveTodoItem.mutate(new CreateTodoItemRequest({ ...todoItem }));
   };
-
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
     if (newDate !== null) {

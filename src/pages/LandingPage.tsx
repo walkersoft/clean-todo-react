@@ -4,7 +4,6 @@ import TodoTagEditor from "../components/todo-tag/TodoTagEditor";
 import { TodoTagListView } from "../components/todo-tag/TodoTagListView";
 
 export function LandingPage() {
-
   return (
     <>
       <TodoTagEditor />

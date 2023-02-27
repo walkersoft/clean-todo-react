@@ -1,7 +1,10 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useTodoItemsAllQuery } from "../../api/api-client/Query";
-import { useTodoItems, useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
+import {
+  useTodoItems,
+  useTodoItemsDispatch,
+} from "../../contexts/TodoItemsContext";
 
 export function TodoItemListView() {
   const { todoItems, fetchRequired } = useTodoItems();
@@ -9,10 +12,10 @@ export function TodoItemListView() {
   const dispatch = useTodoItemsDispatch();
 
   const todoItemsQuery = useTodoItemsAllQuery({
-    onSuccess: (todoItems) => 
+    onSuccess: (todoItems) =>
       dispatch({
         type: "todo-items-fetched",
-        todoItems: todoItems
+        todoItems: todoItems,
       }),
   });
 
@@ -20,7 +23,7 @@ export function TodoItemListView() {
     if (fetchRequired) {
       todoItemsQuery.refetch();
     }
-  }, [fetchRequired, todoItemsQuery])
+  }, [fetchRequired, todoItemsQuery]);
 
   return (
     <>
