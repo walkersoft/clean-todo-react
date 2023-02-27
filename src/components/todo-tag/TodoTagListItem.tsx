@@ -15,12 +15,12 @@ export function TodoTagListItem({
 
   const dispatch = useTagsDispatch();
 
-  const tagDelete = useTodoTagsDELETEMutation(tag.id, {
+  const deleteTag = useTodoTagsDELETEMutation(tag.id, {
     onSuccess: () => dispatch({type: "tag-deleted"}),
   });
 
   const handleDelete = () => {
-    tagDelete.mutate();
+    deleteTag.mutate();
   };
 
   return (
