@@ -1,11 +1,11 @@
 import { QueryClient } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
-  ITodoTagResponse,
-  ITodoItemResponse,
-  TodoTagRequest,
   CreateTodoItemRequest,
   ICreateTodoItemRequest,
+  ITodoItemResponse,
+  ITodoTagResponse,
+  TodoTagRequest,
 } from "../api/api-client";
 import {
   useTodoItemsAllQuery,
@@ -30,6 +30,7 @@ export function LandingPage({ apiClient }: LandingPageProps) {
 
   const [tags, setTags] = useState<ITodoTagResponse[]>([]);
   const [todoItems, setTodoItems] = useState<ITodoItemResponse[]>([]);
+  const [notifyOfTagDeleted, setNotifyOfTagDeleted] = useState<boolean>(false);
 
   const addTag = (tag: ITodoTagResponse) => {
     tagsPost.mutate(new TodoTagRequest({ ...tag }), {
@@ -46,12 +47,19 @@ export function LandingPage({ apiClient }: LandingPageProps) {
   useEffect(() => {
     setTags(!!tagsQuery.data ? tagsQuery.data : []);
     setTodoItems(!!itemsQuery.data ? itemsQuery.data : []);
-  }, [tagsQuery.data, itemsQuery.data]);
+    if (notifyOfTagDeleted) {
+      tagsQuery.refetch();
+      setNotifyOfTagDeleted((notified) => !notified);
+    }
+  }, [tagsQuery, tagsQuery.data, itemsQuery.data, notifyOfTagDeleted]);
 
   return (
     <>
       <TodoTagEditor addTag={addTag} />
-      <TodoTagListView tags={tags} />
+      <TodoTagListView
+        tags={tags}
+        onNotifyOfTagDeleted={() => setNotifyOfTagDeleted(true)}
+      />
       <TodoItemEditor tags={tags} addTodoItem={addTodoItem} />
       <TodoItemListView todoItems={todoItems} />
     </>
