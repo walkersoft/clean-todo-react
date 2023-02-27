@@ -1,70 +1,36 @@
 import { createContext, PropsWithChildren, useContext, useReducer } from "react";
+import { ITodoTagResponse } from "../api/api-client";
 
-const TagsStateContext = createContext({});
-const TagsStateDispatchContext = createContext({});
+const TagsContext = createContext({});
+const TagsDispatchContext = createContext({});
 
 export function TagsStateProvider({ children }: PropsWithChildren) {
-  const [state, dispatch] = useReducer(tagsStateReducer, initialState);
+  const [tags, dispatch] = useReducer(tagsReducer, []);
 
   return (
-    <TagsStateContext.Provider value={state}>
-      <TagsStateDispatchContext.Provider value={dispatch}>
+    <TagsContext.Provider value={tags}>
+      <TagsDispatchContext.Provider value={dispatch}>
         {children}
-      </TagsStateDispatchContext.Provider>
-    </TagsStateContext.Provider>
+      </TagsDispatchContext.Provider>
+    </TagsContext.Provider>
   )
 }
 
-export function useTagsState() {
-  return useContext(TagsStateContext);
+export function useTags() {
+  return useContext(TagsContext);
 }
 
 export function useTagsDispatch() {
-  return useContext(TagsStateDispatchContext);
+  return useContext(TagsDispatchContext);
 }
 
-interface TagsState {
-  tagAdded: boolean;
-  tagDeleted: boolean;
-}
+type TagActions =
+  | { type: "tags-fetched", tags: ITodoTagResponse[] };
 
-interface TagActions {
-  type: TagsStateActions,
-  payload: TagsState
-}
-
-const initialState: TagsState = {
-  tagAdded: false,
-  tagDeleted: false
-}
-
-type TagsStateActions =
-  "tag-added"
-  | "tag-deleted"
-  | "tags-loaded";
-
-function tagsStateReducer(state: TagsState, action: TagActions) {
+function tagsReducer(state: ITodoTagResponse[], action: TagActions): ITodoTagResponse[] {
   switch (action.type) {
-    case "tag-added": {
-      return {
-        ...state,
-        tagAdded: true
-      };
-    }
-
-    case "tag-deleted": {
-      return {
-        ...state,
-        tagDeleted: true
-      }
-    }
-
-    case "tags-loaded": {
-      return {
-        ...state,
-        tagAdded: false,
-        tagDeleted: false
-      }
+    case "tags-fetched": {
+      return action.tags;
     }
   }
 }
