@@ -21,12 +21,13 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import { ICreateTodoItemRequest, ITodoTagResponse } from "../../api/api-client";
-
-interface TodoItemEditorProps {
-  tags: ITodoTagResponse[];
-  addTodoItem: (item: ICreateTodoItemRequest) => void;
-}
+import {
+  CreateTodoItemRequest,
+  ICreateTodoItemRequest,
+} from "../../api/api-client";
+import { useTodoItemsMutation } from "../../api/api-client/Query";
+import { useTags } from "../../contexts/TagsContext";
+import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
 
 const initialItem: ICreateTodoItemRequest = {
   description: "",
@@ -36,9 +37,21 @@ const initialItem: ICreateTodoItemRequest = {
   tagIds: [],
 };
 
-export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
+export function TodoItemEditor() {
   const [todoItem, setTodoItem] = useState<ICreateTodoItemRequest>(initialItem);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const { tags } = useTags();
+
+  const dispatch = useTodoItemsDispatch();
+
+  const saveTodoItem = useTodoItemsMutation({
+    onSuccess: () => dispatch({ type: "require-refetch" }),
+  });
+
+  const handleClick = () => {
+    saveTodoItem.mutate(new CreateTodoItemRequest({ ...todoItem }));
+  };
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
     if (newDate !== null) {
@@ -135,7 +148,7 @@ export function TodoItemEditor({ tags, addTodoItem }: TodoItemEditorProps) {
               ))}
             </Select>
           </FormControl>
-          <Button variant="contained" onClick={() => addTodoItem(todoItem)}>
+          <Button variant="contained" onClick={handleClick}>
             Save Todo
           </Button>
         </Stack>

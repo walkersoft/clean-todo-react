@@ -2,23 +2,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, ListItem, ListItemText } from "@mui/material";
 import { ITodoTagResponse } from "../../api/api-client";
 import { useTodoTagsDELETEMutation } from "../../api/api-client/Query";
+import { useTagsDispatch } from "../../contexts/TagsContext";
 
 interface TodoTagListItemProps {
   tag: ITodoTagResponse;
-  onNotifyTagDeleted: () => void;
 }
 
-export function TodoTagListItem({
-  tag,
-  onNotifyTagDeleted,
-}: TodoTagListItemProps) {
+export function TodoTagListItem({ tag }: TodoTagListItemProps) {
   const { name, isAssigned } = tag;
-  const tagDelete = useTodoTagsDELETEMutation(tag.id, {
-    onSuccess: () => onNotifyTagDeleted(),
+
+  const dispatch = useTagsDispatch();
+
+  const deleteTag = useTodoTagsDELETEMutation(tag.id, {
+    onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
   const handleDelete = () => {
-    tagDelete.mutate();
+    deleteTag.mutate();
   };
 
   return (

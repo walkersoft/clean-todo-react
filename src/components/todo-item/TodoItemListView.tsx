@@ -1,11 +1,30 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
-import { ITodoItemResponse } from "../../api/api-client";
+import { useEffect } from "react";
+import { useTodoItemsAllQuery } from "../../api/api-client/Query";
+import {
+  useTodoItems,
+  useTodoItemsDispatch,
+} from "../../contexts/TodoItemsContext";
 
-interface TodoItemListViewProps {
-  todoItems: ITodoItemResponse[];
-}
+export function TodoItemListView() {
+  const { todoItems, fetchRequired } = useTodoItems();
 
-export function TodoItemListView({ todoItems }: TodoItemListViewProps) {
+  const dispatch = useTodoItemsDispatch();
+
+  const todoItemsQuery = useTodoItemsAllQuery({
+    onSuccess: (todoItems) =>
+      dispatch({
+        type: "todo-items-fetched",
+        todoItems: todoItems,
+      }),
+  });
+
+  useEffect(() => {
+    if (fetchRequired) {
+      todoItemsQuery.refetch();
+    }
+  }, [fetchRequired, todoItemsQuery]);
+
   return (
     <>
       <Typography variant="h5">Todo Items</Typography>
