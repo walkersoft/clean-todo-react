@@ -7,11 +7,11 @@ interface TodoTagListItemProps {
 }
 
 export function TodoTagListItem({ tag }: TodoTagListItemProps) {
-  const { name } = tag;
+  const { name, isAssigned } = tag;
   return (
     <ListItem
       secondaryAction={
-        <IconButton edge="end" color="error">
+        <IconButton edge="end" color="error" disabled={isAssigned}>
           <DeleteIcon />
         </IconButton>
       }
