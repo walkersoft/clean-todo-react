@@ -16,7 +16,7 @@ export function TodoTagListItem({
   const dispatch = useTagsDispatch();
 
   const deleteTag = useTodoTagsDELETEMutation(tag.id, {
-    onSuccess: () => dispatch({type: "tag-deleted"}),
+    onSuccess: () => dispatch({type: "require-refetch"}),
   });
 
   const handleDelete = () => {

@@ -36,7 +36,7 @@ export function useTagsDispatch() {
 
 type TagActions =
   | { type: "tags-fetched", tags: ITodoTagResponse[] }
-  | { type: "tag-deleted"};
+  | { type: "require-refetch"};
 
 function tagsReducer(state: TagsState, action: TagActions): TagsState {
   switch (action.type) {
@@ -48,7 +48,7 @@ function tagsReducer(state: TagsState, action: TagActions): TagsState {
       };
     }
 
-    case "tag-deleted": {
+    case "require-refetch": {
       return {
         ...state,
         fetchRequired: true,
