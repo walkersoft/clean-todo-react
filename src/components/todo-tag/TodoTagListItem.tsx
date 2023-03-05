@@ -40,6 +40,7 @@ export function TodoTagListItem({ tag }: TodoTagListItemProps) {
           <IconButton
             edge="end"
             color="info"
+            title="Unassign Tag"
             disabled={!isAssigned}
             onClick={handleUnassign}
           >
@@ -48,6 +49,7 @@ export function TodoTagListItem({ tag }: TodoTagListItemProps) {
           <IconButton
             edge="end"
             color="error"
+            title="Delete Tag"
             disabled={isAssigned}
             onClick={handleDelete}
           >
