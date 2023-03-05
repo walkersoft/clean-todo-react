@@ -273,7 +273,7 @@ export function todoTagsPOSTMutationKey(): MutationKey {
 export function useTodoTagsPOSTMutation<TContext>(
   options?: Omit<
     UseMutationOptions<
-      Types.TodoItemResponse,
+      Types.TodoTagResponse,
       unknown,
       Types.TodoTagRequest,
       TContext
@@ -281,7 +281,7 @@ export function useTodoTagsPOSTMutation<TContext>(
     "mutationKey" | "mutationFn"
   >
 ): UseMutationResult<
-  Types.TodoItemResponse,
+  Types.TodoTagResponse,
   unknown,
   Types.TodoTagRequest,
   TContext
@@ -314,7 +314,7 @@ export function todoTagsPUTMutationKey(): MutationKey {
 export function useTodoTagsPUTMutation<TContext>(
   options?: Omit<
     UseMutationOptions<
-      Types.TodoItemResponse,
+      Types.TodoTagResponse,
       unknown,
       Types.TodoTagRequest,
       TContext
@@ -322,7 +322,7 @@ export function useTodoTagsPUTMutation<TContext>(
     "mutationKey" | "mutationFn"
   >
 ): UseMutationResult<
-  Types.TodoItemResponse,
+  Types.TodoTagResponse,
   unknown,
   Types.TodoTagRequest,
   TContext
@@ -372,6 +372,47 @@ export function useTodoTagsDELETEMutation<TContext>(
     ...options,
     mutationKey: key,
   });
+}
+
+export function unassignUrl(): string {
+  let url_ = getBaseUrl() + "/api/TodoTags/Unassign";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function unassignMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "unassign"]);
+}
+
+/**
+ * @param body (optional)
+ * @return Success
+ */
+export function useUnassignMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<
+      Types.TodoTagResponse,
+      unknown,
+      Types.TodoTagRequest,
+      TContext
+    >,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<
+  Types.TodoTagResponse,
+  unknown,
+  Types.TodoTagRequest,
+  TContext
+> {
+  const key = unassignMutationKey();
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(
+    (body: Types.TodoTagRequest) => Types.Client.unassign(body),
+    { ...options, mutationKey: key }
+  );
 }
 
 export function getWeatherForecastUrl(): string {
