@@ -242,6 +242,7 @@ export class TodoTagResponse implements ITodoTagResponse {
   id?: string;
   name?: string | undefined;
   isAssigned?: boolean;
+  assignedCount?: number;
 
   constructor(data?: ITodoTagResponse) {
     if (data) {
@@ -257,6 +258,7 @@ export class TodoTagResponse implements ITodoTagResponse {
       this.id = _data["id"];
       this.name = _data["name"];
       this.isAssigned = _data["isAssigned"];
+      this.assignedCount = _data["assignedCount"];
     }
   }
 
@@ -272,6 +274,7 @@ export class TodoTagResponse implements ITodoTagResponse {
     data["id"] = this.id;
     data["name"] = this.name;
     data["isAssigned"] = this.isAssigned;
+    data["assignedCount"] = this.assignedCount;
     return data;
   }
 }
@@ -280,6 +283,7 @@ export interface ITodoTagResponse {
   id?: string;
   name?: string | undefined;
   isAssigned?: boolean;
+  assignedCount?: number;
 }
 
 export class ApiException extends Error {
