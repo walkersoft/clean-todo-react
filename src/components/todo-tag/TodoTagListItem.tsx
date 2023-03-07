@@ -1,12 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
-import {
-  IconButton,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { IconButton, ListItem, ListItemText, Typography } from "@mui/material";
 import { ITodoTagResponse, TodoTagRequest } from "../../api/api-client";
 import {
   useTodoTagsDELETEMutation,
@@ -72,12 +66,10 @@ export function TodoTagListItem({ tag }: TodoTagListItemProps) {
       }
     >
       <ListItemText>
-        <Stack flexDirection="row" alignItems="baseline">
-          <Typography variant="body1">{name}</Typography>
-          <Typography variant="caption" color="info" sx={{ ml: 1 }}>
-            {getTagAssignmentsText(assignedCount ?? 0)}
-          </Typography>
-        </Stack>
+        <Typography variant="body1">{name}</Typography>
+        <Typography variant="caption" color="info">
+          {getTagAssignmentsText(assignedCount ?? 0)}
+        </Typography>
       </ListItemText>
     </ListItem>
   );
