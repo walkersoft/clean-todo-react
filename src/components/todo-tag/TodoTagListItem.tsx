@@ -1,19 +1,22 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
-import { IconButton, ListItem, ListItemText } from "@mui/material";
+import { IconButton, ListItem, ListItemText, Typography } from "@mui/material";
 import { ITodoTagResponse, TodoTagRequest } from "../../api/api-client";
 import {
   useTodoTagsDELETEMutation,
   useUnassignMutation,
 } from "../../api/api-client/Query";
-import { refetchTagsDispatchAction, useTagsDispatch } from "../../contexts/TagsContext";
+import {
+  refetchTagsDispatchAction,
+  useTagsDispatch,
+} from "../../contexts/TagsContext";
 
 interface TodoTagListItemProps {
   tag: ITodoTagResponse;
 }
 
 export function TodoTagListItem({ tag }: TodoTagListItemProps) {
-  const { name, isAssigned } = tag;
+  const { name, isAssigned, assignedCount } = tag;
 
   const dispatch = useTagsDispatch();
 
@@ -31,6 +34,10 @@ export function TodoTagListItem({ tag }: TodoTagListItemProps) {
 
   const handleUnassign = () => {
     unassignTag.mutate(new TodoTagRequest({ ...tag }));
+  };
+
+  const getTagAssignmentsText = (quantity: number): string => {
+    return `${quantity} assignment${quantity === 1 ? "" : "(s)"}`;
   };
 
   return (
@@ -58,7 +65,12 @@ export function TodoTagListItem({ tag }: TodoTagListItemProps) {
         </>
       }
     >
-      <ListItemText primary={name} />
+      <ListItemText>
+        <Typography variant="body1">{name}</Typography>
+        <Typography variant="caption" color="info">
+          {getTagAssignmentsText(assignedCount ?? 0)}
+        </Typography>
+      </ListItemText>
     </ListItem>
   );
 }
