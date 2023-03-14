@@ -1,28 +1,46 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import { useEffect } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
 import { useTodoItemsAllQuery } from "../../api/api-client/Query";
-import { useTags } from "../../contexts/TagsContext";
-import { useTodoItems, useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
+import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
+import {
+  useTodoItems,
+  useTodoItemsDispatch,
+} from "../../contexts/TodoItemsContext";
 
 export function TodoItemTableView() {
   const { todoItems, fetchRequired } = useTodoItems();
   const { tags } = useTags();
 
-  const dispatch = useTodoItemsDispatch();
+  const itemsDispatch = useTodoItemsDispatch();
+  const tagsDispatch = useTagsDispatch();
 
   const todoItemsQuery = useTodoItemsAllQuery({
-    onSuccess: (todoItems) =>
-      dispatch({
+    onSuccess: (todoItems) => {
+      itemsDispatch({
         type: "todo-items-fetched",
         todoItems: todoItems,
-      }),
+      });
+      tagsDispatch({
+        type: "require-refetch"
+      });
+    }
   });
 
   const getTodoItemTags = (item: ITodoItemResponse): string => {
-    const filteredTags = tags.filter(tag => item.tags?.includes(tag.id ?? ""));
+    const filteredTags = tags.filter((tag) =>
+      item.tags?.includes(tag.id ?? "")
+    );
     return filteredTags.length > 0
-      ? filteredTags.join(", ")
+      ? filteredTags.map((t) => t.name).join(", ")
       : "N/A";
   };
 
@@ -48,7 +66,7 @@ export function TodoItemTableView() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {todoItems.map((item) =>(
+          {todoItems.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.description}</TableCell>
               <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
