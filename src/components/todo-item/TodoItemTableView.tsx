@@ -30,9 +30,9 @@ export function TodoItemTableView() {
         todoItems: todoItems,
       });
       tagsDispatch({
-        type: "require-refetch"
+        type: "require-refetch",
       });
-    }
+    },
   });
 
   const getTodoItemTags = (item: ITodoItemResponse): string => {
@@ -67,19 +67,30 @@ export function TodoItemTableView() {
         </TableHead>
         <TableBody>
           {todoItems.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.description}</TableCell>
-              <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
-              <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
-              <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
-              <TableCell>{item.rollOverCount ?? 0}</TableCell>
-              <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
-              <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
-              <TableCell>{getTodoItemTags(item)}</TableCell>
-            </TableRow>
+            <RenderItemRow item={item} tags={getTodoItemTags(item)} />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+  );
+}
+
+interface RenderItemRowProps {
+  item: ITodoItemResponse;
+  tags: string;
+}
+
+function RenderItemRow({ item, tags }: RenderItemRowProps) {
+  return (
+    <TableRow key={item.id}>
+      <TableCell>{item.description}</TableCell>
+      <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
+      <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
+      <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
+      <TableCell>{item.rollOverCount ?? 0}</TableCell>
+      <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
+      <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
+      <TableCell>{tags}</TableCell>
+    </TableRow>
   );
 }
