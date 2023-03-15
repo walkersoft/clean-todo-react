@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import moment from "moment";
 import { useEffect } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
 import { useTodoItemsAllQuery } from "../../api/api-client/Query";
@@ -81,8 +82,11 @@ interface RenderItemRowProps {
 }
 
 function RenderItemRow({ item, tags }: RenderItemRowProps) {
+  const isOverdue = !!item.dueDate && item.dueDate < moment().startOf("day");
+  const bgColor = isOverdue ? "warning.light" : "";
+
   return (
-    <TableRow key={item.id}>
+    <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
       <TableCell>{item.description}</TableCell>
       <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
       <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
