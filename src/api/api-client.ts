@@ -14,68 +14,6 @@ export * as Client from "./api-client/Client";
 export { getFetch, setBaseUrl, setFetchFactory } from "./api-client/helpers";
 export * as Query from "./api-client/Query";
 
-export class CreateTodoItemRequest implements ICreateTodoItemRequest {
-  description?: string | undefined;
-  isActive?: boolean;
-  rollsOver?: boolean;
-  dueDate?: moment.Moment;
-  tagIds?: string[] | undefined;
-
-  constructor(data?: ICreateTodoItemRequest) {
-    if (data) {
-      for (var property in data) {
-        if (data.hasOwnProperty(property))
-          (<any>this)[property] = (<any>data)[property];
-      }
-    }
-  }
-
-  init(_data?: any) {
-    if (_data) {
-      this.description = _data["description"];
-      this.isActive = _data["isActive"];
-      this.rollsOver = _data["rollsOver"];
-      this.dueDate = _data["dueDate"]
-        ? moment(_data["dueDate"].toString())
-        : <any>undefined;
-      if (Array.isArray(_data["tagIds"])) {
-        this.tagIds = [] as any;
-        for (let item of _data["tagIds"]) this.tagIds!.push(item);
-      }
-    }
-  }
-
-  static fromJS(data: any): CreateTodoItemRequest {
-    data = typeof data === "object" ? data : {};
-    let result = new CreateTodoItemRequest();
-    result.init(data);
-    return result;
-  }
-
-  toJSON(data?: any) {
-    data = typeof data === "object" ? data : {};
-    data["description"] = this.description;
-    data["isActive"] = this.isActive;
-    data["rollsOver"] = this.rollsOver;
-    data["dueDate"] = this.dueDate
-      ? this.dueDate.toISOString()
-      : <any>undefined;
-    if (Array.isArray(this.tagIds)) {
-      data["tagIds"] = [];
-      for (let item of this.tagIds) data["tagIds"].push(item);
-    }
-    return data;
-  }
-}
-
-export interface ICreateTodoItemRequest {
-  description?: string | undefined;
-  isActive?: boolean;
-  rollsOver?: boolean;
-  dueDate?: moment.Moment;
-  tagIds?: string[] | undefined;
-}
-
 export class ExceptionResponse implements IExceptionResponse {
   statusCode?: number;
   message?: string | undefined;
@@ -114,6 +52,72 @@ export class ExceptionResponse implements IExceptionResponse {
 export interface IExceptionResponse {
   statusCode?: number;
   message?: string | undefined;
+}
+
+export class TodoItemRequest implements ITodoItemRequest {
+  id?: string;
+  description?: string | undefined;
+  isActive?: boolean;
+  rollsOver?: boolean;
+  dueDate?: moment.Moment;
+  tagIds?: string[] | undefined;
+
+  constructor(data?: ITodoItemRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.id = _data["id"];
+      this.description = _data["description"];
+      this.isActive = _data["isActive"];
+      this.rollsOver = _data["rollsOver"];
+      this.dueDate = _data["dueDate"]
+        ? moment(_data["dueDate"].toString())
+        : <any>undefined;
+      if (Array.isArray(_data["tagIds"])) {
+        this.tagIds = [] as any;
+        for (let item of _data["tagIds"]) this.tagIds!.push(item);
+      }
+    }
+  }
+
+  static fromJS(data: any): TodoItemRequest {
+    data = typeof data === "object" ? data : {};
+    let result = new TodoItemRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    data["id"] = this.id;
+    data["description"] = this.description;
+    data["isActive"] = this.isActive;
+    data["rollsOver"] = this.rollsOver;
+    data["dueDate"] = this.dueDate
+      ? this.dueDate.toISOString()
+      : <any>undefined;
+    if (Array.isArray(this.tagIds)) {
+      data["tagIds"] = [];
+      for (let item of this.tagIds) data["tagIds"].push(item);
+    }
+    return data;
+  }
+}
+
+export interface ITodoItemRequest {
+  id?: string;
+  description?: string | undefined;
+  isActive?: boolean;
+  rollsOver?: boolean;
+  dueDate?: moment.Moment;
+  tagIds?: string[] | undefined;
 }
 
 export class TodoItemResponse implements ITodoItemResponse {
