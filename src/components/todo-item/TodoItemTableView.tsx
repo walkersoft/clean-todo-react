@@ -68,7 +68,7 @@ export function TodoItemTableView() {
         </TableHead>
         <TableBody>
           {todoItems.map((item) => (
-            <RenderItemRow item={item} tags={getTodoItemTags(item)} />
+            <RenderItemRow key={item.id} item={item} tags={getTodoItemTags(item)} />
           ))}
         </TableBody>
       </Table>
