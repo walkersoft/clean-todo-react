@@ -5,14 +5,14 @@ import { DesktopNavigation } from "./DesktopNavigation";
 import { MobileNavigation } from "./MobileNavigation";
 
 export type LinkItem = {
-  title: string,
-  href: string
+  title: string;
+  href: string;
 };
 
 export function NavigationBar() {
   const title = "CLEAN TODO";
   const links = [
-    { title: "Home", href: "/" }, 
+    { title: "Home", href: "/" },
     { title: "Tags Management", href: "/Tags" },
   ];
 

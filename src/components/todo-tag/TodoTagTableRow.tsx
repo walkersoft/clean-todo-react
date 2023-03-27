@@ -1,8 +1,8 @@
+import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
-import ClearIcon from '@mui/icons-material/Clear';
-import CheckIcon from '@mui/icons-material/Check';
 import { IconButton, TableCell, TableRow, TextField } from "@mui/material";
 import { useState } from "react";
 import { ITodoTagResponse, TodoTagRequest } from "../../api/api-client";
@@ -32,7 +32,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
     onSuccess: () => {
       dispatch(refetchTagsDispatchAction);
       setEditMode(false);
-    }
+    },
   });
 
   const deleteTag = useTodoTagsDELETEMutation(tag.id, {
@@ -45,7 +45,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
 
   const handleUpdate = () => {
     updateTag.mutate(new TodoTagRequest({ ...editedTag }));
-  }
+  };
 
   const handleEditModeChanged = (mode: boolean) => {
     setEditMode(mode);
@@ -84,7 +84,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
       <TableCell width="250">{getTagAssignmentsText()}</TableCell>
       <TableCell width="150">
         {editMode ? (
-          <>            
+          <>
             <IconButton
               edge="end"
               color="success"
@@ -93,7 +93,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
               sx={{ mr: 0 }}
             >
               <CheckIcon />
-            </IconButton>            
+            </IconButton>
             <IconButton
               edge="end"
               color="error"

@@ -21,10 +21,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import {
-  TodoItemRequest,
-  ITodoItemRequest,
-} from "../../api/api-client";
+import { ITodoItemRequest, TodoItemRequest } from "../../api/api-client";
 import { useTodoItemsPOSTMutation } from "../../api/api-client/Query";
 import { useTags } from "../../contexts/TagsContext";
 import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
