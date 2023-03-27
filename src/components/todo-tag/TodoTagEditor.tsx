@@ -15,7 +15,10 @@ export default function TodoTagEditor() {
   const dispatch = useTagsDispatch();
 
   const saveTag = useTodoTagsPOSTMutation({
-    onSuccess: () => dispatch({ type: "require-refetch" }),
+    onSuccess: () => {
+      setTag({...tag, name: ""});
+      dispatch({ type: "require-refetch" })
+    },
   });
 
   const handleClick = () => {
@@ -34,6 +37,7 @@ export default function TodoTagEditor() {
               name: e.target.value,
             });
           }}
+          value={tag.name}
           fullWidth
           sx={{ mr: 2 }}
         />
