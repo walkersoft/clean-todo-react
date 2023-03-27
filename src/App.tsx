@@ -6,7 +6,6 @@ import "./App.css";
 import { NavigationBar } from "./components/common/navigation/NavigationBar";
 import { TagsStateProvider } from "./contexts/TagsContext";
 import { TodoItemsStateProvider } from "./contexts/TodoItemsContext";
-import { LandingPage } from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 setBaseUrl("https://localhost:7144");
