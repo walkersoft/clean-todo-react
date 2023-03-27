@@ -1,16 +1,16 @@
 import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { ITodoTagResponse, TodoTagRequest } from "../../api/api-client";
+import { ITodoTagRequest, TodoTagRequest } from "../../api/api-client";
 import { useTodoTagsPOSTMutation } from "../../api/api-client/Query";
 import { useTagsDispatch } from "../../contexts/TagsContext";
 
-const initialItem: ITodoTagResponse = {
+const initialItem: ITodoTagRequest = {
   id: "",
   name: "",
 };
 
 export default function TodoTagEditor() {
-  const [tag, setTag] = useState<ITodoTagResponse>(initialItem);
+  const [tag, setTag] = useState<ITodoTagRequest>(initialItem);
 
   const dispatch = useTagsDispatch();
 
