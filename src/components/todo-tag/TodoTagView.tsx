@@ -1,12 +1,11 @@
-import { Typography, Table } from "@mui/material";
-import { Box, Stack } from "@mui/system";
+import { Table } from "@mui/material";
 import { useEffect } from "react";
 import { useTodoTagsAllQuery } from "../../api/api-client/Query";
 import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
 import DataTableHeader from "../common/data-tables/DataTableHeader";
 import TodoTagTableRow from "../common/data-tables/TableRows/TodoTagTableRow";
 
-export function TodoTagListView() {
+export function TodoTagView() {
   const { tags, fetchRequired } = useTags();
 
   const dispatch = useTagsDispatch();
@@ -25,27 +24,16 @@ export function TodoTagListView() {
     }
   }, [fetchRequired, tagsQuery]);
 
-  const columnHeaders: string[] = [
-    "Tag Name",
-    "Assignments",
-    "Actions"
-  ]
+  const columnHeaders: string[] = ["Tag Name", "Assignments", "Actions"];
 
   return (
-    <Box
-      sx={{ display: "flex", justifyContent: "center", mt: 3 }}
-    >
-      <Stack direction="column">
-        <Typography variant="h4" align="left">
-          Tag Management
-        </Typography>
-        <Table sx={{ width: 700, mt: 2 }}>
-          <DataTableHeader columnHeaders={columnHeaders} />
-          {tags.map((tag) => {
-            return <TodoTagTableRow key={tag.id} tag={tag} />;
-          })}
-        </Table>
-      </Stack>
-    </Box>
+    <>
+      <Table sx={{ width: 700, mt: 2 }}>
+        <DataTableHeader columnHeaders={columnHeaders} />
+        {tags.map((tag) => {
+          return <TodoTagTableRow key={tag.id} tag={tag} />;
+        })}
+      </Table>
+    </>
   );
 }

@@ -37,7 +37,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
   };
 
   const getTagAssignmentsText = (): string => {
-    return `${assignedCount} assignment${assignedCount === 1 ? "" : "(s)"}`;
+    return `${assignedCount} assignment${assignedCount === 1 ? "" : "s"}`;
   };
 
   return (

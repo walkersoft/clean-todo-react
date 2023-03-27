@@ -1,6 +1,6 @@
 import App from "../App";
-import { TodoTagListView } from "../components/todo-tag/TodoTagListView";
 import { LandingPage } from "../pages/LandingPage";
+import { TagManagement } from "../pages/TagManagement";
 
 export default function getAppRoutes() {
   return [{
@@ -13,7 +13,7 @@ export default function getAppRoutes() {
       },
       {
         path: "Tags",
-        element: <TodoTagListView />
+        element: <TagManagement />
       }
     ]
   }];
