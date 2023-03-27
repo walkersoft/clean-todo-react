@@ -1,11 +1,12 @@
 import AdbIcon from "@mui/icons-material/Adb";
 import { Box, Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { LinkItem } from "./NavigationBar";
 
 interface DesktopNavigationProps {
   title: string;
   links: LinkItem[];
-  handleCloseNav: (event: React.MouseEvent<HTMLElement>, navTarget: string) => void;
+  handleCloseNav: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 export function DesktopNavigation({
@@ -13,6 +14,8 @@ export function DesktopNavigation({
   links,
   handleCloseNav,
 }: DesktopNavigationProps) {
+  const navigate = useNavigate();
+
   return (
     <>
       <AdbIcon sx={{ mr: 1, display: { xs: "none", md: "flex" } }} />
@@ -35,7 +38,10 @@ export function DesktopNavigation({
         {links.map((link) => (
           <Button
             key={link.title}
-            onClick={(e) => handleCloseNav(e, link.href)}
+            onClick={(e) => {
+              handleCloseNav(e);
+              navigate(link.href);
+            }}
             sx={{ my: 2, color: "white", display: "block" }}
           >
            {link.title}

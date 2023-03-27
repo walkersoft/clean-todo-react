@@ -1,7 +1,6 @@
 import { AppBar, Toolbar } from "@mui/material";
 import { Container } from "@mui/system";
 import { MouseEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { DesktopNavigation } from "./DesktopNavigation";
 import { MobileNavigation } from "./MobileNavigation";
 
@@ -17,8 +16,6 @@ export function NavigationBar() {
     { title: "Tags Management", href: "/Tags" },
   ];
 
-  const navigate = useNavigate();
-
   const [navAnchorElement, setNavAnchorElement] = useState<HTMLElement | null>(
     null
   );
@@ -27,9 +24,8 @@ export function NavigationBar() {
     setNavAnchorElement(event.currentTarget);
   };
 
-  const handleCloseNav = (event: MouseEvent<HTMLElement>, navTarget: string = "") => {
+  const handleCloseNav = (event: MouseEvent<HTMLElement>) => {
     setNavAnchorElement(null);
-    navigate(navTarget);
   };
 
   return (
