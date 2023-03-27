@@ -1,5 +1,6 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Outlet } from "react-router-dom";
 import { setBaseUrl } from "./api/api-client";
 import "./App.css";
 import { NavigationBar } from "./components/common/navigation/NavigationBar";
@@ -18,7 +19,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <TodoItemsStateProvider>
           <TagsStateProvider>
-            <LandingPage />
+            <Outlet />
           </TagsStateProvider>
         </TodoItemsStateProvider>
       </QueryClientProvider>
