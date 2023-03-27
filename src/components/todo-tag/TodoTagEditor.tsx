@@ -16,8 +16,8 @@ export default function TodoTagEditor() {
 
   const saveTag = useTodoTagsPOSTMutation({
     onSuccess: () => {
-      setTag({...tag, name: ""});
-      dispatch({ type: "require-refetch" })
+      setTag({ ...tag, name: "" });
+      dispatch({ type: "require-refetch" });
     },
   });
 
@@ -27,7 +27,9 @@ export default function TodoTagEditor() {
 
   return (
     <Paper elevation={6} sx={{ mt: 2, p: 2 }}>
-      <Typography variant="h6" align="left">Create Tag</Typography>
+      <Typography variant="h6" align="left">
+        Create Tag
+      </Typography>
       <Stack direction="row">
         <TextField
           variant="standard"
@@ -41,7 +43,12 @@ export default function TodoTagEditor() {
           fullWidth
           sx={{ mr: 2 }}
         />
-        <Button variant="contained" onClick={handleClick} sx={{ width: 200, height: 36 }} disabled={!tag.name}>
+        <Button
+          variant="contained"
+          onClick={handleClick}
+          sx={{ width: 200, height: 36 }}
+          disabled={!tag.name}
+        >
           Save Tag
         </Button>
       </Stack>
