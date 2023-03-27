@@ -41,7 +41,7 @@ export default function TodoTagEditor() {
           fullWidth
           sx={{ mr: 2 }}
         />
-        <Button variant="contained" onClick={handleClick} sx={{ width: 200, height: 36 }}>
+        <Button variant="contained" onClick={handleClick} sx={{ width: 200, height: 36 }} disabled={!tag.name}>
           Save Tag
         </Button>
       </Stack>
