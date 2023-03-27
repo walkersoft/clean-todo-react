@@ -44,9 +44,7 @@ export function MobileNavigation({
         >
           {links.map((link) => (
             <MenuItem key={link.title} onClick={() => navigate(link.href)}>
-              <Typography textAlign="center">
-                {link.title}
-              </Typography>
+              <Typography textAlign="center">{link.title}</Typography>
             </MenuItem>
           ))}
         </Menu>

@@ -62,4 +62,6 @@ function tagsReducer(state: TagsState, action: TagActions): TagsState {
   }
 }
 
-export const refetchTagsDispatchAction = { type: "require-refetch" } as TagActions;
+export const refetchTagsDispatchAction = {
+  type: "require-refetch",
+} as TagActions;

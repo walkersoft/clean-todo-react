@@ -44,7 +44,7 @@ export function DesktopNavigation({
             }}
             sx={{ my: 2, color: "white", display: "block" }}
           >
-           {link.title}
+            {link.title}
           </Button>
         ))}
       </Box>

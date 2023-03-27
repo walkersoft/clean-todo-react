@@ -4,7 +4,9 @@ export interface DataTableHeaderProps {
   columnHeaders: string[];
 }
 
-export default function DataTableHeader({ columnHeaders }: DataTableHeaderProps) {
+export default function DataTableHeader({
+  columnHeaders,
+}: DataTableHeaderProps) {
   return (
     <TableHead>
       <TableRow>
