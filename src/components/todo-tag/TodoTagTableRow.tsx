@@ -5,16 +5,16 @@ import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import { IconButton, TableCell, TableRow, TextField } from "@mui/material";
 import { useState } from "react";
-import { ITodoTagResponse, TodoTagRequest } from "../../../../api/api-client";
+import { ITodoTagResponse, TodoTagRequest } from "../../api/api-client";
 import {
   useTodoTagsDELETEMutation,
   useTodoTagsPUTMutation,
   useUnassignMutation,
-} from "../../../../api/api-client/Query";
+} from "../../api/api-client/Query";
 import {
   refetchTagsDispatchAction,
   useTagsDispatch,
-} from "../../../../contexts/TagsContext";
+} from "../../contexts/TagsContext";
 
 export interface TodoTagTableRowProps {
   tag: ITodoTagResponse;

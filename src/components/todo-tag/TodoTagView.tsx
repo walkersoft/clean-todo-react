@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useTodoTagsAllQuery } from "../../api/api-client/Query";
 import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
 import DataTableHeader from "../common/data-tables/DataTableHeader";
-import TodoTagTableRow from "../common/data-tables/TableRows/TodoTagTableRow";
+import TodoTagTableRow from "./TodoTagTableRow";
 
 export function TodoTagView() {
   const { tags, fetchRequired } = useTags();
