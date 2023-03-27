@@ -119,26 +119,26 @@ export function setTodoItemsAllDataByQueryId(
   queryClient.setQueryData(queryKey, updater);
 }
 
-export function todoItemsUrl(): string {
+export function todoItemsPOSTUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoItems";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-export function todoItemsMutationKey(): MutationKey {
-  return trimArrayEnd(["Client", "todoItems"]);
+export function todoItemsPOSTMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "todoItemsPOST"]);
 }
 
 /**
  * @param body (optional)
  * @return Success
  */
-export function useTodoItemsMutation<TContext>(
+export function useTodoItemsPOSTMutation<TContext>(
   options?: Omit<
     UseMutationOptions<
       Types.TodoItemResponse,
       unknown,
-      Types.CreateTodoItemRequest,
+      Types.TodoItemRequest,
       TContext
     >,
     "mutationKey" | "mutationFn"
@@ -146,16 +146,57 @@ export function useTodoItemsMutation<TContext>(
 ): UseMutationResult<
   Types.TodoItemResponse,
   unknown,
-  Types.CreateTodoItemRequest,
+  Types.TodoItemRequest,
   TContext
 > {
-  const key = todoItemsMutationKey();
+  const key = todoItemsPOSTMutationKey();
 
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
 
   return useMutation(
-    (body: Types.CreateTodoItemRequest) => Types.Client.todoItems(body),
+    (body: Types.TodoItemRequest) => Types.Client.todoItemsPOST(body),
+    { ...options, mutationKey: key }
+  );
+}
+
+export function todoItemsPUTUrl(): string {
+  let url_ = getBaseUrl() + "/api/TodoItems";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function todoItemsPUTMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "todoItemsPUT"]);
+}
+
+/**
+ * @param body (optional)
+ * @return Success
+ */
+export function useTodoItemsPUTMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<
+      Types.TodoItemResponse,
+      unknown,
+      Types.TodoItemRequest,
+      TContext
+    >,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<
+  Types.TodoItemResponse,
+  unknown,
+  Types.TodoItemRequest,
+  TContext
+> {
+  const key = todoItemsPUTMutationKey();
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(
+    (body: Types.TodoItemRequest) => Types.Client.todoItemsPUT(body),
     { ...options, mutationKey: key }
   );
 }

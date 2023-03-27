@@ -4,9 +4,17 @@ import { MouseEvent, useState } from "react";
 import { DesktopNavigation } from "./DesktopNavigation";
 import { MobileNavigation } from "./MobileNavigation";
 
+export type LinkItem = {
+  title: string,
+  href: string
+};
+
 export function NavigationBar() {
   const title = "CLEAN TODO";
-  const pages = ["Home", "Create New List"];
+  const links = [
+    { title: "Home", href: "/" }, 
+    { title: "Tags Management", href: "/Tags" },
+  ];
 
   const [navAnchorElement, setNavAnchorElement] = useState<HTMLElement | null>(
     null
@@ -26,14 +34,14 @@ export function NavigationBar() {
         <Toolbar disableGutters sx={{ ml: 2 }}>
           <MobileNavigation
             title={title}
-            pages={pages}
+            links={links}
             navAnchorElement={navAnchorElement}
             handleOpenNav={handleOpenNav}
             handleCloseNav={handleCloseNav}
           />
           <DesktopNavigation
             title={title}
-            pages={pages}
+            links={links}
             handleCloseNav={handleCloseNav}
           />
         </Toolbar>

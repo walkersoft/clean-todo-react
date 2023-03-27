@@ -1,9 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
-import * as Types from "../api-client";
 import { throwException } from "../api-client";
 import { getBaseUrl, getFetch, getJsonParseReviver } from "./helpers";
-
+import * as Types from "../api-client"
 /**
  * @return Success
  */
@@ -82,8 +81,8 @@ function processTodoItemsAll(
  * @param body (optional)
  * @return Success
  */
-export function todoItems(
-  body?: Types.CreateTodoItemRequest | undefined
+export function todoItemsPOST(
+  body?: Types.TodoItemRequest | undefined
 ): Promise<Types.TodoItemResponse> {
   let url_ = getBaseUrl() + "/api/TodoItems";
   url_ = url_.replace(/[?&]$/, "");
@@ -102,11 +101,13 @@ export function todoItems(
   return getFetch()
     .fetch(url_, options_)
     .then((_response: Response) => {
-      return processTodoItems(_response);
+      return processTodoItemsPOST(_response);
     });
 }
 
-function processTodoItems(response: Response): Promise<Types.TodoItemResponse> {
+function processTodoItemsPOST(
+  response: Response
+): Promise<Types.TodoItemResponse> {
   const status = response.status;
   let _headers: any = {};
   if (response.headers && response.headers.forEach) {
@@ -137,6 +138,97 @@ function processTodoItems(response: Response): Promise<Types.TodoItemResponse> {
           : JSON.parse(_responseText, getJsonParseReviver());
       result200 = Types.TodoItemResponse.fromJS(resultData200);
       return result200;
+    });
+  } else if (status !== 200 && status !== 204) {
+    return response.text().then((_responseText) => {
+      return throwException(
+        "An unexpected server error occurred.",
+        status,
+        _responseText,
+        _headers
+      );
+    });
+  }
+  return Promise.resolve<Types.TodoItemResponse>(null as any);
+}
+
+/**
+ * @param body (optional)
+ * @return Success
+ */
+export function todoItemsPUT(
+  body?: Types.TodoItemRequest | undefined
+): Promise<Types.TodoItemResponse> {
+  let url_ = getBaseUrl() + "/api/TodoItems";
+  url_ = url_.replace(/[?&]$/, "");
+
+  const content_ = JSON.stringify(body);
+
+  let options_: RequestInit = {
+    body: content_,
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "text/plain",
+    },
+  };
+
+  return getFetch()
+    .fetch(url_, options_)
+    .then((_response: Response) => {
+      return processTodoItemsPUT(_response);
+    });
+}
+
+function processTodoItemsPUT(
+  response: Response
+): Promise<Types.TodoItemResponse> {
+  const status = response.status;
+  let _headers: any = {};
+  if (response.headers && response.headers.forEach) {
+    response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+  }
+  if (status === 500) {
+    return response.text().then((_responseText) => {
+      let result500: any = null;
+      let resultData500 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result500 = Types.ExceptionResponse.fromJS(resultData500);
+      return throwException(
+        "Server Error",
+        status,
+        _responseText,
+        _headers,
+        result500
+      );
+    });
+  } else if (status === 200) {
+    return response.text().then((_responseText) => {
+      let result200: any = null;
+      let resultData200 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result200 = Types.TodoItemResponse.fromJS(resultData200);
+      return result200;
+    });
+  } else if (status === 404) {
+    return response.text().then((_responseText) => {
+      let result404: any = null;
+      let resultData404 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result404 = Types.ExceptionResponse.fromJS(resultData404);
+      return throwException(
+        "Not Found",
+        status,
+        _responseText,
+        _headers,
+        result404
+      );
     });
   } else if (status !== 200 && status !== 204) {
     return response.text().then((_responseText) => {
@@ -438,6 +530,22 @@ function processTodoTagsDELETE(response: Response): Promise<void> {
   } else if (status === 204) {
     return response.text().then((_responseText) => {
       return;
+    });
+  } else if (status === 400) {
+    return response.text().then((_responseText) => {
+      let result400: any = null;
+      let resultData400 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result400 = Types.ExceptionResponse.fromJS(resultData400);
+      return throwException(
+        "Bad Request",
+        status,
+        _responseText,
+        _headers,
+        result400
+      );
     });
   } else if (status === 404) {
     return response.text().then((_responseText) => {

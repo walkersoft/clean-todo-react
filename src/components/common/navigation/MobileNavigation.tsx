@@ -1,10 +1,12 @@
 import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { LinkItem } from "./NavigationBar";
 
 interface MobileNavigationProps {
   title: string;
-  pages: string[];
+  links: LinkItem[];
   navAnchorElement: HTMLElement | null;
   handleOpenNav: (event: React.MouseEvent<HTMLElement>) => void;
   handleCloseNav: (event: React.MouseEvent<HTMLElement>) => void;
@@ -12,11 +14,12 @@ interface MobileNavigationProps {
 
 export function MobileNavigation({
   title,
-  pages,
+  links,
   navAnchorElement,
   handleOpenNav,
   handleCloseNav,
 }: MobileNavigationProps) {
+  const navigate = useNavigate();
   return (
     <>
       <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -39,9 +42,11 @@ export function MobileNavigation({
           transformOrigin={{ vertical: "top", horizontal: "left" }}
           sx={{ display: { sx: "block", md: "none" } }}
         >
-          {pages.map((page) => (
-            <MenuItem key={page} onClick={() => {}}>
-              <Typography textAlign="center">{page}</Typography>
+          {links.map((link) => (
+            <MenuItem key={link.title} onClick={() => navigate(link.href)}>
+              <Typography textAlign="center">
+                {link.title}
+              </Typography>
             </MenuItem>
           ))}
         </Menu>

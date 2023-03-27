@@ -1,4 +1,4 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { ITodoTagResponse, TodoTagRequest } from "../../api/api-client";
 import { useTodoTagsPOSTMutation } from "../../api/api-client/Query";
@@ -15,7 +15,10 @@ export default function TodoTagEditor() {
   const dispatch = useTagsDispatch();
 
   const saveTag = useTodoTagsPOSTMutation({
-    onSuccess: () => dispatch({ type: "require-refetch" }),
+    onSuccess: () => {
+      setTag({...tag, name: ""});
+      dispatch({ type: "require-refetch" })
+    },
   });
 
   const handleClick = () => {
@@ -23,19 +26,25 @@ export default function TodoTagEditor() {
   };
 
   return (
-    <Stack direction="row">
-      <Typography variant="h5">Create Tag</Typography>
-      <TextField
-        variant="standard"
-        onChange={(e) => {
-          setTag({
-            name: e.target.value,
-          });
-        }}
-      />
-      <Button variant="contained" onClick={handleClick}>
-        Save Tag
-      </Button>
-    </Stack>
+    <Paper elevation={6} sx={{ mt: 2, p: 2 }}>
+      <Typography variant="h6" align="left">Create Tag</Typography>
+      <Stack direction="row">
+        <TextField
+          variant="standard"
+          helperText="Enter a tag name. Duplicate tags (case-insensitive) will be ignored."
+          onChange={(e) => {
+            setTag({
+              name: e.target.value,
+            });
+          }}
+          value={tag.name}
+          fullWidth
+          sx={{ mr: 2 }}
+        />
+        <Button variant="contained" onClick={handleClick} sx={{ width: 200, height: 36 }}>
+          Save Tag
+        </Button>
+      </Stack>
+    </Paper>
   );
 }
