@@ -1,10 +1,10 @@
 import { TableCell, TableHead, TableRow } from "@mui/material";
 
-export interface TableHeaderProps {
+export interface DataTableHeaderProps {
   columnHeaders: string[];
 }
 
-export default function TableHeader({ columnHeaders }: TableHeaderProps) {
+export default function DataTableHeader({ columnHeaders }: DataTableHeaderProps) {
   return (
     <TableHead>
       <TableRow>

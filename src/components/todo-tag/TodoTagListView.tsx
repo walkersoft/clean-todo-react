@@ -1,4 +1,5 @@
-import { List, Typography } from "@mui/material";
+import { Divider, List, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/system";
 import { useEffect } from "react";
 import { useTodoTagsAllQuery } from "../../api/api-client/Query";
 import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
@@ -24,13 +25,20 @@ export function TodoTagListView() {
   }, [fetchRequired, tagsQuery]);
 
   return (
-    <>
-      <Typography variant="h6">Existing Tags</Typography>
-      <List dense>
-        {tags.map((value, index) => {
-          return <TodoTagListItem key={index} tag={value} />;
-        })}
-      </List>
-    </>
+    <Box
+      sx={{ display: "flex", justifyContent: "center", mt: 3 }}
+    >
+      <Stack direction="column">
+        <Typography variant="h4" align="left">
+          Tag Management
+        </Typography>
+        <Divider sx={{ width: 800, mt: 2, mb: 1 }} />
+        <List dense>
+          {tags.map((value, index) => {
+            return <TodoTagListItem key={index} tag={value} />;
+          })}
+        </List>
+      </Stack>
+    </Box>
   );
 }
