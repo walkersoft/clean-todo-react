@@ -1,4 +1,4 @@
-import { Table } from "@mui/material";
+import { Table, TableBody, TableContainer } from "@mui/material";
 import { useEffect } from "react";
 import { useTodoTagsAllQuery } from "../../api/api-client/Query";
 import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
@@ -28,12 +28,16 @@ export function TodoTagView() {
 
   return (
     <>
-      <Table sx={{ width: 700, mt: 2 }}>
-        <DataTableHeader columnHeaders={columnHeaders} />
-        {tags.map((tag) => {
-          return <TodoTagTableRow key={tag.id} tag={tag} />;
-        })}
-      </Table>
+      <TableContainer>
+        <Table sx={{ width: 700, mt: 2 }}>
+          <DataTableHeader columnHeaders={columnHeaders} />
+          <TableBody>
+            {tags.map((tag) => {
+              return <TodoTagTableRow key={tag.id} tag={tag} />;
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 }

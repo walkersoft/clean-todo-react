@@ -8,8 +8,8 @@ export default function DataTableHeader({ columnHeaders }: DataTableHeaderProps)
   return (
     <TableHead>
       <TableRow>
-        {columnHeaders.map(header => (
-          <TableCell>{header}</TableCell>
+        {columnHeaders.map((header, index) => (
+          <TableCell key={index}>{header}</TableCell>
         ))}
       </TableRow>
     </TableHead>
