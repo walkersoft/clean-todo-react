@@ -1,6 +1,7 @@
 import { AppBar, Toolbar } from "@mui/material";
 import { Container } from "@mui/system";
 import { MouseEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DesktopNavigation } from "./DesktopNavigation";
 import { MobileNavigation } from "./MobileNavigation";
 
@@ -13,8 +14,10 @@ export function NavigationBar() {
   const title = "CLEAN TODO";
   const links = [
     { title: "Home", href: "/" }, 
-    { title: "Create New List", href: "/CreateList" },
+    { title: "Tags Management", href: "/Tags" },
   ];
+
+  const navigate = useNavigate();
 
   const [navAnchorElement, setNavAnchorElement] = useState<HTMLElement | null>(
     null
@@ -24,8 +27,9 @@ export function NavigationBar() {
     setNavAnchorElement(event.currentTarget);
   };
 
-  const handleCloseNav = (event: MouseEvent<HTMLElement>) => {
+  const handleCloseNav = (event: MouseEvent<HTMLElement>, navTarget: string = "") => {
     setNavAnchorElement(null);
+    navigate(navTarget);
   };
 
   return (

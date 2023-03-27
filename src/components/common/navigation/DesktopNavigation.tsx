@@ -5,7 +5,7 @@ import { LinkItem } from "./NavigationBar";
 interface DesktopNavigationProps {
   title: string;
   links: LinkItem[];
-  handleCloseNav: (event: React.MouseEvent<HTMLElement>) => void;
+  handleCloseNav: (event: React.MouseEvent<HTMLElement>, navTarget: string) => void;
 }
 
 export function DesktopNavigation({
@@ -35,7 +35,7 @@ export function DesktopNavigation({
         {links.map((link) => (
           <Button
             key={link.title}
-            onClick={handleCloseNav}
+            onClick={(e) => handleCloseNav(e, link.href)}
             sx={{ my: 2, color: "white", display: "block" }}
           >
            {link.title}
