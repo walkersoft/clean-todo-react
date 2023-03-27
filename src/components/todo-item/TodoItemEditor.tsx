@@ -25,7 +25,7 @@ import {
   TodoItemRequest,
   ITodoItemRequest,
 } from "../../api/api-client";
-import { useTodoItemsPUTMutation } from "../../api/api-client/Query";
+import { useTodoItemsPOSTMutation } from "../../api/api-client/Query";
 import { useTags } from "../../contexts/TagsContext";
 import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
 
@@ -45,7 +45,7 @@ export function TodoItemEditor() {
 
   const dispatch = useTodoItemsDispatch();
 
-  const saveTodoItem = useTodoItemsPUTMutation({
+  const saveTodoItem = useTodoItemsPOSTMutation({
     onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
