@@ -1,10 +1,11 @@
 import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { LinkItem } from "./NavigationBar";
 
 interface MobileNavigationProps {
   title: string;
-  pages: string[];
+  links: LinkItem[];
   navAnchorElement: HTMLElement | null;
   handleOpenNav: (event: React.MouseEvent<HTMLElement>) => void;
   handleCloseNav: (event: React.MouseEvent<HTMLElement>) => void;
@@ -12,7 +13,7 @@ interface MobileNavigationProps {
 
 export function MobileNavigation({
   title,
-  pages,
+  links,
   navAnchorElement,
   handleOpenNav,
   handleCloseNav,
@@ -39,9 +40,11 @@ export function MobileNavigation({
           transformOrigin={{ vertical: "top", horizontal: "left" }}
           sx={{ display: { sx: "block", md: "none" } }}
         >
-          {pages.map((page) => (
-            <MenuItem key={page} onClick={() => {}}>
-              <Typography textAlign="center">{page}</Typography>
+          {links.map((link) => (
+            <MenuItem key={link.title} onClick={() => {}}>
+              <Typography textAlign="center">
+                {link.title}
+              </Typography>
             </MenuItem>
           ))}
         </Menu>

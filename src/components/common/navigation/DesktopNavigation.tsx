@@ -1,15 +1,16 @@
 import AdbIcon from "@mui/icons-material/Adb";
 import { Box, Button, Typography } from "@mui/material";
+import { LinkItem } from "./NavigationBar";
 
 interface DesktopNavigationProps {
   title: string;
-  pages: string[];
+  links: LinkItem[];
   handleCloseNav: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 export function DesktopNavigation({
   title,
-  pages,
+  links,
   handleCloseNav,
 }: DesktopNavigationProps) {
   return (
@@ -31,13 +32,13 @@ export function DesktopNavigation({
         {title}
       </Typography>
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-        {pages.map((page) => (
+        {links.map((link) => (
           <Button
-            key={page}
+            key={link.title}
             onClick={handleCloseNav}
             sx={{ my: 2, color: "white", display: "block" }}
           >
-            {page}
+           {link.title}
           </Button>
         ))}
       </Box>
