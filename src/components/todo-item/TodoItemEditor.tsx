@@ -39,7 +39,15 @@ const initialItem: ITodoItemRequest = {
   tagIds: [],
 };
 
-export function TodoItemEditor() {
+export interface TodoItemEditorProps {
+  editorOpen: boolean;
+  setEditorOpen: (isOpen: boolean) => void;
+}
+
+export function TodoItemEditor({
+  editorOpen,
+  setEditorOpen,
+}: TodoItemEditorProps) {
   const [todoItem, setTodoItem] = useState<ITodoItemRequest>(initialItem);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -52,7 +60,9 @@ export function TodoItemEditor() {
   });
 
   const handleClick = () => {
-    saveTodoItem.mutate(new TodoItemRequest({ ...todoItem }));
+    saveTodoItem.mutate(new TodoItemRequest({ ...todoItem }), {
+      onSuccess: () => setEditorOpen(false)
+    });
   };
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
@@ -82,9 +92,11 @@ export function TodoItemEditor() {
   };
 
   return (
-    <Dialog open={true}>
+    <Dialog open={editorOpen} onClose={() => setEditorOpen(false)}>
       <Paper sx={{ width: 600, p: 3 }}>
-        <DialogTitle><Typography variant="h5">Edit TODO Item</Typography></DialogTitle>
+        <DialogTitle>
+          <Typography variant="h5">Edit TODO Item</Typography>
+        </DialogTitle>
         <Divider />
         <DialogContent>
           <Stack direction="column" spacing={3}>
@@ -167,7 +179,7 @@ export function TodoItemEditor() {
           <Button variant="contained" onClick={handleClick}>
             Save Todo
           </Button>
-          <Button variant="contained" color="error" onClick={handleClick}>
+          <Button variant="contained" color="error" onClick={() => setEditorOpen(false)}>
             Cancel
           </Button>
         </DialogActions>

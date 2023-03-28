@@ -1,4 +1,5 @@
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -8,7 +9,7 @@ import {
   TableRow,
 } from "@mui/material";
 import moment from "moment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
 import { useTodoItemsAllQuery } from "../../api/api-client/Query";
 import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
@@ -16,8 +17,11 @@ import {
   useTodoItems,
   useTodoItemsDispatch,
 } from "../../contexts/TodoItemsContext";
+import { TodoItemEditor } from "./TodoItemEditor";
 
 export function TodoItemTableView() {
+  const [ editorOpen, setEditorOpen ] = useState<boolean>(false);
+
   const { todoItems, fetchRequired } = useTodoItems();
   const { tags } = useTags();
 
@@ -52,31 +56,37 @@ export function TodoItemTableView() {
   }, [fetchRequired, todoItemsQuery]);
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ maxWidth: 1200 }}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Description</TableCell>
-            <TableCell>Active</TableCell>
-            <TableCell>Complete</TableCell>
-            <TableCell>Rolls Over</TableCell>
-            <TableCell>Roll Over Qty.</TableCell>
-            <TableCell>Due Date</TableCell>
-            <TableCell>Completion Date</TableCell>
-            <TableCell>Tags</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {todoItems.map((item) => (
-            <RenderItemRow
-              key={item.id}
-              item={item}
-              tags={getTodoItemTags(item)}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <Button variant="outlined" onClick={() => setEditorOpen(true)}>
+        Create Todo Item
+      </Button>
+      <TableContainer component={Paper}>
+        <Table sx={{ maxWidth: 1200 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Description</TableCell>
+              <TableCell>Active</TableCell>
+              <TableCell>Complete</TableCell>
+              <TableCell>Rolls Over</TableCell>
+              <TableCell>Roll Over Qty.</TableCell>
+              <TableCell>Due Date</TableCell>
+              <TableCell>Completion Date</TableCell>
+              <TableCell>Tags</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {todoItems.map((item) => (
+              <RenderItemRow
+                key={item.id}
+                item={item}
+                tags={getTodoItemTags(item)}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TodoItemEditor editorOpen={editorOpen} setEditorOpen={setEditorOpen} />
+    </>
   );
 }
 
