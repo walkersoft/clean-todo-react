@@ -59,10 +59,21 @@ export function TodoItemEditor({
     onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
-  const handleClick = () => {
+  const closeAndResetEditor = () => {
+    setTodoItem(initialItem);
+    setEditorOpen(false);
+  };
+
+  const handleSaveItemClick = () => {
     saveTodoItem.mutate(new TodoItemRequest({ ...todoItem }), {
-      onSuccess: () => setEditorOpen(false)
+      onSuccess: () => {
+        closeAndResetEditor();
+      },
     });
+  };
+
+  const handleCancelEditClick = () => {
+    closeAndResetEditor();
   };
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
@@ -176,10 +187,14 @@ export function TodoItemEditor({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={handleClick}>
+          <Button variant="contained" onClick={handleSaveItemClick}>
             Save Todo
           </Button>
-          <Button variant="contained" color="error" onClick={() => setEditorOpen(false)}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleCancelEditClick}
+          >
             Cancel
           </Button>
         </DialogActions>
