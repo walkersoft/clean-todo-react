@@ -47,6 +47,11 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
     updateTag.mutate(new TodoTagRequest({ ...editedTag }));
   };
 
+  const handleCancelEdit = () => {
+    handleEditModeChanged(false);
+    setEditedTag(tag);
+  }
+
   const handleEditModeChanged = (mode: boolean) => {
     setEditMode(mode);
   };
@@ -90,6 +95,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
               color="success"
               title="Edit Tag"
               onClick={handleUpdate}
+              disabled={editedTag.name?.length === 0}
               sx={{ mr: 0 }}
             >
               <CheckIcon />
@@ -99,7 +105,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
               color="error"
               title="Cancel Editing"
               sx={{ mr: 0 }}
-              onClick={() => handleEditModeChanged(false)}
+              onClick={handleCancelEdit}
             >
               <ClearIcon />
             </IconButton>
