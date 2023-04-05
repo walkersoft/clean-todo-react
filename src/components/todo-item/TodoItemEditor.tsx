@@ -3,6 +3,11 @@ import {
   Button,
   Checkbox,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -34,7 +39,15 @@ const initialItem: ITodoItemRequest = {
   tagIds: [],
 };
 
-export function TodoItemEditor() {
+export interface TodoItemEditorProps {
+  editorOpen: boolean;
+  setEditorOpen: (isOpen: boolean) => void;
+}
+
+export function TodoItemEditor({
+  editorOpen,
+  setEditorOpen,
+}: TodoItemEditorProps) {
   const [todoItem, setTodoItem] = useState<ITodoItemRequest>(initialItem);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -46,8 +59,21 @@ export function TodoItemEditor() {
     onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
-  const handleClick = () => {
-    saveTodoItem.mutate(new TodoItemRequest({ ...todoItem }));
+  const closeAndResetEditor = () => {
+    setTodoItem(initialItem);
+    setEditorOpen(false);
+  };
+
+  const handleSaveItemClick = () => {
+    saveTodoItem.mutate(new TodoItemRequest({ ...todoItem }), {
+      onSuccess: () => {
+        closeAndResetEditor();
+      },
+    });
+  };
+
+  const handleCancelEditClick = () => {
+    closeAndResetEditor();
   };
 
   const handleDueDateChange = (newDate: moment.Moment | null) => {
@@ -77,79 +103,102 @@ export function TodoItemEditor() {
   };
 
   return (
-    <>
-      <Paper sx={{ maxWidth: 800 }}>
-        <Typography variant="h5">Create Todo Item</Typography>
-        <Stack direction="column">
-          <TextField
-            variant="standard"
-            value={todoItem.description}
-            onChange={(e) =>
-              setTodoItem({ ...todoItem, description: e.target.value })
-            }
-          />
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={todoItem.isActive}
-                  onChange={(e) =>
-                    setTodoItem({ ...todoItem, isActive: e.target.checked })
-                  }
-                />
+    <Dialog open={editorOpen} onClose={() => setEditorOpen(false)}>
+      <Paper sx={{ width: 600, p: 3 }}>
+        <DialogTitle>
+          <Typography variant="h5">Edit TODO Item</Typography>
+        </DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Stack direction="column" spacing={3}>
+            <TextField
+              label="Enter todo item..."
+              variant="standard"
+              value={todoItem.description}
+              onChange={(e) =>
+                setTodoItem({ ...todoItem, description: e.target.value })
               }
-              label="Active"
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={todoItem.rollsOver}
-                  onChange={(e) =>
-                    setTodoItem({ ...todoItem, rollsOver: e.target.checked })
+            <Stack direction="row" spacing={4}>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={todoItem.isActive}
+                      onChange={(e) =>
+                        setTodoItem({ ...todoItem, isActive: e.target.checked })
+                      }
+                    />
                   }
+                  label="Active"
                 />
-              }
-              label="Rolling item"
-            />
-          </FormGroup>
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DatePicker
-              label="Due Date"
-              value={todoItem.dueDate}
-              onChange={handleDueDateChange}
-              minDate={moment()}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-          <FormControl sx={{ m: 1 }}>
-            <InputLabel id="demo-multiple-chip-label">Tags</InputLabel>
-            <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
-              multiple
-              value={selectedTags}
-              onChange={handleTagsChanged}
-              input={<OutlinedInput id="select-mulitple-chip" label="Tag" />}
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </Box>
-              )}
-            >
-              {tags.map((tag) => (
-                <MenuItem key={tag.id} value={tag.name}>
-                  {tag.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button variant="contained" onClick={handleClick}>
+              </FormGroup>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={todoItem.rollsOver}
+                      onChange={(e) =>
+                        setTodoItem({
+                          ...todoItem,
+                          rollsOver: e.target.checked,
+                        })
+                      }
+                    />
+                  }
+                  label="Rolling item"
+                />
+              </FormGroup>
+            </Stack>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DatePicker
+                label="Due Date"
+                value={todoItem.dueDate}
+                onChange={handleDueDateChange}
+                minDate={moment()}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <FormControl>
+              <InputLabel id="demo-multiple-chip-label">Tags</InputLabel>
+              <Select
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                multiple
+                fullWidth
+                value={selectedTags}
+                onChange={handleTagsChanged}
+                input={<OutlinedInput id="select-mulitple-chip" label="Tag" />}
+                renderValue={(selected) => (
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                    {selected.map((value) => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}
+              >
+                {tags.map((tag) => (
+                  <MenuItem key={tag.id} value={tag.name}>
+                    {tag.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={handleSaveItemClick}>
             Save Todo
           </Button>
-        </Stack>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleCancelEditClick}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
       </Paper>
-    </>
+    </Dialog>
   );
 }
