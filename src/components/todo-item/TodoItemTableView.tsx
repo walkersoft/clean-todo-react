@@ -23,7 +23,7 @@ import {
 import { TodoItemEditor } from "./TodoItemEditor";
 
 export function TodoItemTableView() {
-  const [ editorOpen, setEditorOpen ] = useState<boolean>(false);
+  const [editorOpen, setEditorOpen] = useState<boolean>(false);
 
   const { todoItems, fetchRequired } = useTodoItems();
   const { tags } = useTags();
@@ -103,24 +103,27 @@ function RenderItemRow({ item, tags }: RenderItemRowProps) {
   const isOverdue = !!item.dueDate && item.dueDate < moment().startOf("day");
   const bgColor = isOverdue ? "warning.light" : "";
 
+  const [editorOpen, setEditorOpen] = useState<boolean>(false);
+
   return (
-    <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
-      <TableCell>{item.description}</TableCell>
-      <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
-      <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
-      <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
-      <TableCell>{item.rollOverCount ?? 0}</TableCell>
-      <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
-      <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
-      <TableCell>{tags}</TableCell>
-      <TableCell>
-      <>
+    <>
+      <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
+        <TableCell>{item.description}</TableCell>
+        <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
+        <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
+        <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
+        <TableCell>{item.rollOverCount ?? 0}</TableCell>
+        <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
+        <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
+        <TableCell>{tags}</TableCell>
+        <TableCell>
+          <>
             <IconButton
               edge="end"
               color="info"
               title="Edit Tag"
               sx={{ mr: 0 }}
-              onClick={() => {}}
+              onClick={() => setEditorOpen(true)}
             >
               <EditIcon />
             </IconButton>
@@ -133,7 +136,9 @@ function RenderItemRow({ item, tags }: RenderItemRowProps) {
               <DeleteIcon />
             </IconButton>
           </>
-      </TableCell>
-    </TableRow>
+        </TableCell>
+      </TableRow>
+      <TodoItemEditor editorOpen={editorOpen} setEditorOpen={setEditorOpen} />
+    </>
   );
 }
