@@ -3,6 +3,7 @@
 import * as Types from "../api-client";
 import { throwException } from "../api-client";
 import { getBaseUrl, getFetch, getJsonParseReviver } from "./helpers";
+
 /**
  * @return Success
  */
@@ -379,6 +380,22 @@ function processTodoTagsPOST(
       result200 = Types.TodoTagResponse.fromJS(resultData200);
       return result200;
     });
+  } else if (status === 400) {
+    return response.text().then((_responseText) => {
+      let result400: any = null;
+      let resultData400 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result400 = Types.ExceptionResponse.fromJS(resultData400);
+      return throwException(
+        "Bad Request",
+        status,
+        _responseText,
+        _headers,
+        result400
+      );
+    });
   } else if (status !== 200 && status !== 204) {
     return response.text().then((_responseText) => {
       return throwException(
@@ -453,6 +470,22 @@ function processTodoTagsPUT(
           : JSON.parse(_responseText, getJsonParseReviver());
       result200 = Types.TodoTagResponse.fromJS(resultData200);
       return result200;
+    });
+  } else if (status === 400) {
+    return response.text().then((_responseText) => {
+      let result400: any = null;
+      let resultData400 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result400 = Types.ExceptionResponse.fromJS(resultData400);
+      return throwException(
+        "Bad Request",
+        status,
+        _responseText,
+        _headers,
+        result400
+      );
     });
   } else if (status === 404) {
     return response.text().then((_responseText) => {
