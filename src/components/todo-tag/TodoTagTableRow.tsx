@@ -90,6 +90,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
               color="success"
               title="Edit Tag"
               onClick={handleUpdate}
+              disabled={editedTag.name?.length === 0}
               sx={{ mr: 0 }}
             >
               <CheckIcon />
