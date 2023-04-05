@@ -14,7 +14,7 @@ import {
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
-import { useTodoItemsAllQuery } from "../../api/api-client/Query";
+import { useTodoItemsAllQuery, useTodoTagsAllQuery } from "../../api/api-client/Query";
 import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
 import {
   useTodoItems,
@@ -43,6 +43,14 @@ export function TodoItemTableView() {
     },
   });
 
+  const todoTagsQuery = useTodoTagsAllQuery({
+    onSuccess: (tags) =>
+      tagsDispatch({
+        type: "tags-fetched",
+        tags: tags,
+      }),
+  });
+
   const getTodoItemTags = (item: ITodoItemResponse): string => {
     const filteredTags = tags.filter((tag) =>
       item.tags?.includes(tag.id ?? "")
@@ -55,8 +63,9 @@ export function TodoItemTableView() {
   useEffect(() => {
     if (fetchRequired) {
       todoItemsQuery.refetch();
+      todoTagsQuery.refetch();
     }
-  }, [fetchRequired, todoItemsQuery]);
+  }, [fetchRequired, todoItemsQuery, todoTagsQuery]);
 
   return (
     <>
@@ -138,7 +147,11 @@ function RenderItemRow({ item, tags }: RenderItemRowProps) {
           </>
         </TableCell>
       </TableRow>
-      <TodoItemEditor editorOpen={editorOpen} setEditorOpen={setEditorOpen} />
+      <TodoItemEditor
+        editorOpen={editorOpen}
+        setEditorOpen={setEditorOpen}
+        currentItem={item}
+      />
     </>
   );
 }
