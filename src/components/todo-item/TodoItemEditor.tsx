@@ -42,13 +42,15 @@ const initialItem: ITodoItemRequest = {
 export interface TodoItemEditorProps {
   editorOpen: boolean;
   setEditorOpen: (isOpen: boolean) => void;
+  currentItem?: ITodoItemRequest;
 }
 
 export function TodoItemEditor({
   editorOpen,
   setEditorOpen,
+  currentItem
 }: TodoItemEditorProps) {
-  const [todoItem, setTodoItem] = useState<ITodoItemRequest>(initialItem);
+  const [todoItem, setTodoItem] = useState<ITodoItemRequest>(currentItem ?? initialItem);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const { tags } = useTags();
@@ -60,7 +62,7 @@ export function TodoItemEditor({
   });
 
   const closeAndResetEditor = () => {
-    setTodoItem(initialItem);
+    setTodoItem(currentItem ?? initialItem);
     setEditorOpen(false);
   };
 
