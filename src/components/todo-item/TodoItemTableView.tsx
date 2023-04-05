@@ -1,5 +1,8 @@
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -72,6 +75,7 @@ export function TodoItemTableView() {
               <TableCell>Due Date</TableCell>
               <TableCell>Completion Date</TableCell>
               <TableCell>Tags</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -109,6 +113,27 @@ function RenderItemRow({ item, tags }: RenderItemRowProps) {
       <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
       <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
       <TableCell>{tags}</TableCell>
+      <TableCell>
+      <>
+            <IconButton
+              edge="end"
+              color="info"
+              title="Edit Tag"
+              sx={{ mr: 0 }}
+              onClick={() => {}}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              edge="end"
+              color="error"
+              title="Delete Tag"
+              onClick={() => {}}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </>
+      </TableCell>
     </TableRow>
   );
 }
