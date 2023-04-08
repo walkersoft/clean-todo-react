@@ -12,9 +12,7 @@ export default function useSelectedTagNames(
   const names: string[] = [];
   todoItem.tags?.forEach((tagId) => {
     const searchTag = tags.find((t) => t.id === tagId);
-    if (searchTag !== undefined) {
-      names.push(searchTag.name ?? "");
-    }
+    names.push(searchTag?.name ?? "");
   });
 
   return names;
