@@ -30,7 +30,10 @@ import {
   ITodoItemResponse,
   TodoItemRequest,
 } from "../../api/api-client";
-import { useTodoItemsPOSTMutation, useTodoItemsPUTMutation } from "../../api/api-client/Query";
+import {
+  useTodoItemsPOSTMutation,
+  useTodoItemsPUTMutation,
+} from "../../api/api-client/Query";
 import { useTags } from "../../contexts/TagsContext";
 import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
 
@@ -145,7 +148,9 @@ export function TodoItemEditor({
   return (
     <Dialog open={editorOpen} onClose={() => setEditorOpen(false)}>
       <Paper sx={{ width: 600, p: 3 }}>
-        <DialogTitle>Edit TODO Item</DialogTitle>
+        <DialogTitle>
+          {saveMode === "create" ? "Create" : "Edit"} TODO Item
+        </DialogTitle>
         <Divider />
         <DialogContent>
           <Stack direction="column" spacing={3}>

@@ -88,7 +88,11 @@ export function TodoItemTableView() {
           </TableBody>
         </Table>
       </TableContainer>
-      <TodoItemEditor editorOpen={editorOpen} setEditorOpen={setEditorOpen} saveMode="create" />
+      <TodoItemEditor
+        editorOpen={editorOpen}
+        setEditorOpen={setEditorOpen}
+        saveMode="create"
+      />
     </>
   );
 }
