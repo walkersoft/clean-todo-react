@@ -18,18 +18,18 @@ import {
   useTodoItemsAllQuery,
   useTodoTagsAllQuery,
 } from "../../api/api-client/Query";
-import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
+import { useTagsDispatch } from "../../contexts/TagsContext";
 import {
   useTodoItems,
   useTodoItemsDispatch,
 } from "../../contexts/TodoItemsContext";
+import useSelectedTagNames from "../hooks/use-selected-tags";
 import { TodoItemEditor } from "./TodoItemEditor";
 
 export function TodoItemTableView() {
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
 
   const { todoItems, fetchRequired } = useTodoItems();
-  const { tags } = useTags();
 
   const itemsDispatch = useTodoItemsDispatch();
   const tagsDispatch = useTagsDispatch();
@@ -54,17 +54,9 @@ export function TodoItemTableView() {
       }),
   });
 
-  const getTodoItemTags = (item: ITodoItemResponse): string => {
-    const filteredTags = tags.filter((tag) =>
-      item.tags?.includes(tag.id ?? "")
-    );
-    return filteredTags.length > 0
-      ? filteredTags.map((t) => t.name).join(", ")
-      : "N/A";
-  };
-
   useEffect(() => {
     if (fetchRequired) {
+      console.log("fetched in view");
       todoItemsQuery.refetch();
       todoTagsQuery.refetch();
     }
@@ -92,11 +84,7 @@ export function TodoItemTableView() {
           </TableHead>
           <TableBody>
             {todoItems.map((item) => (
-              <RenderItemRow
-                key={item.id}
-                item={item}
-                tags={getTodoItemTags(item)}
-              />
+              <RenderItemRow key={item.id} item={item} />
             ))}
           </TableBody>
         </Table>
@@ -108,14 +96,14 @@ export function TodoItemTableView() {
 
 interface RenderItemRowProps {
   item: ITodoItemResponse;
-  tags: string;
 }
 
-function RenderItemRow({ item, tags }: RenderItemRowProps) {
+function RenderItemRow({ item }: RenderItemRowProps) {
   const isOverdue = !!item.dueDate && item.dueDate < moment().startOf("day");
   const bgColor = isOverdue ? "warning.light" : "";
 
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const selectedTagNames = useSelectedTagNames(item);
 
   return (
     <>
@@ -127,7 +115,7 @@ function RenderItemRow({ item, tags }: RenderItemRowProps) {
         <TableCell>{item.rollOverCount ?? 0}</TableCell>
         <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
         <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
-        <TableCell>{tags}</TableCell>
+        <TableCell>{selectedTagNames.join(", ")}</TableCell>
         <TableCell>
           <>
             <IconButton
@@ -154,6 +142,7 @@ function RenderItemRow({ item, tags }: RenderItemRowProps) {
         editorOpen={editorOpen}
         setEditorOpen={setEditorOpen}
         currentItem={item}
+        selectedTagNames={selectedTagNames}
       />
     </>
   );
