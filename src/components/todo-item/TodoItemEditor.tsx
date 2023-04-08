@@ -131,7 +131,7 @@ export function TodoItemEditor({
   }, [currentItem, selectedTagNames]);
 
   return (
-    <Dialog open={editorOpen} onClose={() => setEditorOpen(false)} keepMounted>
+    <Dialog open={editorOpen} onClose={() => setEditorOpen(false)}>
       <Paper sx={{ width: 600, p: 3 }}>
         <DialogTitle>Edit TODO Item</DialogTitle>
         <Divider />
