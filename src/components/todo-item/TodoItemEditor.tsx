@@ -30,7 +30,7 @@ import {
   ITodoItemResponse,
   TodoItemRequest,
 } from "../../api/api-client";
-import { useTodoItemsPUTMutation } from "../../api/api-client/Query";
+import { useTodoItemsPOSTMutation, useTodoItemsPUTMutation } from "../../api/api-client/Query";
 import { useTags } from "../../contexts/TagsContext";
 import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
 
@@ -45,6 +45,7 @@ const initialItem: ITodoItemRequest = {
 export interface TodoItemEditorProps {
   editorOpen: boolean;
   setEditorOpen: (isOpen: boolean) => void;
+  saveMode: "create" | "update";
   currentItem?: ITodoItemResponse;
   selectedTagNames?: string[];
 }
@@ -52,6 +53,7 @@ export interface TodoItemEditorProps {
 export function TodoItemEditor({
   editorOpen,
   setEditorOpen,
+  saveMode,
   currentItem,
   selectedTagNames,
 }: TodoItemEditorProps) {
@@ -66,7 +68,11 @@ export function TodoItemEditor({
   const { tags } = useTags();
   const dispatch = useTodoItemsDispatch();
 
-  const saveTodoItem = useTodoItemsPUTMutation({
+  const updateTodoItem = useTodoItemsPUTMutation({
+    onSuccess: () => dispatch({ type: "require-refetch" }),
+  });
+
+  const createTodoItem = useTodoItemsPOSTMutation({
     onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
@@ -77,17 +83,33 @@ export function TodoItemEditor({
   };
 
   const handleSaveItemClick = () => {
-    saveTodoItem.mutate(
-      new TodoItemRequest({
-        ...todoItem,
-        tagIds: getSelectedTagIds(selectedTags),
-      }),
-      {
-        onSuccess: () => {
-          closeAndResetEditor();
-        },
-      }
-    );
+    const successHandler = () => {
+      closeAndResetEditor();
+    };
+
+    if (saveMode === "create") {
+      createTodoItem.mutate(
+        new TodoItemRequest({
+          ...todoItem,
+        }),
+        {
+          onSuccess: successHandler,
+        }
+      );
+    }
+
+    if (saveMode === "update") {
+      updateTodoItem.mutate(
+        new TodoItemRequest({
+          ...todoItem,
+          tagIds: getSelectedTagIds(selectedTags),
+        }),
+        {
+          onSuccess: successHandler,
+        }
+      );
+      return;
+    }
   };
 
   const handleCancelEditClick = () => {

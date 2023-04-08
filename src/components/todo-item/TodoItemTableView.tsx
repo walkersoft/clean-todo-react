@@ -88,7 +88,7 @@ export function TodoItemTableView() {
           </TableBody>
         </Table>
       </TableContainer>
-      <TodoItemEditor editorOpen={editorOpen} setEditorOpen={setEditorOpen} />
+      <TodoItemEditor editorOpen={editorOpen} setEditorOpen={setEditorOpen} saveMode="create" />
     </>
   );
 }
@@ -141,6 +141,7 @@ function RenderItemRow({ item }: RenderItemRowProps) {
         <TodoItemEditor
           editorOpen={editorOpen}
           setEditorOpen={setEditorOpen}
+          saveMode="update"
           currentItem={item}
           selectedTagNames={selectedTagNames}
         />
