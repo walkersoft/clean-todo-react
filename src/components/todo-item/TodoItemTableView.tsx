@@ -1,5 +1,8 @@
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -11,19 +14,22 @@ import {
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
-import { useTodoItemsAllQuery } from "../../api/api-client/Query";
-import { useTags, useTagsDispatch } from "../../contexts/TagsContext";
+import {
+  useTodoItemsAllQuery,
+  useTodoTagsAllQuery,
+} from "../../api/api-client/Query";
+import { useTagsDispatch } from "../../contexts/TagsContext";
 import {
   useTodoItems,
   useTodoItemsDispatch,
 } from "../../contexts/TodoItemsContext";
+import useSelectedTagNames from "../hooks/use-selected-tags";
 import { TodoItemEditor } from "./TodoItemEditor";
 
 export function TodoItemTableView() {
-  const [ editorOpen, setEditorOpen ] = useState<boolean>(false);
+  const [editorOpen, setEditorOpen] = useState<boolean>(false);
 
   const { todoItems, fetchRequired } = useTodoItems();
-  const { tags } = useTags();
 
   const itemsDispatch = useTodoItemsDispatch();
   const tagsDispatch = useTagsDispatch();
@@ -40,20 +46,20 @@ export function TodoItemTableView() {
     },
   });
 
-  const getTodoItemTags = (item: ITodoItemResponse): string => {
-    const filteredTags = tags.filter((tag) =>
-      item.tags?.includes(tag.id ?? "")
-    );
-    return filteredTags.length > 0
-      ? filteredTags.map((t) => t.name).join(", ")
-      : "N/A";
-  };
+  const todoTagsQuery = useTodoTagsAllQuery({
+    onSuccess: (tags) =>
+      tagsDispatch({
+        type: "tags-fetched",
+        tags: tags,
+      }),
+  });
 
   useEffect(() => {
     if (fetchRequired) {
       todoItemsQuery.refetch();
+      todoTagsQuery.refetch();
     }
-  }, [fetchRequired, todoItemsQuery]);
+  }, [fetchRequired, todoItemsQuery, todoTagsQuery]);
 
   return (
     <>
@@ -72,43 +78,78 @@ export function TodoItemTableView() {
               <TableCell>Due Date</TableCell>
               <TableCell>Completion Date</TableCell>
               <TableCell>Tags</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {todoItems.map((item) => (
-              <RenderItemRow
-                key={item.id}
-                item={item}
-                tags={getTodoItemTags(item)}
-              />
+              <RenderItemRow key={item.id} item={item} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <TodoItemEditor editorOpen={editorOpen} setEditorOpen={setEditorOpen} />
+      <TodoItemEditor
+        editorOpen={editorOpen}
+        setEditorOpen={setEditorOpen}
+        saveMode="create"
+      />
     </>
   );
 }
 
 interface RenderItemRowProps {
   item: ITodoItemResponse;
-  tags: string;
 }
 
-function RenderItemRow({ item, tags }: RenderItemRowProps) {
+function RenderItemRow({ item }: RenderItemRowProps) {
   const isOverdue = !!item.dueDate && item.dueDate < moment().startOf("day");
   const bgColor = isOverdue ? "warning.light" : "";
 
+  const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const selectedTagNames = useSelectedTagNames(item);
+
   return (
-    <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
-      <TableCell>{item.description}</TableCell>
-      <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
-      <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
-      <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
-      <TableCell>{item.rollOverCount ?? 0}</TableCell>
-      <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
-      <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
-      <TableCell>{tags}</TableCell>
-    </TableRow>
+    <>
+      <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
+        <TableCell>{item.description}</TableCell>
+        <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
+        <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
+        <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
+        <TableCell>{item.rollOverCount ?? 0}</TableCell>
+        <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
+        <TableCell>{item.completionDate?.format("MM-DD-YYYY")}</TableCell>
+        <TableCell>{selectedTagNames.join(", ")}</TableCell>
+        <TableCell>
+          <>
+            <IconButton
+              edge="end"
+              color="info"
+              title="Edit Tag"
+              sx={{ mr: 0 }}
+              onClick={() => setEditorOpen(true)}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              edge="end"
+              color="error"
+              title="Delete Tag"
+              onClick={() => {}}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </>
+        </TableCell>
+      </TableRow>
+      {editorOpen && (
+        <TodoItemEditor
+          editorOpen={editorOpen}
+          setEditorOpen={setEditorOpen}
+          saveMode="update"
+          currentItem={item}
+          selectedTagNames={selectedTagNames}
+        />
+      )}
+    </>
   );
 }

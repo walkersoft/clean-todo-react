@@ -19,15 +19,21 @@ import {
   SelectChangeEvent,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
 import { useState } from "react";
-import { ITodoItemRequest, TodoItemRequest } from "../../api/api-client";
-import { useTodoItemsPOSTMutation } from "../../api/api-client/Query";
+import {
+  ITodoItemRequest,
+  ITodoItemResponse,
+  TodoItemRequest,
+} from "../../api/api-client";
+import {
+  useTodoItemsPOSTMutation,
+  useTodoItemsPUTMutation,
+} from "../../api/api-client/Query";
 import { useTags } from "../../contexts/TagsContext";
 import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
 
@@ -42,34 +48,71 @@ const initialItem: ITodoItemRequest = {
 export interface TodoItemEditorProps {
   editorOpen: boolean;
   setEditorOpen: (isOpen: boolean) => void;
+  saveMode: "create" | "update";
+  currentItem?: ITodoItemResponse;
+  selectedTagNames?: string[];
 }
 
 export function TodoItemEditor({
   editorOpen,
   setEditorOpen,
+  saveMode,
+  currentItem,
+  selectedTagNames,
 }: TodoItemEditorProps) {
-  const [todoItem, setTodoItem] = useState<ITodoItemRequest>(initialItem);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [todoItem, setTodoItem] = useState<ITodoItemRequest>(
+    currentItem ?? initialItem
+  );
+
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    selectedTagNames ?? []
+  );
 
   const { tags } = useTags();
-
   const dispatch = useTodoItemsDispatch();
 
-  const saveTodoItem = useTodoItemsPOSTMutation({
+  const updateTodoItem = useTodoItemsPUTMutation({
+    onSuccess: () => dispatch({ type: "require-refetch" }),
+  });
+
+  const createTodoItem = useTodoItemsPOSTMutation({
     onSuccess: () => dispatch({ type: "require-refetch" }),
   });
 
   const closeAndResetEditor = () => {
-    setTodoItem(initialItem);
+    setTodoItem(currentItem ?? initialItem);
+    setSelectedTags(selectedTagNames ?? []);
     setEditorOpen(false);
   };
 
   const handleSaveItemClick = () => {
-    saveTodoItem.mutate(new TodoItemRequest({ ...todoItem }), {
-      onSuccess: () => {
-        closeAndResetEditor();
-      },
-    });
+    const successHandler = () => {
+      closeAndResetEditor();
+    };
+
+    if (saveMode === "create") {
+      createTodoItem.mutate(
+        new TodoItemRequest({
+          ...todoItem,
+        }),
+        {
+          onSuccess: successHandler,
+        }
+      );
+    }
+
+    if (saveMode === "update") {
+      updateTodoItem.mutate(
+        new TodoItemRequest({
+          ...todoItem,
+          tagIds: getSelectedTagIds(selectedTags),
+        }),
+        {
+          onSuccess: successHandler,
+        }
+      );
+      return;
+    }
   };
 
   const handleCancelEditClick = () => {
@@ -94,7 +137,7 @@ export function TodoItemEditor({
     });
   };
 
-  const getSelectedTagIds = (selected: string[]): string[] | undefined => {
+  const getSelectedTagIds = (selected: string[]): string[] => {
     const ids: string[] = [];
     tags
       .filter((t) => !!t.name && selected.includes(t.name))
@@ -106,7 +149,7 @@ export function TodoItemEditor({
     <Dialog open={editorOpen} onClose={() => setEditorOpen(false)}>
       <Paper sx={{ width: 600, p: 3 }}>
         <DialogTitle>
-          <Typography variant="h5">Edit TODO Item</Typography>
+          {saveMode === "create" ? "Create" : "Edit"} TODO Item
         </DialogTitle>
         <Divider />
         <DialogContent>
