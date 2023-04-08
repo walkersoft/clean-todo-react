@@ -56,7 +56,6 @@ export function TodoItemTableView() {
 
   useEffect(() => {
     if (fetchRequired) {
-      console.log("fetched in view");
       todoItemsQuery.refetch();
       todoTagsQuery.refetch();
     }
