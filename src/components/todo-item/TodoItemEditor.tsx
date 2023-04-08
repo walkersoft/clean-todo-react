@@ -59,8 +59,6 @@ export function TodoItemEditor({
     currentItem ?? initialItem
   );
 
-  console.log("I rendered....");
-
   const [selectedTags, setSelectedTags] = useState<string[]>(
     selectedTagNames ?? []
   );
