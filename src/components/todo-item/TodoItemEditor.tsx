@@ -24,7 +24,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ITodoItemRequest,
   ITodoItemResponse,
@@ -58,6 +58,8 @@ export function TodoItemEditor({
   const [todoItem, setTodoItem] = useState<ITodoItemRequest>(
     currentItem ?? initialItem
   );
+
+  console.log("I rendered....");
 
   const [selectedTags, setSelectedTags] = useState<string[]>(
     selectedTagNames ?? []
@@ -119,16 +121,6 @@ export function TodoItemEditor({
       .forEach((t) => !!t.id && ids.push(t.id));
     return ids;
   };
-
-  useEffect(() => {
-    if (!!selectedTagNames) {
-      setSelectedTags(selectedTagNames);
-    }
-
-    if (!!currentItem) {
-      setTodoItem(currentItem);
-    }
-  }, [currentItem, selectedTagNames]);
 
   return (
     <Dialog open={editorOpen} onClose={() => setEditorOpen(false)}>

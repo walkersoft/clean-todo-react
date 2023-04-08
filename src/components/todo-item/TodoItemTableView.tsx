@@ -138,12 +138,14 @@ function RenderItemRow({ item }: RenderItemRowProps) {
           </>
         </TableCell>
       </TableRow>
-      <TodoItemEditor
-        editorOpen={editorOpen}
-        setEditorOpen={setEditorOpen}
-        currentItem={item}
-        selectedTagNames={selectedTagNames}
-      />
+      {editorOpen && (
+        <TodoItemEditor
+          editorOpen={editorOpen}
+          setEditorOpen={setEditorOpen}
+          currentItem={item}
+          selectedTagNames={selectedTagNames}
+        />
+      )}
     </>
   );
 }
