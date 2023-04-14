@@ -201,6 +201,42 @@ export function useTodoItemsPUTMutation<TContext>(
   );
 }
 
+export function todoItemsDELETEUrl(id?: string | undefined): string {
+  let url_ = getBaseUrl() + "/api/TodoItems?";
+  if (id === null) throw new Error("The parameter 'id' cannot be null.");
+  else if (id !== undefined) url_ += "id=" + encodeURIComponent("" + id) + "&";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function todoItemsDELETEMutationKey(
+  id?: string | undefined
+): MutationKey {
+  return trimArrayEnd(["Client", "todoItemsDELETE", id as any]);
+}
+
+/**
+ * @param id (optional)
+ * @return Success
+ */
+export function useTodoItemsDELETEMutation<TContext>(
+  id?: string | undefined,
+  options?: Omit<
+    UseMutationOptions<void, unknown, void, TContext>,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<void, unknown, void, TContext> {
+  const key = todoItemsDELETEMutationKey(id);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(() => Types.Client.todoItemsDELETE(id), {
+    ...options,
+    mutationKey: key,
+  });
+}
+
 export function todoTagsAllUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoTags";
   url_ = url_.replace(/[?&]$/, "");
