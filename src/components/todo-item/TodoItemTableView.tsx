@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
 import {
   useTodoItemsAllQuery,
+  useTodoItemsDELETEMutation,
   useTodoTagsAllQuery,
 } from "../../api/api-client/Query";
 import { useTagsDispatch } from "../../contexts/TagsContext";
@@ -107,6 +108,17 @@ function RenderItemRow({ item }: RenderItemRowProps) {
 
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
   const selectedTagNames = useSelectedTagNames(item);
+  const itemsDispatch = useTodoItemsDispatch();
+
+  const deleteTodoItem = useTodoItemsDELETEMutation(item.id, {
+    onSuccess: () => {
+      itemsDispatch({type: "require-refetch"});
+    },
+  });
+
+  const handleDeleteItemClick = () => {
+    deleteTodoItem.mutate();
+  }
 
   return (
     <>
@@ -134,7 +146,7 @@ function RenderItemRow({ item }: RenderItemRowProps) {
               edge="end"
               color="error"
               title="Delete Tag"
-              onClick={() => {}}
+              onClick={handleDeleteItemClick}
             >
               <DeleteIcon />
             </IconButton>
