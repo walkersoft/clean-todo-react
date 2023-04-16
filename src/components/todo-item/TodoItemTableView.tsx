@@ -136,7 +136,7 @@ function RenderItemRow({ item }: RenderItemRowProps) {
             <IconButton
               edge="end"
               color="info"
-              title="Edit Tag"
+              title="Edit Item"
               sx={{ mr: 0 }}
               onClick={() => setEditorOpen(true)}
             >
@@ -145,7 +145,7 @@ function RenderItemRow({ item }: RenderItemRowProps) {
             <IconButton
               edge="end"
               color="error"
-              title="Delete Tag"
+              title="Delete Item"
               onClick={handleDeleteItemClick}
             >
               <DeleteIcon />
