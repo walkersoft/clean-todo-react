@@ -24,7 +24,7 @@ import {
   useTodoItems,
   useTodoItemsDispatch,
 } from "../../contexts/TodoItemsContext";
-import DeleteTodoItemDialog from "../common/dialogs/delete-todo-item-dialog";
+import DeleteTodoItemDialog from "../common/dialogs/DeleteTodoItemDialog";
 import useSelectedTagNames from "../hooks/use-selected-tags";
 import { TodoItemEditor } from "./TodoItemEditor";
 
