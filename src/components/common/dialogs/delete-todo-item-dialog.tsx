@@ -11,12 +11,13 @@ import {
 export interface DeleteTodoItemDialogProps {
   dialogOpen: boolean;
   setDialogOpen: (isOpen: boolean) => void;
-  itemId: string;
+  handleItemDeleteClick: () => void;
 }
+
 export default function DeleteTodoItemDialog({
   dialogOpen,
   setDialogOpen,
-  itemId,
+  handleItemDeleteClick,
 }: DeleteTodoItemDialogProps) {
   return (
     <>
@@ -30,8 +31,14 @@ export default function DeleteTodoItemDialog({
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained">Delete Item</Button>
-          <Button variant="contained" color="error">
+          <Button variant="contained" onClick={handleItemDeleteClick}>
+            Delete Item
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => setDialogOpen(false)}
+          >
             Cancel
           </Button>
         </DialogActions>

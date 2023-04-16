@@ -24,6 +24,7 @@ import {
   useTodoItems,
   useTodoItemsDispatch,
 } from "../../contexts/TodoItemsContext";
+import DeleteTodoItemDialog from "../common/dialogs/delete-todo-item-dialog";
 import useSelectedTagNames from "../hooks/use-selected-tags";
 import { TodoItemEditor } from "./TodoItemEditor";
 
@@ -107,18 +108,20 @@ function RenderItemRow({ item }: RenderItemRowProps) {
   const bgColor = isOverdue ? "warning.light" : "";
 
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const selectedTagNames = useSelectedTagNames(item);
   const itemsDispatch = useTodoItemsDispatch();
 
   const deleteTodoItem = useTodoItemsDELETEMutation(item.id, {
     onSuccess: () => {
-      itemsDispatch({type: "require-refetch"});
+      itemsDispatch({ type: "require-refetch" });
     },
   });
 
-  const handleDeleteItemClick = () => {
-    deleteTodoItem.mutate();
-  }
+  const handleDeleteItemClick = async () => {
+    await deleteTodoItem.mutateAsync();
+    setDeleteDialogOpen(false);
+  };
 
   return (
     <>
@@ -146,7 +149,7 @@ function RenderItemRow({ item }: RenderItemRowProps) {
               edge="end"
               color="error"
               title="Delete Item"
-              onClick={handleDeleteItemClick}
+              onClick={() => setDeleteDialogOpen(true)}
             >
               <DeleteIcon />
             </IconButton>
@@ -160,6 +163,13 @@ function RenderItemRow({ item }: RenderItemRowProps) {
           saveMode="update"
           currentItem={item}
           selectedTagNames={selectedTagNames}
+        />
+      )}
+      {deleteDialogOpen && (
+        <DeleteTodoItemDialog
+          dialogOpen={deleteDialogOpen}
+          setDialogOpen={setDeleteDialogOpen}
+          handleItemDeleteClick={handleDeleteItemClick}
         />
       )}
     </>
