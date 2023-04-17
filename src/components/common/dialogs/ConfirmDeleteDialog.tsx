@@ -12,24 +12,24 @@ interface ConfirmDeleteDialogProps {
   dialogOpen: boolean;
   setDialogOpen: (isOpen: boolean) => void;
   handleDeleteAction: () => void;
-  dialogTitle: string;
-  dialogText: string;
+  title: string;
+  text: string;
 }
 
 export default function ConfirmDeleteDialog({
   dialogOpen,
   setDialogOpen,
   handleDeleteAction,
-  dialogTitle,
-  dialogText,
+  title,
+  text,
 }: ConfirmDeleteDialogProps) {
   return (
     <>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>{dialogTitle}</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <Divider />
         <DialogContent>
-          <Typography variant="body1">{dialogText}</Typography>
+          <Typography variant="body1">{text}</Typography>
         </DialogContent>
         <DialogActions>
           <Button variant="contained" onClick={handleDeleteAction}>
