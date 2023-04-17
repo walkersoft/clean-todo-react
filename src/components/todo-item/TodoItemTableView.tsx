@@ -24,7 +24,7 @@ import {
   useTodoItems,
   useTodoItemsDispatch,
 } from "../../contexts/TodoItemsContext";
-import DeleteTodoItemDialog from "../common/dialogs/delete-todo-item-dialog";
+import ConfirmDeleteDialog from "../common/dialogs/ConfirmDeleteDialog";
 import useSelectedTagNames from "../hooks/use-selected-tags";
 import { TodoItemEditor } from "./TodoItemEditor";
 
@@ -123,6 +123,9 @@ function RenderItemRow({ item }: RenderItemRowProps) {
     setDeleteDialogOpen(false);
   };
 
+  const DELETE_DIALOG_TEXT: string =
+    "Are you sure you want to delete this TODO item? The item cannot be recovered.";
+
   return (
     <>
       <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
@@ -166,10 +169,12 @@ function RenderItemRow({ item }: RenderItemRowProps) {
         />
       )}
       {deleteDialogOpen && (
-        <DeleteTodoItemDialog
+        <ConfirmDeleteDialog
           dialogOpen={deleteDialogOpen}
           setDialogOpen={setDeleteDialogOpen}
-          handleItemDeleteClick={handleDeleteItemClick}
+          handleDeleteAction={handleDeleteItemClick}
+          title="Delete TODO Item?"
+          text={DELETE_DIALOG_TEXT}
         />
       )}
     </>

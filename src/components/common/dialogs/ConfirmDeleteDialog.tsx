@@ -8,30 +8,31 @@ import {
   Typography,
 } from "@mui/material";
 
-export interface DeleteTodoItemDialogProps {
+interface ConfirmDeleteDialogProps {
   dialogOpen: boolean;
   setDialogOpen: (isOpen: boolean) => void;
-  handleItemDeleteClick: () => void;
+  handleDeleteAction: () => void;
+  title: string;
+  text: string;
 }
 
-export default function DeleteTodoItemDialog({
+export default function ConfirmDeleteDialog({
   dialogOpen,
   setDialogOpen,
-  handleItemDeleteClick,
-}: DeleteTodoItemDialogProps) {
+  handleDeleteAction,
+  title,
+  text,
+}: ConfirmDeleteDialogProps) {
   return (
     <>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>Delete TODO Item?</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <Divider />
         <DialogContent>
-          <Typography variant="body1">
-            Are you sure you want to delete this TODO item? The item cannot be
-            recovered.
-          </Typography>
+          <Typography variant="body1">{text}</Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={handleItemDeleteClick}>
+          <Button variant="contained" onClick={handleDeleteAction}>
             Delete Item
           </Button>
           <Button

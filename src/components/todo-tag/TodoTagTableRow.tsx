@@ -15,6 +15,7 @@ import {
   refetchTagsDispatchAction,
   useTagsDispatch,
 } from "../../contexts/TagsContext";
+import ConfirmDeleteDialog from "../common/dialogs/ConfirmDeleteDialog";
 
 export interface TodoTagTableRowProps {
   tag: ITodoTagResponse;
@@ -25,6 +26,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
 
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editedTag, setEditedTag] = useState<ITodoTagResponse>(tag);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   const dispatch = useTagsDispatch();
 
@@ -50,7 +52,7 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
   const handleCancelEdit = () => {
     handleEditModeChanged(false);
     setEditedTag(tag);
-  }
+  };
 
   const handleEditModeChanged = (mode: boolean) => {
     setEditMode(mode);
@@ -60,8 +62,9 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
     setEditedTag({ ...editedTag, name: updatedName });
   };
 
-  const handleDelete = () => {
-    deleteTag.mutate();
+  const handleDelete = async () => {
+    await deleteTag.mutateAsync();
+    setDeleteDialogOpen(false);
   };
 
   const handleUnassign = () => {
@@ -72,77 +75,88 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
     return `${assignedCount} assignment${assignedCount === 1 ? "" : "s"}`;
   };
 
+  const DELETE_DIALOG_TEXT: string = "Are you sure you want to delete this TODO tag? The tag cannot be recovered.";
+
   return (
-    <TableRow>
-      <TableCell>
-        {editMode ? (
-          <TextField
-            variant="standard"
-            fullWidth
-            value={editedTag.name}
-            onChange={(e) => handleTagEdited(e.target.value)}
-          />
-        ) : (
-          name
-        )}
-      </TableCell>
-      <TableCell width="250">{getTagAssignmentsText()}</TableCell>
-      <TableCell width="150">
-        {editMode ? (
-          <>
-            <IconButton
-              edge="end"
-              color="success"
-              title="Edit Tag"
-              onClick={handleUpdate}
-              disabled={editedTag.name?.length === 0}
-              sx={{ mr: 0 }}
-            >
-              <CheckIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              color="error"
-              title="Cancel Editing"
-              sx={{ mr: 0 }}
-              onClick={handleCancelEdit}
-            >
-              <ClearIcon />
-            </IconButton>
-          </>
-        ) : (
-          <>
-            <IconButton
-              edge="end"
-              color="info"
-              title="Edit Tag"
-              sx={{ mr: 0 }}
-              onClick={() => handleEditModeChanged(true)}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              color="info"
-              title="Unassign Tag"
-              disabled={!isAssigned}
-              onClick={handleUnassign}
-              sx={{ mr: 0 }}
-            >
-              <PlaylistRemoveIcon />
-            </IconButton>
-            <IconButton
-              edge="end"
-              color="error"
-              title="Delete Tag"
-              disabled={isAssigned}
-              onClick={handleDelete}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </>
-        )}
-      </TableCell>
-    </TableRow>
+    <>
+      <TableRow>
+        <TableCell>
+          {editMode ? (
+            <TextField
+              variant="standard"
+              fullWidth
+              value={editedTag.name}
+              onChange={(e) => handleTagEdited(e.target.value)}
+            />
+          ) : (
+            name
+          )}
+        </TableCell>
+        <TableCell width="250">{getTagAssignmentsText()}</TableCell>
+        <TableCell width="150">
+          {editMode ? (
+            <>
+              <IconButton
+                edge="end"
+                color="success"
+                title="Edit Tag"
+                onClick={handleUpdate}
+                disabled={editedTag.name?.length === 0}
+                sx={{ mr: 0 }}
+              >
+                <CheckIcon />
+              </IconButton>
+              <IconButton
+                edge="end"
+                color="error"
+                title="Cancel Editing"
+                sx={{ mr: 0 }}
+                onClick={handleCancelEdit}
+              >
+                <ClearIcon />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <IconButton
+                edge="end"
+                color="info"
+                title="Edit Tag"
+                sx={{ mr: 0 }}
+                onClick={() => handleEditModeChanged(true)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                edge="end"
+                color="info"
+                title="Unassign Tag"
+                disabled={!isAssigned}
+                onClick={handleUnassign}
+                sx={{ mr: 0 }}
+              >
+                <PlaylistRemoveIcon />
+              </IconButton>
+              <IconButton
+                edge="end"
+                color="error"
+                title="Delete Tag"
+                disabled={isAssigned}
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </>
+          )}
+        </TableCell>
+      </TableRow>
+      <ConfirmDeleteDialog
+        dialogOpen={deleteDialogOpen}
+        setDialogOpen={setDeleteDialogOpen}
+        handleDeleteAction={handleDelete}
+        title="Delete TODO Tag?"
+        text={DELETE_DIALOG_TEXT}
+      />
+    </>
   );
 }
