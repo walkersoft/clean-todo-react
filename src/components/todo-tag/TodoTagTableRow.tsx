@@ -15,7 +15,7 @@ import {
   refetchTagsDispatchAction,
   useTagsDispatch,
 } from "../../contexts/TagsContext";
-import DeleteTodoTagDialog from "../common/dialogs/DeleteTodoTagDialog";
+import ConfirmDeleteDialog from "../common/dialogs/ConfirmDeleteDialog";
 
 export interface TodoTagTableRowProps {
   tag: ITodoTagResponse;
@@ -74,6 +74,8 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
   const getTagAssignmentsText = (): string => {
     return `${assignedCount} assignment${assignedCount === 1 ? "" : "s"}`;
   };
+
+  const DELETE_DIALOG_TEXT: string = "Are you sure you want to delete this TODO tag? The tag cannot be recovered.";
 
   return (
     <>
@@ -148,10 +150,12 @@ export default function TodoTagTableRow({ tag }: TodoTagTableRowProps) {
           )}
         </TableCell>
       </TableRow>
-      <DeleteTodoTagDialog
+      <ConfirmDeleteDialog
         dialogOpen={deleteDialogOpen}
         setDialogOpen={setDeleteDialogOpen}
-        handleTagDeleteClick={handleDelete}
+        handleDeleteAction={handleDelete}
+        title="Delete TODO Tag?"
+        text={DELETE_DIALOG_TEXT}
       />
     </>
   );
