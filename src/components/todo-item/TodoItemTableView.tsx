@@ -2,6 +2,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
+  Checkbox,
   IconButton,
   Paper,
   Table,
@@ -131,7 +132,9 @@ function RenderItemRow({ item }: RenderItemRowProps) {
       <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
         <TableCell>{item.description}</TableCell>
         <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
-        <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
+        <TableCell>
+          <CompletionState isComplete={item.isComplete ?? false} />
+        </TableCell>
         <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
         <TableCell>{item.rollOverCount ?? 0}</TableCell>
         <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
@@ -177,6 +180,18 @@ function RenderItemRow({ item }: RenderItemRowProps) {
           text={DELETE_DIALOG_TEXT}
         />
       )}
+    </>
+  );
+}
+
+interface CompletionStateProps {
+  isComplete: boolean;
+}
+
+function CompletionState({ isComplete }: CompletionStateProps) {
+  return (
+    <>
+      <Checkbox checked={isComplete} />
     </>
   );
 }
