@@ -322,6 +322,92 @@ function processTodoItemsDELETE(response: Response): Promise<void> {
 }
 
 /**
+ * @param id (optional)
+ * @param completionStatus (optional)
+ * @return Success
+ */
+export function setCompletion(
+  id?: string | undefined,
+  completionStatus?: boolean | undefined
+): Promise<void> {
+  let url_ = getBaseUrl() + "/api/TodoItems/SetCompletion?";
+  if (id === null) throw new Error("The parameter 'id' cannot be null.");
+  else if (id !== undefined) url_ += "id=" + encodeURIComponent("" + id) + "&";
+  if (completionStatus === null)
+    throw new Error("The parameter 'completionStatus' cannot be null.");
+  else if (completionStatus !== undefined)
+    url_ +=
+      "completionStatus=" + encodeURIComponent("" + completionStatus) + "&";
+  url_ = url_.replace(/[?&]$/, "");
+
+  let options_: RequestInit = {
+    method: "PUT",
+    headers: {},
+  };
+
+  return getFetch()
+    .fetch(url_, options_)
+    .then((_response: Response) => {
+      return processSetCompletion(_response);
+    });
+}
+
+function processSetCompletion(response: Response): Promise<void> {
+  const status = response.status;
+  let _headers: any = {};
+  if (response.headers && response.headers.forEach) {
+    response.headers.forEach((v: any, k: any) => (_headers[k] = v));
+  }
+  if (status === 500) {
+    return response.text().then((_responseText) => {
+      let result500: any = null;
+      let resultData500 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result500 = Types.ExceptionResponse.fromJS(resultData500);
+      return throwException(
+        "Server Error",
+        status,
+        _responseText,
+        _headers,
+        result500
+      );
+    });
+  } else if (status === 200) {
+    return response.text().then((_responseText) => {
+      return;
+    });
+  } else if (status === 404) {
+    return response.text().then((_responseText) => {
+      let result404: any = null;
+      let resultData404 =
+        _responseText === ""
+          ? null
+          : JSON.parse(_responseText, getJsonParseReviver());
+      result404 = Types.ExceptionResponse.fromJS(resultData404);
+      return throwException(
+        "Not Found",
+        status,
+        _responseText,
+        _headers,
+        result404
+      );
+    });
+  } else if (status !== 200 && status !== 204) {
+    return response.text().then((_responseText) => {
+      return throwException(
+        "An unexpected server error occurred.",
+        status,
+        _responseText,
+        _headers
+      );
+    });
+  }
+  return Promise.resolve<void>(null as any);
+}
+
+/**
  * @return Success
  */
 export function todoTagsAll(): Promise<Types.TodoTagResponse[]> {

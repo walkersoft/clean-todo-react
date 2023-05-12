@@ -237,6 +237,58 @@ export function useTodoItemsDELETEMutation<TContext>(
   });
 }
 
+export function setCompletionUrl(
+  id?: string | undefined,
+  completionStatus?: boolean | undefined
+): string {
+  let url_ = getBaseUrl() + "/api/TodoItems/SetCompletion?";
+  if (id === null) throw new Error("The parameter 'id' cannot be null.");
+  else if (id !== undefined) url_ += "id=" + encodeURIComponent("" + id) + "&";
+  if (completionStatus === null)
+    throw new Error("The parameter 'completionStatus' cannot be null.");
+  else if (completionStatus !== undefined)
+    url_ +=
+      "completionStatus=" + encodeURIComponent("" + completionStatus) + "&";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function setCompletionMutationKey(
+  id?: string | undefined,
+  completionStatus?: boolean | undefined
+): MutationKey {
+  return trimArrayEnd([
+    "Client",
+    "setCompletion",
+    id as any,
+    completionStatus as any,
+  ]);
+}
+
+/**
+ * @param id (optional)
+ * @param completionStatus (optional)
+ * @return Success
+ */
+export function useSetCompletionMutation<TContext>(
+  id?: string | undefined,
+  completionStatus?: boolean | undefined,
+  options?: Omit<
+    UseMutationOptions<void, unknown, void, TContext>,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<void, unknown, void, TContext> {
+  const key = setCompletionMutationKey(id, completionStatus);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(() => Types.Client.setCompletion(id, completionStatus), {
+    ...options,
+    mutationKey: key,
+  });
+}
+
 export function todoTagsAllUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoTags";
   url_ = url_.replace(/[?&]$/, "");

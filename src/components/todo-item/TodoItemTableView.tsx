@@ -2,6 +2,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
+  Checkbox,
   IconButton,
   Paper,
   Table,
@@ -15,6 +16,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
 import {
+  useSetCompletionMutation,
   useTodoItemsAllQuery,
   useTodoItemsDELETEMutation,
   useTodoTagsAllQuery,
@@ -131,7 +133,12 @@ function RenderItemRow({ item }: RenderItemRowProps) {
       <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
         <TableCell>{item.description}</TableCell>
         <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
-        <TableCell>{item.isComplete ? "Yes" : "No"}</TableCell>
+        <TableCell>
+          <CompletionState
+            id={item.id ?? ""}
+            isComplete={item.isComplete ?? false}
+          />
+        </TableCell>
         <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
         <TableCell>{item.rollOverCount ?? 0}</TableCell>
         <TableCell>{item.dueDate?.format("MM-DD-YYYY")}</TableCell>
@@ -177,6 +184,34 @@ function RenderItemRow({ item }: RenderItemRowProps) {
           text={DELETE_DIALOG_TEXT}
         />
       )}
+    </>
+  );
+}
+
+interface CompletionStateProps {
+  id: string;
+  isComplete: boolean;
+}
+
+function CompletionState({ id, isComplete }: CompletionStateProps) {
+  const [nextCompletionState, setNextCompletionState] = useState(!isComplete);
+
+  const dispatch = useTodoItemsDispatch();
+  const updateCompletion = useSetCompletionMutation(id, nextCompletionState, {
+    onSuccess: () => dispatch({ type: "require-refetch" }),
+  });
+
+  const handleCheckboxChanged = (toggledState: boolean) => {
+    setNextCompletionState(!toggledState);
+    updateCompletion.mutate();
+  };
+
+  return (
+    <>
+      <Checkbox
+        checked={isComplete}
+        onChange={(e) => handleCheckboxChanged(e.target.checked)}
+      />
     </>
   );
 }
