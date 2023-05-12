@@ -16,6 +16,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { ITodoItemResponse } from "../../api/api-client";
 import {
+  useSetCompletionMutation,
   useTodoItemsAllQuery,
   useTodoItemsDELETEMutation,
   useTodoTagsAllQuery,
@@ -133,7 +134,10 @@ function RenderItemRow({ item }: RenderItemRowProps) {
         <TableCell>{item.description}</TableCell>
         <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
         <TableCell>
-          <CompletionState isComplete={item.isComplete ?? false} />
+          <CompletionState
+            id={item.id ?? ""}
+            isComplete={item.isComplete ?? false}
+          />
         </TableCell>
         <TableCell>{item.rollsOver ? "Yes" : "No"}</TableCell>
         <TableCell>{item.rollOverCount ?? 0}</TableCell>
@@ -185,13 +189,29 @@ function RenderItemRow({ item }: RenderItemRowProps) {
 }
 
 interface CompletionStateProps {
+  id: string;
   isComplete: boolean;
 }
 
-function CompletionState({ isComplete }: CompletionStateProps) {
+function CompletionState({ id, isComplete }: CompletionStateProps) {
+  const [nextCompletionState, setNextCompletionState] = useState(!isComplete);
+
+  const dispatch = useTodoItemsDispatch();
+  const updateCompletion = useSetCompletionMutation(id, nextCompletionState, {
+    onSuccess: () => dispatch({ type: "require-refetch" }),
+  });
+
+  const handleCheckboxChanged = (toggledState: boolean) => {
+    setNextCompletionState(!toggledState);
+    updateCompletion.mutate();
+  };
+
   return (
     <>
-      <Checkbox checked={isComplete} />
+      <Checkbox
+        checked={isComplete}
+        onChange={(e) => handleCheckboxChanged(e.target.checked)}
+      />
     </>
   );
 }
