@@ -14,6 +14,7 @@ export function NavigationBar() {
   const links = [
     { title: "Home", href: "/" },
     { title: "Tags Management", href: "/Tags" },
+    { title: "List Management", href: "/Lists" }
   ];
 
   const [navAnchorElement, setNavAnchorElement] = useState<HTMLElement | null>(
