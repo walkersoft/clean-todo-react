@@ -1,6 +1,6 @@
+//-----ReactQueryFile-----
 /* tslint:disable */
 /* eslint-disable */
-//-----ReactQueryFile-----
 import type { MutationMeta, QueryMeta } from "@tanstack/react-query";
 import type { QueryMetaContextValue } from "react-query-swagger";
 

@@ -289,6 +289,47 @@ export function useSetCompletionMutation<TContext>(
   });
 }
 
+export function todoListsUrl(): string {
+  let url_ = getBaseUrl() + "/api/TodoLists";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function todoListsMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "todoLists"]);
+}
+
+/**
+ * @param body (optional)
+ * @return Success
+ */
+export function useTodoListsMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<
+      Types.TodoListResponse,
+      unknown,
+      Types.TodoListRequest,
+      TContext
+    >,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<
+  Types.TodoListResponse,
+  unknown,
+  Types.TodoListRequest,
+  TContext
+> {
+  const key = todoListsMutationKey();
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(
+    (body: Types.TodoListRequest) => Types.Client.todoLists(body),
+    { ...options, mutationKey: key }
+  );
+}
+
 export function todoTagsAllUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoTags";
   url_ = url_.replace(/[?&]$/, "");
