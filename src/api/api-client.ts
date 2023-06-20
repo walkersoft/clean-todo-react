@@ -541,6 +541,7 @@ export function getResultTypeClassKey(queryKey: QueryKey): string {
 
 export function initPersister() {
   addResultTypeFactory("Client___todoItemsAll", () => new TodoItemResponse());
+  addResultTypeFactory("Client___todoListsAll", () => new TodoListResponse());
   addResultTypeFactory("Client___todoTagsAll", () => new TodoTagResponse());
 }
 //-----/PersistorHydrator.File----
