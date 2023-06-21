@@ -202,6 +202,116 @@ export interface ITodoItemResponse {
   tags?: string[] | undefined;
 }
 
+export class TodoListRequest implements ITodoListRequest {
+  title?: string | undefined;
+  description?: string | undefined;
+  dueDate?: moment.Moment | undefined;
+
+  constructor(data?: ITodoListRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.title = _data["title"];
+      this.description = _data["description"];
+      this.dueDate = _data["dueDate"]
+        ? moment(_data["dueDate"].toString())
+        : <any>undefined;
+    }
+  }
+
+  static fromJS(data: any): TodoListRequest {
+    data = typeof data === "object" ? data : {};
+    let result = new TodoListRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    data["title"] = this.title;
+    data["description"] = this.description;
+    data["dueDate"] = this.dueDate
+      ? this.dueDate.toISOString()
+      : <any>undefined;
+    return data;
+  }
+}
+
+export interface ITodoListRequest {
+  title?: string | undefined;
+  description?: string | undefined;
+  dueDate?: moment.Moment | undefined;
+}
+
+export class TodoListResponse implements ITodoListResponse {
+  id?: string;
+  title?: string | undefined;
+  description?: string | undefined;
+  dueDate?: moment.Moment | undefined;
+  todoItems?: string[] | undefined;
+
+  constructor(data?: ITodoListResponse) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.id = _data["id"];
+      this.title = _data["title"];
+      this.description = _data["description"];
+      this.dueDate = _data["dueDate"]
+        ? moment(_data["dueDate"].toString())
+        : <any>undefined;
+      if (Array.isArray(_data["todoItems"])) {
+        this.todoItems = [] as any;
+        for (let item of _data["todoItems"]) this.todoItems!.push(item);
+      }
+    }
+  }
+
+  static fromJS(data: any): TodoListResponse {
+    data = typeof data === "object" ? data : {};
+    let result = new TodoListResponse();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    data["id"] = this.id;
+    data["title"] = this.title;
+    data["description"] = this.description;
+    data["dueDate"] = this.dueDate
+      ? this.dueDate.toISOString()
+      : <any>undefined;
+    if (Array.isArray(this.todoItems)) {
+      data["todoItems"] = [];
+      for (let item of this.todoItems) data["todoItems"].push(item);
+    }
+    return data;
+  }
+}
+
+export interface ITodoListResponse {
+  id?: string;
+  title?: string | undefined;
+  description?: string | undefined;
+  dueDate?: moment.Moment | undefined;
+  todoItems?: string[] | undefined;
+}
+
 export class TodoTagRequest implements ITodoTagRequest {
   id?: string;
   name?: string | undefined;
@@ -431,6 +541,7 @@ export function getResultTypeClassKey(queryKey: QueryKey): string {
 
 export function initPersister() {
   addResultTypeFactory("Client___todoItemsAll", () => new TodoItemResponse());
+  addResultTypeFactory("Client___todoListsAll", () => new TodoListResponse());
   addResultTypeFactory("Client___todoTagsAll", () => new TodoTagResponse());
 }
 //-----/PersistorHydrator.File----

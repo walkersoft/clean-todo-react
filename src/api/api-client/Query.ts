@@ -289,6 +289,143 @@ export function useSetCompletionMutation<TContext>(
   });
 }
 
+export function todoListsAllUrl(): string {
+  let url_ = getBaseUrl() + "/api/TodoLists";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+let todoListsAllDefaultOptions: UseQueryOptions<
+  Types.TodoListResponse[],
+  unknown,
+  Types.TodoListResponse[]
+> = {
+  queryFn: __todoListsAll,
+};
+export function getTodoListsAllDefaultOptions(): UseQueryOptions<
+  Types.TodoListResponse[],
+  unknown,
+  Types.TodoListResponse[]
+> {
+  return todoListsAllDefaultOptions;
+}
+export function setTodoListsAllDefaultOptions(
+  options: UseQueryOptions<
+    Types.TodoListResponse[],
+    unknown,
+    Types.TodoListResponse[]
+  >
+) {
+  todoListsAllDefaultOptions = options;
+}
+
+export function todoListsAllQueryKey(): QueryKey;
+export function todoListsAllQueryKey(...params: any[]): QueryKey {
+  return trimArrayEnd(["Client", "todoListsAll"]);
+}
+function __todoListsAll() {
+  return Types.Client.todoListsAll();
+}
+
+/**
+ * @return Success
+ */
+export function useTodoListsAllQuery<
+  TSelectData = Types.TodoListResponse[],
+  TError = unknown
+>(
+  options?: UseQueryOptions<Types.TodoListResponse[], TError, TSelectData>
+): UseQueryResult<TSelectData, TError>;
+export function useTodoListsAllQuery<
+  TSelectData = Types.TodoListResponse[],
+  TError = unknown
+>(...params: any[]): UseQueryResult<TSelectData, TError> {
+  let options:
+    | UseQueryOptions<Types.TodoListResponse[], TError, TSelectData>
+    | undefined = undefined;
+
+  options = params[0] as any;
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useQuery<Types.TodoListResponse[], TError, TSelectData>({
+    queryFn: __todoListsAll,
+    queryKey: todoListsAllQueryKey(),
+    ...(todoListsAllDefaultOptions as unknown as UseQueryOptions<
+      Types.TodoListResponse[],
+      TError,
+      TSelectData
+    >),
+    ...options,
+  });
+}
+/**
+ * @return Success
+ */
+export function setTodoListsAllData(
+  queryClient: QueryClient,
+  updater: (
+    data: Types.TodoListResponse[] | undefined
+  ) => Types.TodoListResponse[]
+) {
+  queryClient.setQueryData(todoListsAllQueryKey(), updater);
+}
+
+/**
+ * @return Success
+ */
+export function setTodoListsAllDataByQueryId(
+  queryClient: QueryClient,
+  queryKey: QueryKey,
+  updater: (
+    data: Types.TodoListResponse[] | undefined
+  ) => Types.TodoListResponse[]
+) {
+  queryClient.setQueryData(queryKey, updater);
+}
+
+export function todoListsUrl(): string {
+  let url_ = getBaseUrl() + "/api/TodoLists";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function todoListsMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "todoLists"]);
+}
+
+/**
+ * @param body (optional)
+ * @return Success
+ */
+export function useTodoListsMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<
+      Types.TodoListResponse,
+      unknown,
+      Types.TodoListRequest,
+      TContext
+    >,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<
+  Types.TodoListResponse,
+  unknown,
+  Types.TodoListRequest,
+  TContext
+> {
+  const key = todoListsMutationKey();
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(
+    (body: Types.TodoListRequest) => Types.Client.todoLists(body),
+    { ...options, mutationKey: key }
+  );
+}
+
 export function todoTagsAllUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoTags";
   url_ = url_.replace(/[?&]$/, "");

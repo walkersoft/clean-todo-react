@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { setBaseUrl } from "./api/api-client";
 import "./App.css";
 import { NavigationBar } from "./components/common/navigation/NavigationBar";
+import { ListsStateProvider } from "./contexts/ListsContext";
 import { TagsStateProvider } from "./contexts/TagsContext";
 import { TodoItemsStateProvider } from "./contexts/TodoItemsContext";
 
@@ -18,7 +19,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <TodoItemsStateProvider>
           <TagsStateProvider>
-            <Outlet />
+            <ListsStateProvider>
+              <Outlet />
+            </ListsStateProvider>
           </TagsStateProvider>
         </TodoItemsStateProvider>
       </QueryClientProvider>
