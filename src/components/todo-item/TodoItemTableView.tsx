@@ -74,6 +74,7 @@ export function TodoItemTableView() {
         <Table sx={{ maxWidth: 1200 }}>
           <TableHead>
             <TableRow>
+              <TableCell>Assign</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Complete</TableCell>
@@ -131,6 +132,9 @@ function RenderItemRow({ item }: RenderItemRowProps) {
   return (
     <>
       <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
+        <TableCell>
+          <Checkbox />
+        </TableCell>
         <TableCell>{item.description}</TableCell>
         <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
         <TableCell>
