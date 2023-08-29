@@ -6,7 +6,7 @@ export interface TodoListTableRowProps {
 }
 
 export default function TodoListTableRow({ list }: TodoListTableRowProps) {
-  const { title, description, dueDate } = list;
+  const { title, description, dueDate, todoItems } = list;
 
   return (
     <>
@@ -14,6 +14,7 @@ export default function TodoListTableRow({ list }: TodoListTableRowProps) {
         <TableCell>{title}</TableCell>
         <TableCell>{description}</TableCell>
         <TableCell>{dueDate?.format("MM-DD-YYYY")}</TableCell>
+        <TableCell>{todoItems?.length}</TableCell>
       </TableRow>
     </>
   );

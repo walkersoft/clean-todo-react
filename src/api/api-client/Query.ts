@@ -289,6 +289,37 @@ export function useSetCompletionMutation<TContext>(
   });
 }
 
+export function assignToListUrl(): string {
+  let url_ = getBaseUrl() + "/api/TodoItems/AssignToList";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function assignToListMutationKey(): MutationKey {
+  return trimArrayEnd(["Client", "assignToList"]);
+}
+
+/**
+ * @param body (optional)
+ * @return Success
+ */
+export function useAssignToListMutation<TContext>(
+  options?: Omit<
+    UseMutationOptions<void, unknown, Types.AssignTodoItemRequest, TContext>,
+    "mutationKey" | "mutationFn"
+  >
+): UseMutationResult<void, unknown, Types.AssignTodoItemRequest, TContext> {
+  const key = assignToListMutationKey();
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation(
+    (body: Types.AssignTodoItemRequest) => Types.Client.assignToList(body),
+    { ...options, mutationKey: key }
+  );
+}
+
 export function todoListsAllUrl(): string {
   let url_ = getBaseUrl() + "/api/TodoLists";
   url_ = url_.replace(/[?&]$/, "");

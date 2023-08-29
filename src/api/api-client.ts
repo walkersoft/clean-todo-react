@@ -14,6 +14,46 @@ export * as Client from "./api-client/Client";
 export { getFetch, setBaseUrl, setFetchFactory } from "./api-client/helpers";
 export * as Query from "./api-client/Query";
 
+export class AssignTodoItemRequest implements IAssignTodoItemRequest {
+  todoItemId?: string;
+  todoListId?: string;
+
+  constructor(data?: IAssignTodoItemRequest) {
+    if (data) {
+      for (var property in data) {
+        if (data.hasOwnProperty(property))
+          (<any>this)[property] = (<any>data)[property];
+      }
+    }
+  }
+
+  init(_data?: any) {
+    if (_data) {
+      this.todoItemId = _data["todoItemId"];
+      this.todoListId = _data["todoListId"];
+    }
+  }
+
+  static fromJS(data: any): AssignTodoItemRequest {
+    data = typeof data === "object" ? data : {};
+    let result = new AssignTodoItemRequest();
+    result.init(data);
+    return result;
+  }
+
+  toJSON(data?: any) {
+    data = typeof data === "object" ? data : {};
+    data["todoItemId"] = this.todoItemId;
+    data["todoListId"] = this.todoListId;
+    return data;
+  }
+}
+
+export interface IAssignTodoItemRequest {
+  todoItemId?: string;
+  todoListId?: string;
+}
+
 export class ExceptionResponse implements IExceptionResponse {
   statusCode?: number;
   message?: string | undefined;

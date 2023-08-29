@@ -4,23 +4,34 @@ import {
   Button,
   Checkbox,
   IconButton,
+  MenuItem,
   Paper,
+  Select,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { ITodoItemResponse } from "../../api/api-client";
 import {
+  AssignTodoItemRequest,
+  ITodoItemResponse,
+  ITodoListResponse,
+} from "../../api/api-client";
+import {
+  useAssignToListMutation,
   useSetCompletionMutation,
   useTodoItemsAllQuery,
   useTodoItemsDELETEMutation,
+  useTodoListsAllQuery,
   useTodoTagsAllQuery,
 } from "../../api/api-client/Query";
+import { useLists, useListsDispatch } from "../../contexts/ListsContext";
 import { useTagsDispatch } from "../../contexts/TagsContext";
 import {
   useTodoItems,
@@ -32,8 +43,19 @@ import { TodoItemEditor } from "./TodoItemEditor";
 
 export function TodoItemTableView() {
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const [stagedItemIds, setStagedItemIds] = useState<string[]>([]);
 
   const { todoItems, fetchRequired } = useTodoItems();
+  const { lists } = useLists();
+  const dispatch = useListsDispatch();
+
+  const listsQuery = useTodoListsAllQuery({
+    onSuccess: (lists) =>
+      dispatch({
+        type: "lists-fetched",
+        lists: lists,
+      }),
+  });
 
   const itemsDispatch = useTodoItemsDispatch();
   const tagsDispatch = useTagsDispatch();
@@ -58,22 +80,38 @@ export function TodoItemTableView() {
       }),
   });
 
+  const toggleStagedItemState = (id: string) => {
+    if (id.length === 0) {
+      return;
+    }
+
+    const index = stagedItemIds.findIndex((x) => x === id);
+    if (index === -1) {
+      setStagedItemIds([id, ...stagedItemIds]);
+    } else {
+      setStagedItemIds(stagedItemIds.filter((x) => x !== id));
+    }
+  };
+
   useEffect(() => {
     if (fetchRequired) {
       todoItemsQuery.refetch();
       todoTagsQuery.refetch();
+      listsQuery.refetch();
     }
-  }, [fetchRequired, todoItemsQuery, todoTagsQuery]);
+  }, [fetchRequired, todoItemsQuery, todoTagsQuery, listsQuery]);
 
   return (
     <>
       <Button variant="outlined" onClick={() => setEditorOpen(true)}>
         Create Todo Item
       </Button>
+      <TodoItemAssignmentForm todoLists={lists} selectedItems={stagedItemIds} />
       <TableContainer component={Paper}>
         <Table sx={{ maxWidth: 1200 }}>
           <TableHead>
             <TableRow>
+              <TableCell>Assign</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Complete</TableCell>
@@ -87,7 +125,11 @@ export function TodoItemTableView() {
           </TableHead>
           <TableBody>
             {todoItems.map((item) => (
-              <RenderItemRow key={item.id} item={item} />
+              <RenderItemRow
+                key={item.id}
+                item={item}
+                setItemStaging={toggleStagedItemState}
+              />
             ))}
           </TableBody>
         </Table>
@@ -103,9 +145,10 @@ export function TodoItemTableView() {
 
 interface RenderItemRowProps {
   item: ITodoItemResponse;
+  setItemStaging: (id: string) => void;
 }
 
-function RenderItemRow({ item }: RenderItemRowProps) {
+function RenderItemRow({ item, setItemStaging }: RenderItemRowProps) {
   const isOverdue = !!item.dueDate && item.dueDate < moment().startOf("day");
   const bgColor = isOverdue ? "warning.light" : "";
 
@@ -131,6 +174,9 @@ function RenderItemRow({ item }: RenderItemRowProps) {
   return (
     <>
       <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
+        <TableCell>
+          <Checkbox onChange={() => setItemStaging(item.id ?? "")} />
+        </TableCell>
         <TableCell>{item.description}</TableCell>
         <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
         <TableCell>
@@ -212,6 +258,66 @@ function CompletionState({ id, isComplete }: CompletionStateProps) {
         checked={isComplete}
         onChange={(e) => handleCheckboxChanged(e.target.checked)}
       />
+    </>
+  );
+}
+
+interface TodoItemAssignmentFormProps {
+  todoLists: ITodoListResponse[];
+  selectedItems: string[];
+}
+
+function TodoItemAssignmentForm({
+  todoLists,
+  selectedItems,
+}: TodoItemAssignmentFormProps) {
+  const [selectedList, setSelectedList] = useState<string>("");
+  const assignToList = useAssignToListMutation();
+
+  const handleChange = (selected: string) => setSelectedList(selected);
+  const handleClick = () => {
+    selectedItems.map((item) =>
+      assignToList.mutate(
+        new AssignTodoItemRequest({
+          todoListId: selectedList,
+          todoItemId: item,
+        })
+      )
+    );
+
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setSelectedList("");
+  };
+
+  return (
+    <>
+      <Stack direction="row">
+        <Typography variant="body1" sx={{ mr: 2 }}>
+          Assign to list:
+        </Typography>
+        <Select
+          variant="outlined"
+          size="small"
+          value={selectedList}
+          onChange={(e) => handleChange(e.target.value)}
+        >
+          {todoLists.map((list) => (
+            <MenuItem key={list.id} value={list.id}>
+              {list.title}
+            </MenuItem>
+          ))}
+        </Select>
+        <Button
+          variant="outlined"
+          disabled={selectedList.length === 0}
+          onClick={handleClick}
+        >
+          Assign Items
+        </Button>
+      </Stack>
     </>
   );
 }
