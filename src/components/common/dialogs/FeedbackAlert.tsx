@@ -9,6 +9,8 @@ export interface FeedbackAlertProps {
   horizontal?: "left" | "right" | "center";
 }
 
+export type FeedbackAlertData = Omit<FeedbackAlertProps, "handleClose">;
+
 export function FeedbackAlert({
   message,
   severity,
