@@ -24,7 +24,7 @@ export function TodoListView() {
     }
   }, [fetchRequired, listsQuery]);
 
-  const columnHeaders: string[] = ["Title", "Description", "Due Date"];
+  const columnHeaders: string[] = ["Title", "Description", "Due Date", "Assigned Items"];
 
   return (
     <>

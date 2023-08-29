@@ -18,8 +18,13 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { ITodoItemResponse, ITodoListResponse } from "../../api/api-client";
 import {
+  AssignTodoItemRequest,
+  ITodoItemResponse,
+  ITodoListResponse,
+} from "../../api/api-client";
+import {
+  useAssignToListMutation,
   useSetCompletionMutation,
   useTodoItemsAllQuery,
   useTodoItemsDELETEMutation,
@@ -38,6 +43,7 @@ import { TodoItemEditor } from "./TodoItemEditor";
 
 export function TodoItemTableView() {
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const [stagedItemIds, setStagedItemIds] = useState<string[]>([]);
 
   const { todoItems, fetchRequired } = useTodoItems();
   const { lists } = useLists();
@@ -74,6 +80,19 @@ export function TodoItemTableView() {
       }),
   });
 
+  const toggleStagedItemState = (id: string) => {
+    if (id.length === 0) {
+      return;
+    }
+
+    const index = stagedItemIds.findIndex((x) => x === id);
+    if (index === -1) {
+      setStagedItemIds([id, ...stagedItemIds]);
+    } else {
+      setStagedItemIds(stagedItemIds.filter((x) => x !== id));
+    }
+  };
+
   useEffect(() => {
     if (fetchRequired) {
       todoItemsQuery.refetch();
@@ -87,7 +106,7 @@ export function TodoItemTableView() {
       <Button variant="outlined" onClick={() => setEditorOpen(true)}>
         Create Todo Item
       </Button>
-      <TodoItemAssignmentForm todoLists={lists} />
+      <TodoItemAssignmentForm todoLists={lists} selectedItems={stagedItemIds} />
       <TableContainer component={Paper}>
         <Table sx={{ maxWidth: 1200 }}>
           <TableHead>
@@ -106,7 +125,11 @@ export function TodoItemTableView() {
           </TableHead>
           <TableBody>
             {todoItems.map((item) => (
-              <RenderItemRow key={item.id} item={item} />
+              <RenderItemRow
+                key={item.id}
+                item={item}
+                setItemStaging={toggleStagedItemState}
+              />
             ))}
           </TableBody>
         </Table>
@@ -122,9 +145,10 @@ export function TodoItemTableView() {
 
 interface RenderItemRowProps {
   item: ITodoItemResponse;
+  setItemStaging: (id: string) => void;
 }
 
-function RenderItemRow({ item }: RenderItemRowProps) {
+function RenderItemRow({ item, setItemStaging }: RenderItemRowProps) {
   const isOverdue = !!item.dueDate && item.dueDate < moment().startOf("day");
   const bgColor = isOverdue ? "warning.light" : "";
 
@@ -151,7 +175,7 @@ function RenderItemRow({ item }: RenderItemRowProps) {
     <>
       <TableRow key={item.id} sx={{ bgcolor: bgColor }}>
         <TableCell>
-          <Checkbox />
+          <Checkbox onChange={() => setItemStaging(item.id ?? "")} />
         </TableCell>
         <TableCell>{item.description}</TableCell>
         <TableCell>{item.isActive ? "Yes" : "No"}</TableCell>
@@ -240,11 +264,33 @@ function CompletionState({ id, isComplete }: CompletionStateProps) {
 
 interface TodoItemAssignmentFormProps {
   todoLists: ITodoListResponse[];
+  selectedItems: string[];
 }
 
-function TodoItemAssignmentForm({ todoLists }: TodoItemAssignmentFormProps) {
+function TodoItemAssignmentForm({
+  todoLists,
+  selectedItems,
+}: TodoItemAssignmentFormProps) {
   const [selectedList, setSelectedList] = useState<string>("");
+  const assignToList = useAssignToListMutation();
+
   const handleChange = (selected: string) => setSelectedList(selected);
+  const handleClick = () => {
+    selectedItems.map((item) =>
+      assignToList.mutate(
+        new AssignTodoItemRequest({
+          todoListId: selectedList,
+          todoItemId: item,
+        })
+      )
+    );
+
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setSelectedList("");
+  };
 
   return (
     <>
@@ -264,7 +310,13 @@ function TodoItemAssignmentForm({ todoLists }: TodoItemAssignmentFormProps) {
             </MenuItem>
           ))}
         </Select>
-        <Button variant="outlined">Assign Items</Button>
+        <Button
+          variant="outlined"
+          disabled={selectedList.length === 0}
+          onClick={handleClick}
+        >
+          Assign Items
+        </Button>
       </Stack>
     </>
   );
