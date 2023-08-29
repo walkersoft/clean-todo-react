@@ -6,7 +6,7 @@ export interface FeedbackAlertProps {
   severity: AlertColor;
   isOpen: boolean;
   vertical?: "bottom" | "top";
-  horizontal?: "left" | "right";
+  horizontal?: "left" | "right" | "center";
 }
 
 export function FeedbackAlert({
@@ -14,7 +14,7 @@ export function FeedbackAlert({
   severity,
   isOpen,
   vertical = "bottom",
-  horizontal = "right",
+  horizontal = "center",
 }: FeedbackAlertProps) {
   const [open, setOpen] = useState(isOpen);
 
