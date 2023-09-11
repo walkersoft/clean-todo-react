@@ -38,12 +38,23 @@ import {
   useTodoItemsDispatch,
 } from "../../contexts/TodoItemsContext";
 import ConfirmDeleteDialog from "../common/dialogs/ConfirmDeleteDialog";
+import {
+  FeedbackAlert,
+  FeedbackAlertData,
+} from "../common/dialogs/FeedbackAlert";
 import useSelectedTagNames from "../hooks/use-selected-tags";
 import { TodoItemEditor } from "./TodoItemEditor";
+
+const INITIAL_ALERT: FeedbackAlertData = {
+  message: "",
+  severity: "error",
+  open: false,
+};
 
 export function TodoItemTableView() {
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
   const [stagedItemIds, setStagedItemIds] = useState<string[]>([]);
+  const [alertData, setAlertData] = useState(INITIAL_ALERT);
 
   const { todoItems, fetchRequired } = useTodoItems();
   const { lists } = useLists();
@@ -138,6 +149,18 @@ export function TodoItemTableView() {
         editorOpen={editorOpen}
         setEditorOpen={setEditorOpen}
         saveMode="create"
+        setAlertData={setAlertData}
+      />
+      <FeedbackAlert
+        {...alertData}
+        handleClose={() =>
+          setAlertData((prev) => {
+            return {
+              ...prev,
+              open: false,
+            };
+          })
+        }
       />
     </>
   );
@@ -153,6 +176,7 @@ function RenderItemRow({ item, setItemStaging }: RenderItemRowProps) {
   const bgColor = isOverdue ? "warning.light" : "";
 
   const [editorOpen, setEditorOpen] = useState<boolean>(false);
+  const [alertData, setAlertData] = useState<FeedbackAlertData>(INITIAL_ALERT);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const selectedTagNames = useSelectedTagNames(item);
   const itemsDispatch = useTodoItemsDispatch();
@@ -219,6 +243,7 @@ function RenderItemRow({ item, setItemStaging }: RenderItemRowProps) {
           saveMode="update"
           currentItem={item}
           selectedTagNames={selectedTagNames}
+          setAlertData={setAlertData}
         />
       )}
       {deleteDialogOpen && (
@@ -230,6 +255,17 @@ function RenderItemRow({ item, setItemStaging }: RenderItemRowProps) {
           text={DELETE_DIALOG_TEXT}
         />
       )}
+      <FeedbackAlert
+        {...alertData}
+        handleClose={() =>
+          setAlertData((prev) => {
+            return {
+              ...prev,
+              open: false,
+            };
+          })
+        }
+      />
     </>
   );
 }
