@@ -36,6 +36,7 @@ import {
 } from "../../api/api-client/Query";
 import { useTags } from "../../contexts/TagsContext";
 import { useTodoItemsDispatch } from "../../contexts/TodoItemsContext";
+import { FeedbackAlertData } from "../common/dialogs/FeedbackAlert";
 
 const initialItem: ITodoItemRequest = {
   description: "",
@@ -48,6 +49,7 @@ const initialItem: ITodoItemRequest = {
 export interface TodoItemEditorProps {
   editorOpen: boolean;
   setEditorOpen: (isOpen: boolean) => void;
+  setAlertData: (alertData: FeedbackAlertData) => void;
   saveMode: "create" | "update";
   currentItem?: ITodoItemResponse;
   selectedTagNames?: string[];
@@ -59,6 +61,7 @@ export function TodoItemEditor({
   saveMode,
   currentItem,
   selectedTagNames,
+  setAlertData,
 }: TodoItemEditorProps) {
   const [todoItem, setTodoItem] = useState<ITodoItemRequest>(
     currentItem ?? initialItem
@@ -87,6 +90,11 @@ export function TodoItemEditor({
 
   const handleSaveItemClick = () => {
     const successHandler = () => {
+      setAlertData({
+        severity: "success",
+        message: "Item saved successfully",
+        open: true,
+      });
       closeAndResetEditor();
     };
 
@@ -116,6 +124,11 @@ export function TodoItemEditor({
   };
 
   const handleCancelEditClick = () => {
+    setAlertData({
+      message: "Editing cancelled...",
+      open: true,
+      severity: "info",
+    });
     closeAndResetEditor();
   };
 
